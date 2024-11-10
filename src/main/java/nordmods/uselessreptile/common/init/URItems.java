@@ -37,15 +37,19 @@ public class URItems {
     public static final DragonEquipmentItem DRAGON_HELMET_IRON = createDragonArmorItem(EquipmentSlot.HEAD, 2, 0);
     public static final DragonEquipmentItem DRAGON_HELMET_GOLD = createDragonArmorItem(EquipmentSlot.HEAD,3, 0);
     public static final DragonEquipmentItem DRAGON_HELMET_DIAMOND = createDragonArmorItem(EquipmentSlot.HEAD, 4, 0);
+    public static final DragonEquipmentItem DRAGON_HELMET_NETHERITE = createDragonArmorItem(EquipmentSlot.HEAD, 5, 2);
     public static final DragonEquipmentItem DRAGON_CHESTPLATE_IRON = createDragonArmorItem(EquipmentSlot.CHEST, 4, 0);
     public static final DragonEquipmentItem DRAGON_CHESTPLATE_GOLD = createDragonArmorItem(EquipmentSlot.CHEST, 5, 0);
     public static final DragonEquipmentItem DRAGON_CHESTPLATE_DIAMOND = createDragonArmorItem(EquipmentSlot.CHEST, 6, 0);
+    public static final DragonEquipmentItem DRAGON_CHESTPLATE_NETHERITE = createDragonArmorItem(EquipmentSlot.CHEST, 7, 3);
     public static final DragonEquipmentItem DRAGON_TAIL_ARMOR_IRON = createDragonArmorItem(EquipmentSlot.LEGS, 1, 0);
     public static final DragonEquipmentItem DRAGON_TAIL_ARMOR_GOLD = createDragonArmorItem(EquipmentSlot.LEGS, 2, 0);
     public static final DragonEquipmentItem DRAGON_TAIL_ARMOR_DIAMOND = createDragonArmorItem(EquipmentSlot.LEGS, 3, 0);
+    public static final DragonEquipmentItem DRAGON_TAIL_ARMOR_NETHERITE = createDragonArmorItem(EquipmentSlot.LEGS, 4, 1);
     public static final DragonEquipmentItem MOLECLAW_HELMET_IRON = createDragonArmorItem(EquipmentSlot.HEAD, 2, 0);
     public static final DragonEquipmentItem MOLECLAW_HELMET_GOLD = createDragonArmorItem(EquipmentSlot.HEAD, 3, 0);
     public static final DragonEquipmentItem MOLECLAW_HELMET_DIAMOND = createDragonArmorItem(EquipmentSlot.HEAD, 4, 0);
+    public static final DragonEquipmentItem MOLECLAW_HELMET_NETHERITE = createDragonArmorItem(EquipmentSlot.HEAD, 5, 2);
     public static final Item WYVERN_SPAWN_EGG = new SpawnEggItem(UREntities.WYVERN_ENTITY, 5462570, 3094045, new Item.Settings());
     public static final Item MOLECLAW_SPAWN_EGG = new SpawnEggItem(UREntities.MOLECLAW_ENTITY,2105119, 458752, new Item.Settings());
     public static final Item RIVER_PIKEHORN_SPAWN_EGG = new SpawnEggItem(UREntities.RIVER_PIKEHORN_ENTITY,2910895, 1457243, new Item.Settings());
@@ -70,9 +74,13 @@ public class URItems {
         register(DRAGON_HELMET_DIAMOND, "dragon_helmet_diamond");
         register(DRAGON_CHESTPLATE_DIAMOND, "dragon_chestplate_diamond");
         register(DRAGON_TAIL_ARMOR_DIAMOND,"dragon_tail_armor_diamond");
+        register(DRAGON_HELMET_NETHERITE, "dragon_helmet_netherite");
+        register(DRAGON_CHESTPLATE_NETHERITE, "dragon_chestplate_netherite");
+        register(DRAGON_TAIL_ARMOR_NETHERITE,"dragon_tail_armor_netherite");
         register(MOLECLAW_HELMET_IRON,"moleclaw_helmet_iron");
         register(MOLECLAW_HELMET_GOLD,"moleclaw_helmet_gold");
         register(MOLECLAW_HELMET_DIAMOND,"moleclaw_helmet_diamond");
+        register(MOLECLAW_HELMET_NETHERITE,"moleclaw_helmet_netherite");
         register(MOLECLAW_SPAWN_EGG, "moleclaw_spawn_egg");
         register(RIVER_PIKEHORN_SPAWN_EGG, "river_pikehorn_spawn_egg");
         register(WYVERN_SPAWN_EGG, "wyvern_spawn_egg");
@@ -101,6 +109,7 @@ public class URItems {
             c.add(MOLECLAW_HELMET_IRON);
             c.add(MOLECLAW_HELMET_GOLD);
             c.add(MOLECLAW_HELMET_DIAMOND);
+            c.add(MOLECLAW_HELMET_NETHERITE);
             c.add(DRAGON_HELMET_IRON);
             c.add(DRAGON_CHESTPLATE_IRON);
             c.add(DRAGON_TAIL_ARMOR_IRON);
@@ -110,6 +119,9 @@ public class URItems {
             c.add(DRAGON_HELMET_DIAMOND);
             c.add(DRAGON_CHESTPLATE_DIAMOND);
             c.add(DRAGON_TAIL_ARMOR_DIAMOND);
+            c.add(DRAGON_HELMET_NETHERITE);
+            c.add(DRAGON_CHESTPLATE_NETHERITE);
+            c.add(DRAGON_TAIL_ARMOR_NETHERITE);
             c.add(WYVERN_SKIN);
             c.add(FLUTE);
             c.getContext().lookup().getOptionalWrapper(RegistryKeys.INSTRUMENT).ifPresent((wrapper) ->
