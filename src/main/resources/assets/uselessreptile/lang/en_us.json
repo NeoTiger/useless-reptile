@@ -225,6 +225,10 @@
     "tag.item.uselessreptile.lightning_chaser_chestplates": "Lightning Chaser Chestplates",
     "tag.item.uselessreptile.lightning_chaser_tail_armor": "Lightning Chaser Tail Armor",
     "tag.item.uselessreptile.lightning_chaser_helmets": "Lightning Chaser Helmets",
+    "tag.item.uselessreptile.wyvern_saddles": "Swamp Wyvern Saddles",
+    "tag.item.uselessreptile.moleclaw_saddles": "Moleclaw Saddles",
+    "tag.item.uselessreptile.lightning_chaser_saddles": "Lightning Chaser Saddles",
+    "tag.item.uselessreptile.dragon_saddles": "Dragon Saddles",
 
     "attribute.name.dragon.ground_rotation_speed": "Rotation Speed on Ground",
     "attribute.name.dragon.flying_rotation_speed": "Rotation Speed in Air",

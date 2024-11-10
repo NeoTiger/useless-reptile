@@ -13,7 +13,6 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.network.packet.s2c.play.VehicleMoveS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -139,10 +138,7 @@ public abstract class URRideableDragonEntity extends URDragonEntity implements R
     }
 
     public boolean hasSaddle() {
-        if (inventory != null) {
-            ItemStack saddle = inventory.getStack(0);
-            return saddle.getItem() == Items.SADDLE;
-        } else return false;
+        return inventory != null ?  isSaddleItem(inventory.getStack(0)) : false;
     }
 
     @Override
@@ -160,4 +156,6 @@ public abstract class URRideableDragonEntity extends URDragonEntity implements R
     public int vortexHornCapacity() {
         return 3;
     }
+
+    public abstract boolean isSaddleItem(ItemStack itemStack);
 }

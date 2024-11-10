@@ -2,6 +2,7 @@ package nordmods.uselessreptile.datagen.data.tag;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
+import net.minecraft.item.Items;
 import net.minecraft.registry.RegistryWrapper;
 import nordmods.uselessreptile.common.init.URItems;
 import nordmods.uselessreptile.common.init.URTags;
@@ -59,5 +60,20 @@ public class URItemTagProvider extends FabricTagProvider.ItemTagProvider{
                 .add(URItems.DRAGON_HELMET_GOLD)
                 .add(URItems.DRAGON_HELMET_DIAMOND)
                 .add(URItems.DRAGON_HELMET_NETHERITE);
+
+        //Saddles
+        getOrCreateTagBuilder(URTags.WYVERN_SADDLES)
+                .add(Items.SADDLE);
+
+        getOrCreateTagBuilder(URTags.LIGHTNING_CHASER_SADDLES)
+                .add(Items.SADDLE);
+
+        getOrCreateTagBuilder(URTags.MOLECLAW_SADDLES)
+                .add(Items.SADDLE);
+
+        getOrCreateTagBuilder(URTags.DRAGON_SADDLES)
+                .addOptionalTag(URTags.WYVERN_SADDLES)
+                .addOptionalTag(URTags.LIGHTNING_CHASER_SADDLES)
+                .addOptionalTag(URTags.MOLECLAW_SADDLES);
     }
 }

@@ -42,10 +42,7 @@ import nordmods.uselessreptile.common.entity.base.URDragonPart;
 import nordmods.uselessreptile.common.entity.base.URRideableFlyingDragonEntity;
 import nordmods.uselessreptile.common.entity.special.AcidBlastEntity;
 import nordmods.uselessreptile.common.gui.WyvernScreenHandler;
-import nordmods.uselessreptile.common.init.URAttributes;
-import nordmods.uselessreptile.common.init.URPotions;
-import nordmods.uselessreptile.common.init.URSounds;
-import nordmods.uselessreptile.common.init.URStatusEffects;
+import nordmods.uselessreptile.common.init.*;
 import nordmods.uselessreptile.common.network.GUIEntityToRenderS2CPacket;
 import nordmods.uselessreptile.common.network.URPacketHelper;
 import org.jetbrains.annotations.Nullable;
@@ -247,6 +244,11 @@ public class WyvernEntity extends URRideableFlyingDragonEntity implements Multip
         }
 
         updateChildParts();
+    }
+
+    @Override
+    public boolean isSaddleItem(ItemStack itemStack) {
+        return itemStack.isIn(URTags.WYVERN_SADDLES);
     }
 
     @Override

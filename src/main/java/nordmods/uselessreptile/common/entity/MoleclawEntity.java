@@ -201,6 +201,11 @@ public class MoleclawEntity extends URRideableDragonEntity {
     }
 
     @Override
+    public boolean isSaddleItem(ItemStack itemStack) {
+        return itemStack.isIn(URTags.MOLECLAW_SADDLES);
+    }
+
+    @Override
     public void travel(Vec3d movementInput) {
         if (!isAlive()) return;
 

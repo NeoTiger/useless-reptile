@@ -62,6 +62,7 @@ import nordmods.uselessreptile.common.gui.LightningChaserScreenHandler;
 import nordmods.uselessreptile.common.init.URAttributes;
 import nordmods.uselessreptile.common.init.URGameEvents;
 import nordmods.uselessreptile.common.init.URSounds;
+import nordmods.uselessreptile.common.init.URTags;
 import nordmods.uselessreptile.common.network.GUIEntityToRenderS2CPacket;
 import nordmods.uselessreptile.common.network.URPacketHelper;
 import org.jetbrains.annotations.Nullable;
@@ -371,6 +372,11 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
         }
 
         updateChildParts();
+    }
+
+    @Override
+    public boolean isSaddleItem(ItemStack itemStack) {
+        return itemStack.isIn(URTags.LIGHTNING_CHASER_SADDLES);
     }
 
     private void updateThunderstormBonus() {

@@ -70,10 +70,22 @@ public class URModEvents {
         DragonEquipmentTooltipEntryEvent.EVENT.register(item -> {
             List<EntityType<?>> entityTypes = new ArrayList<>();
             RegistryEntry<Item> entry = Registries.ITEM.getEntry(item);
-            if (entry.isIn(URTags.MOLECLAW_TAIL_ARMOR) || entry.isIn(URTags.MOLECLAW_CHESTPLATES) || entry.isIn(URTags.MOLECLAW_HELMETS))
+
+            if (entry.isIn(URTags.MOLECLAW_TAIL_ARMOR)
+                    || entry.isIn(URTags.MOLECLAW_CHESTPLATES)
+                    || entry.isIn(URTags.MOLECLAW_HELMETS)
+                    || entry.isIn(URTags.MOLECLAW_SADDLES))
                 entityTypes.add(UREntities.MOLECLAW_ENTITY);
-            if (entry.isIn(URTags.LIGHTNING_CHASER_TAIL_ARMOR) || entry.isIn(URTags.LIGHTNING_CHASER_CHESTPLATES) || entry.isIn(URTags.LIGHTNING_CHASER_HELMETS))
+
+            if (entry.isIn(URTags.LIGHTNING_CHASER_TAIL_ARMOR)
+                    || entry.isIn(URTags.LIGHTNING_CHASER_CHESTPLATES)
+                    || entry.isIn(URTags.LIGHTNING_CHASER_HELMETS)
+                    || entry.isIn(URTags.LIGHTNING_CHASER_SADDLES))
                 entityTypes.add(UREntities.LIGHTNING_CHASER_ENTITY);
+
+            if (entry.isIn(URTags.WYVERN_SADDLES))
+                entityTypes.add(UREntities.WYVERN_ENTITY);
+
             return entityTypes;
         });
     }

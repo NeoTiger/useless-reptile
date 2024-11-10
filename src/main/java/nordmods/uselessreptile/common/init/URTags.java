@@ -18,14 +18,20 @@ public class URTags {
     public static final TagKey<Biome> MOLECLAW_SPAWN_BLACKLIST = register(RegistryKeys.BIOME,"moleclaw_spawn_blacklist");
     public static final TagKey<Biome> LIGHTNING_CHASER_SPAWN_BLACKLIST = register(RegistryKeys.BIOME,"lightning_chaser_spawn_blacklist");
 
+    public static final TagKey<Item> DRAGON_SADDLES = register(RegistryKeys.ITEM, "dragon_saddles");
+
     public static final TagKey<Item> MOLECLAW_CHESTPLATES = register(RegistryKeys.ITEM, "moleclaw_chestplates");
     public static final TagKey<Item> MOLECLAW_TAIL_ARMOR = register(RegistryKeys.ITEM, "moleclaw_tail_armor");
     public static final TagKey<Item> MOLECLAW_HELMETS = register(RegistryKeys.ITEM, "moleclaw_helmets");
     public static final TagKey<Item> PROTECTS_MOLECLAW_FROM_LIGHT = register(RegistryKeys.ITEM, "protects_moleclaw_from_light");
+    public static final TagKey<Item> MOLECLAW_SADDLES = register(RegistryKeys.ITEM, "moleclaw_saddles");
 
     public static final TagKey<Item> LIGHTNING_CHASER_CHESTPLATES = register(RegistryKeys.ITEM, "lightning_chaser_chestplates");
     public static final TagKey<Item> LIGHTNING_CHASER_TAIL_ARMOR = register(RegistryKeys.ITEM, "lightning_chaser_tail_armor");
     public static final TagKey<Item> LIGHTNING_CHASER_HELMETS = register(RegistryKeys.ITEM, "lightning_chaser_helmets");
+    public static final TagKey<Item> LIGHTNING_CHASER_SADDLES = register(RegistryKeys.ITEM, "lightning_chaser_saddles");
+
+    public static final TagKey<Item> WYVERN_SADDLES = register(RegistryKeys.ITEM, "wyvern_saddles");
 
     private static<T> TagKey<T> register(RegistryKey<? extends Registry<T>> registryKey, String id) {
         return TagKey.of(registryKey, UselessReptile.id(id));
