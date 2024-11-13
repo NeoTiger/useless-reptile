@@ -11,6 +11,7 @@ import nordmods.uselessreptile.datagen.data.tag.URBiomeTagProvider;
 import nordmods.uselessreptile.datagen.data.tag.URBlockTagProvider;
 import nordmods.uselessreptile.datagen.data.tag.URDamageTypeTagProvider;
 import nordmods.uselessreptile.datagen.data.tag.URItemTagProvider;
+import nordmods.uselessreptile.integration.modonomicon.ModonomiconIntegration;
 
 public class UselessReptileDataGenerator implements DataGeneratorEntrypoint {
     @Override
@@ -29,5 +30,7 @@ public class UselessReptileDataGenerator implements DataGeneratorEntrypoint {
         pack.addProvider(URModelProvider::new);
         pack.addProvider(UREquipmentModelDataProvider::new);
         pack.addProvider(URDragonModelDataProvider::new);
+
+        ModonomiconIntegration.initDatagen(fabricDataGenerator);
     }
 }

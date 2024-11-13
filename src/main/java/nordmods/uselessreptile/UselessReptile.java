@@ -8,7 +8,7 @@ import nordmods.uselessreptile.common.config.URConfig;
 import nordmods.uselessreptile.common.config.URMobAttributesConfig;
 import nordmods.uselessreptile.common.init.*;
 import nordmods.uselessreptile.common.util.dragon_spawn.DragonSpawnReloadListener;
-import nordmods.uselessreptile.integration.ModonomiconIntegration;
+import nordmods.uselessreptile.integration.modonomicon.ModonomiconIntegration;
 import org.slf4j.Logger;
 
 public class UselessReptile implements ModInitializer, PreLaunchEntrypoint {
