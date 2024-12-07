@@ -4,6 +4,7 @@ import com.klikli_dev.modonomicon.api.datagen.SingleBookSubProvider;
 import com.klikli_dev.modonomicon.api.datagen.book.BookModel;
 import net.minecraft.util.Identifier;
 import nordmods.uselessreptile.UselessReptile;
+import nordmods.uselessreptile.integration.modonomicon.category.IndexCategory;
 
 import java.util.function.BiConsumer;
 
@@ -19,13 +20,11 @@ public class ModonomiconBookProvider extends SingleBookSubProvider {
 
     @Override
     protected void generateCategories() {
-
+        add(new IndexCategory(this).generate());
     }
 
     @Override
     protected BookModel additionalSetup(BookModel book) {
-        add(lang("ru_ru"), this.context().bookName(), "Драконариум");
-
         return book.withModel(Identifier.of("modonomicon:modonomicon_green"))
                 .withBookTextOffsetX(5)
                 .withBookTextOffsetY(0) //no top offset
@@ -35,7 +34,7 @@ public class ModonomiconBookProvider extends SingleBookSubProvider {
 
     @Override
     protected String bookName() {
-        return "Draconarium";
+        return "Dragonarium";
     }
 
     @Override
