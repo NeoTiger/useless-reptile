@@ -208,6 +208,7 @@ public class VortexHornItem extends GoatHornItem {
                     spawnCloud(urDragon);
                 }
                 world.spawnEntity(dragon);
+                if (dragon instanceof URDragonEntity urDragon && urDragon.getOwner() != user) urDragon.setTarget(user);
             }
             dragons.removeLast();
             stack.set(URItems.DRAGON_STORAGE_COMPONENT, new URDragonDataStorageComponent(dragons));

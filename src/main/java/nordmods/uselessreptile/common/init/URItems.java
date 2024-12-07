@@ -55,11 +55,11 @@ public class URItems {
     public static final Item RIVER_PIKEHORN_SPAWN_EGG = new SpawnEggItem(UREntities.RIVER_PIKEHORN_ENTITY,2910895, 1457243, new Item.Settings());
     public static final Item LIGHTNING_CHASER_SPAWN_EGG = new SpawnEggItem(UREntities.LIGHTNING_CHASER_ENTITY,4145472, 10922151, new Item.Settings());
     public static final FluteItem FLUTE = new FluteItem(new Item.Settings().maxCount(1).component(FLUTE_MODE_COMPONENT, FluteComponent.DEFAULT));
-    public static final VortexHornItem VORTEX_HORN = createVortexHornItem(1);
-    public static final VortexHornItem IRON_VORTEX_HORN = createVortexHornItem(3);
-    public static final VortexHornItem GOLD_VORTEX_HORN = createVortexHornItem(5);
-    public static final VortexHornItem DIAMOND_VORTEX_HORN = createVortexHornItem(7);
-    public static final VortexHornItem NETHERITE_VORTEX_HORN = createVortexHornItem(14);
+    public static final VortexHornItem VORTEX_HORN = new VortexHornItem(createVortexHornItemSettings(), 1);
+    public static final VortexHornItem IRON_VORTEX_HORN = new VortexHornItem(createVortexHornItemSettings(), 3);
+    public static final VortexHornItem GOLD_VORTEX_HORN = new VortexHornItem(createVortexHornItemSettings(), 5);
+    public static final VortexHornItem DIAMOND_VORTEX_HORN = new VortexHornItem(createVortexHornItemSettings(), 7);
+    public static final VortexHornItem NETHERITE_VORTEX_HORN = new VortexHornItem(createVortexHornItemSettings().fireproof(), 14);
 
     public static final RegistryKey<ItemGroup> UR_ITEM_GROUP = RegistryKey.of(RegistryKeys.ITEM_GROUP, UselessReptile.id("item_group"));
 
@@ -163,11 +163,10 @@ public class URItems {
                         GoatHornItem.getStackForInstrument(item, instrument)).forEach((stack) -> entries.add(stack, visibility)));
     }
 
-    private static VortexHornItem createVortexHornItem(int capacity) {
-        return new VortexHornItem(new Item.Settings().maxCount(1)
+    private static Item.Settings createVortexHornItemSettings() {
+        return new Item.Settings().maxCount(1)
                 .component(DRAGON_STORAGE_COMPONENT, URDragonDataStorageComponent.DEFAULT)
-                .component(VORTEX_HORN_CAPACITY_COMPONENT, VortexHornCapacityComponent.DEFAULT),
-                capacity);
+                .component(VORTEX_HORN_CAPACITY_COMPONENT, VortexHornCapacityComponent.DEFAULT);
     }
 }
 
