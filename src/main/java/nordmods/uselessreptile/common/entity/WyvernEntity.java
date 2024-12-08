@@ -18,7 +18,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsage;
 import net.minecraft.item.Items;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.screen.ScreenHandler;
@@ -256,7 +255,8 @@ public class WyvernEntity extends URRideableFlyingDragonEntity implements Multip
         ItemStack itemStack = player.getStackInHand(hand);
 
         if (isTamingItem(itemStack) && !isTamed()) {
-            eat(player, hand, itemStack);
+            player.setStackInHand(hand, consumeGivenItem(player, itemStack));
+            tryApplyFoodEffects(itemStack);
             if (random.nextInt(3) == 0) setTamingProgress(getTamingProgress() - 2);
             else setTamingProgress(getTamingProgress() - 1);
             if (player.isCreative()) setTamingProgress(0);
@@ -282,8 +282,8 @@ public class WyvernEntity extends URRideableFlyingDragonEntity implements Multip
                 potion.set(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent(URPotions.ACID));
                 player.incrementStat(Stats.USED.getOrCreateStat(bottle));
                 getWorld().playSound(player, player.getBlockPos(), SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-                if (itemStack.getCount() > 1) ItemUsage.exchangeStack(itemStack, player, potion);
-                else player.setStackInHand(hand, potion);
+                player.setStackInHand(hand, consumeGivenItem(player, itemStack));
+                player.giveItemStack(potion);
                 return ActionResult.SUCCESS;
             }
         }
@@ -358,7 +358,12 @@ public class WyvernEntity extends URRideableFlyingDragonEntity implements Multip
 
     @Override
     public boolean isFavoriteFood(ItemStack itemStack){
-        return itemStack.isOf(Items.CHICKEN);
+        return itemStack.isIn(URTags.WYVERN_FOOD);
+    }
+
+    @Override
+    public boolean isTamingItem(ItemStack itemStack){
+        return itemStack.isIn(URTags.WYVERN_TAMING_ITEM);
     }
 
     @Override

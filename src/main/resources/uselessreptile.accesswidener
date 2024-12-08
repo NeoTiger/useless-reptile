@@ -10,3 +10,4 @@ accessible field net/minecraft/data/server/recipe/ShapedRecipeJsonBuilder count 
 accessible field net/minecraft/data/server/recipe/ShapedRecipeJsonBuilder criteria Ljava/util/Map;
 accessible field net/minecraft/data/server/recipe/ShapedRecipeJsonBuilder group Ljava/lang/String;
 accessible field net/minecraft/data/server/recipe/ShapedRecipeJsonBuilder showNotification Z
+accessible method net/minecraft/entity/LivingEntity applyFoodEffects (Lnet/minecraft/component/type/FoodComponent;)V

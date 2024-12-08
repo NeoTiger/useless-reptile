@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.item.Items;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.registry.tag.ItemTags;
 import nordmods.uselessreptile.common.init.URItems;
 import nordmods.uselessreptile.common.init.URTags;
 
@@ -75,5 +76,23 @@ public class URItemTagProvider extends FabricTagProvider.ItemTagProvider{
                 .addOptionalTag(URTags.WYVERN_SADDLES)
                 .addOptionalTag(URTags.LIGHTNING_CHASER_SADDLES)
                 .addOptionalTag(URTags.MOLECLAW_SADDLES);
+
+        //Dragon food
+        getOrCreateTagBuilder(URTags.LIGHTNING_CHASER_FOOD)
+                .addOptionalTag(ItemTags.MEAT);
+        getOrCreateTagBuilder(URTags.WYVERN_FOOD)
+                .add(Items.CHICKEN);
+        getOrCreateTagBuilder(URTags.RIVER_PIKEHORN_FOOD)
+                .addOptionalTag(ItemTags.FISHES);
+        getOrCreateTagBuilder(URTags.MOLECLAW_FOOD)
+                .add(Items.BEETROOT);
+
+        //Dragon taming items
+        getOrCreateTagBuilder(URTags.WYVERN_TAMING_ITEM)
+                .addOptionalTag(URTags.WYVERN_FOOD);
+        getOrCreateTagBuilder(URTags.RIVER_PIKEHORN_TAMING_ITEM)
+                .add(Items.TROPICAL_FISH_BUCKET);
+        getOrCreateTagBuilder(URTags.MOLECLAW_TAMING_ITEM)
+                .addOptionalTag(URTags.MOLECLAW_FOOD);
     }
 }

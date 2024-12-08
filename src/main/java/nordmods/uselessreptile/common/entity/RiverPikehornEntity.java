@@ -1,6 +1,5 @@
 package nordmods.uselessreptile.common.entity;
 
-import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.SitGoal;
 import net.minecraft.entity.ai.goal.UntamedActiveTargetGoal;
@@ -16,8 +15,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
@@ -34,6 +31,7 @@ import nordmods.uselessreptile.common.entity.base.URFlyingDragonEntity;
 import nordmods.uselessreptile.common.init.URAttributes;
 import nordmods.uselessreptile.common.init.URItems;
 import nordmods.uselessreptile.common.init.URSounds;
+import nordmods.uselessreptile.common.init.URTags;
 import nordmods.uselessreptile.common.item.FluteItem;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -179,13 +177,15 @@ public class RiverPikehornEntity extends URFlyingDragonEntity {
             else setIsHunting(true);
 
             ItemStack itemStack = getMainHandStack();
-            if (itemStack.isIn(ItemTags.FISHES) && itemStack.getComponents().contains(DataComponentTypes.FOOD)) {
-                if (eatTimer <= 0 || getMaxHealth() > getHealth()) {
-                    eatFood(getWorld(), itemStack, itemStack.getComponents().get(DataComponentTypes.FOOD));
+            if (eatTimer <= 0 || getMaxHealth() > getHealth()) {
+                if (isFavoriteFood(itemStack)) {
+                    consumeGivenItem(this, itemStack);
+                    tryApplyFoodEffects(itemStack);
                     heal(getHealthRegenerationFromFood());
-                    stopHunt();
-                } else eatTimer--;
-            }
+                } else dropStack(itemStack);
+                stopHunt();
+            } else eatTimer--;
+
         }
 
         if (isTamed()) {
@@ -259,7 +259,8 @@ public class RiverPikehornEntity extends URFlyingDragonEntity {
         ItemStack itemStack = player.getStackInHand(hand);
 
         if (isTamingItem(itemStack) && !isTamed()) {
-            if (!player.isCreative()) player.setStackInHand(hand, new ItemStack(Items.WATER_BUCKET));
+            player.setStackInHand(hand, consumeGivenItem(player, itemStack));
+            tryApplyFoodEffects(itemStack);
             setOwner(player);
             getWorld().sendEntityStatus(this, EntityStatuses.ADD_POSITIVE_PLAYER_REACTION_PARTICLES);
             setPersistent();
@@ -281,7 +282,8 @@ public class RiverPikehornEntity extends URFlyingDragonEntity {
     @Override
     protected void loot(ItemEntity item) {
         if (isOwnerClose()) return;
-        if (getEquippedStack(EquipmentSlot.MAINHAND).isEmpty() && item.getStack().isIn(ItemTags.FISHES) || getEquippedStack(EquipmentSlot.MAINHAND).isOf(item.getStack().getItem())) {
+        if (getEquippedStack(EquipmentSlot.MAINHAND).isEmpty() && isFavoriteFood(item.getStack())
+                || getEquippedStack(EquipmentSlot.MAINHAND).isOf(item.getStack().getItem()) && item.getStack().getComponents().equals(getEquippedStack(EquipmentSlot.MAINHAND).getComponents())) {
             triggerItemPickedUpByEntityCriteria(item);
             ItemStack itemStack = item.getStack();
             equipStack(EquipmentSlot.MAINHAND, itemStack);
@@ -332,12 +334,12 @@ public class RiverPikehornEntity extends URFlyingDragonEntity {
 
     @Override
     public boolean isFavoriteFood(ItemStack itemStack) {
-        return itemStack.isIn(ItemTags.FISHES);
+        return itemStack.isIn(URTags.RIVER_PIKEHORN_FOOD);
     }
 
     @Override
     public boolean isTamingItem(ItemStack itemStack) {
-        return itemStack.isOf(Items.TROPICAL_FISH_BUCKET);
+        return itemStack.isIn(URTags.RIVER_PIKEHORN_TAMING_ITEM);
     }
 
     @Override

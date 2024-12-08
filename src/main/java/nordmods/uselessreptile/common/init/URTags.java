@@ -33,6 +33,15 @@ public class URTags {
 
     public static final TagKey<Item> WYVERN_SADDLES = register(RegistryKeys.ITEM, "wyvern_saddles");
 
+    public static final TagKey<Item> WYVERN_TAMING_ITEM = register(RegistryKeys.ITEM, "wyvern_taming_item");
+    public static final TagKey<Item> MOLECLAW_TAMING_ITEM = register(RegistryKeys.ITEM, "moleclaw_taming_item");
+    public static final TagKey<Item> RIVER_PIKEHORN_TAMING_ITEM = register(RegistryKeys.ITEM, "river_pikehorn_taming_item");
+
+    public static final TagKey<Item> WYVERN_FOOD = register(RegistryKeys.ITEM, "wyvern_food");
+    public static final TagKey<Item> MOLECLAW_FOOD = register(RegistryKeys.ITEM, "moleclaw_food");
+    public static final TagKey<Item> RIVER_PIKEHORN_FOOD = register(RegistryKeys.ITEM, "river_pikehorn_food");
+    public static final TagKey<Item> LIGHTNING_CHASER_FOOD = register(RegistryKeys.ITEM, "lightning_chaser_food");
+
     private static<T> TagKey<T> register(RegistryKey<? extends Registry<T>> registryKey, String id) {
         return TagKey.of(registryKey, UselessReptile.id(id));
     }

@@ -7,7 +7,6 @@ import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.EnchantmentEffectComponentTypes;
-import net.minecraft.component.type.FoodComponents;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.pathing.EntityNavigation;
@@ -36,7 +35,10 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.Util;
 import net.minecraft.util.function.BooleanBiFunction;
 import net.minecraft.util.math.*;
 import net.minecraft.util.math.random.Random;
@@ -54,6 +56,7 @@ import nordmods.uselessreptile.common.config.URMobAttributesConfig;
 import nordmods.uselessreptile.common.entity.ai.control.DragonLookControl;
 import nordmods.uselessreptile.common.entity.ai.control.LandDragonMoveControl;
 import nordmods.uselessreptile.common.entity.ai.navigation.DragonNavigation;
+import nordmods.uselessreptile.common.event.DragonOnItemConsumedEvent;
 import nordmods.uselessreptile.common.gui.URDragonScreenHandler;
 import nordmods.uselessreptile.common.init.URAttributes;
 import nordmods.uselessreptile.common.init.URStatusEffects;
@@ -397,7 +400,8 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
         ItemStack itemStack = player.getStackInHand(hand);
         if (isTamed()) {
             if (isFavoriteFood(itemStack) && getHealth() != getAttributeValue(EntityAttributes.GENERIC_MAX_HEALTH)) {
-                eatFood(getWorld(), itemStack, itemStack.getComponents().getOrDefault(DataComponentTypes.FOOD, FoodComponents.SALMON));
+                DragonOnItemConsumedEvent.EVENT.invoker().onItemConsumed(player, itemStack);
+                tryApplyFoodEffects(itemStack);
                 heal(getHealthRegenerationFromFood());
                 return ActionResult.SUCCESS;
             }
@@ -405,6 +409,7 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
 
         if (isTamed() && isOwner(player)) {
             if (itemStack.getItem() instanceof PotionItem potionItem && player.isSneaking()) {
+                DragonOnItemConsumedEvent.EVENT.invoker().onItemConsumed(player, itemStack);
                 potionItem.finishUsing(itemStack, getWorld(), this);
                 playSound(SoundEvents.ENTITY_GENERIC_DRINK, 1, 1);
                 if (!player.isCreative()) { //checking for emptiness for case if somehow potion stack size is more than 1
@@ -665,18 +670,14 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
         }
     }
 
-    public boolean isFavoriteFood(ItemStack itemStack){
-        return false;
-    }
+    public abstract boolean isFavoriteFood(ItemStack itemStack);
 
     @Override
     public boolean isBreedingItem(ItemStack stack) {
         return false;
     }
 
-    public boolean isTamingItem(ItemStack itemStack){
-        return isFavoriteFood(itemStack);
-    }
+    public abstract boolean isTamingItem(ItemStack itemStack);
 
     public float getHealthRegenerationFromFood() {
         return (float) getAttributeValue(URAttributes.DRAGON_REGENERATION_FROM_FOOD);
@@ -809,6 +810,21 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
     @Override
     public float getPathfindingFavor(BlockPos pos, WorldView world) {
         return 0;
+    }
+
+    public void giveItemStack(ItemStack itemStack) {
+        if (inventory.canInsert(itemStack)) inventory.addStack(itemStack);
+        else dropStack(itemStack);
+    }
+
+    public ItemStack consumeGivenItem(@Nullable LivingEntity user, ItemStack itemStack) {
+        DragonOnItemConsumedEvent.EVENT.invoker().onItemConsumed(user, itemStack);
+        if (user == null || !user.isInCreativeMode()) itemStack.decrement(1);
+        return itemStack;
+    }
+
+    public void tryApplyFoodEffects(ItemStack itemStack) {
+        if (itemStack.getComponents().contains(DataComponentTypes.FOOD)) applyFoodEffects(itemStack.getComponents().get(DataComponentTypes.FOOD));
     }
 
     //asset location caching so mod doesn't have to make stupid amount of checks if file even exists each frame

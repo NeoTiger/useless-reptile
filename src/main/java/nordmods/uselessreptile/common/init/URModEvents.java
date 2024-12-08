@@ -1,9 +1,12 @@
 package nordmods.uselessreptile.common.init;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.BlockTags;
@@ -13,7 +16,9 @@ import net.minecraft.world.GameRules;
 import net.minecraft.world.Heightmap;
 import nordmods.uselessreptile.common.config.URConfig;
 import nordmods.uselessreptile.common.entity.LightningChaserEntity;
+import nordmods.uselessreptile.common.entity.base.URDragonEntity;
 import nordmods.uselessreptile.common.event.DragonEquipmentTooltipEntryEvent;
+import nordmods.uselessreptile.common.event.DragonOnItemConsumedEvent;
 import nordmods.uselessreptile.common.event.MoleclawGetBlockMiningLevelEvent;
 import nordmods.uselessreptile.common.network.URPacketHelper;
 import nordmods.uselessreptile.common.util.LightningChaserSpawnTimer;
@@ -26,6 +31,7 @@ public class URModEvents {
         spawnLightningChaser();
         addDragonEquipmentTooltipEntries();
         getDefaultBlockMiningLevelForMoleclaw();
+        onItemConsumedEvents();
     }
 
     private static void spawnLightningChaser() {
@@ -98,6 +104,20 @@ public class URModEvents {
             if (blockState.isIn(BlockTags.INCORRECT_FOR_STONE_TOOL)) return 2;
             if (blockState.isIn(BlockTags.INCORRECT_FOR_WOODEN_TOOL)) return 1;
             return 0;
+        });
+    }
+
+    private static void onItemConsumedEvents() {
+        DragonOnItemConsumedEvent.EVENT.register((user, itemStack) -> {
+            if (itemStack.isIn(ConventionalItemTags.ENTITY_WATER_BUCKETS)) {
+                if (user instanceof PlayerEntity player) player.giveItemStack(Items.WATER_BUCKET.getDefaultStack());
+                if (user instanceof URDragonEntity dragon) dragon.giveItemStack(Items.WATER_BUCKET.getDefaultStack());
+                return;
+            }
+            if (itemStack.getItem().hasRecipeRemainder()) {
+                if (user instanceof PlayerEntity player) player.giveItemStack(itemStack.getItem().getRecipeRemainder().getDefaultStack());
+                if (user instanceof URDragonEntity dragon) dragon.giveItemStack(itemStack.getItem().getRecipeRemainder().getDefaultStack());
+            }
         });
     }
 }

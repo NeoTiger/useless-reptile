@@ -16,7 +16,6 @@ import net.minecraft.entity.passive.ChickenEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -245,7 +244,8 @@ public class MoleclawEntity extends URRideableDragonEntity {
         ItemStack itemStack = player.getStackInHand(hand);
 
         if (isTamingItem(itemStack) && !isTamed()) {
-            eat(player, hand, itemStack);
+            player.setStackInHand(hand, consumeGivenItem(player, itemStack));
+            tryApplyFoodEffects(itemStack);
             if (random.nextInt(3) == 0) setTamingProgress(getTamingProgress() - 2);
             else setTamingProgress(getTamingProgress() - 1);
             if (player.isCreative()) setTamingProgress(0);
@@ -422,7 +422,12 @@ public class MoleclawEntity extends URRideableDragonEntity {
 
     @Override
     public boolean isFavoriteFood(ItemStack itemStack){
-        return itemStack.isOf(Items.BEETROOT);
+        return itemStack.isIn(URTags.MOLECLAW_FOOD);
+    }
+
+    @Override
+    public boolean isTamingItem(ItemStack itemStack){
+        return itemStack.isIn(URTags.MOLECLAW_TAMING_ITEM);
     }
 
     @Override

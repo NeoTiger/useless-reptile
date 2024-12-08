@@ -23,7 +23,6 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -497,7 +496,7 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
         ItemStack itemStack = player.getStackInHand(hand);
 
         if (!isTamed()) {
-            if (hasSurrendered() && getTamingProgress() <= 0 || player.isCreative() && isTamingItem(itemStack)) {
+            if (hasSurrendered() && getTamingProgress() <= 0 || player.isCreative() && isFavoriteFood(itemStack)) {
                 setOwner(player);
                 setPersistent();
                 setSurrendered(false);
@@ -528,7 +527,12 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
 
     @Override
     public boolean isFavoriteFood(ItemStack itemStack){
-        return itemStack.isIn(ItemTags.MEAT);
+        return itemStack.isIn(URTags.LIGHTNING_CHASER_FOOD);
+    }
+
+    @Override
+    public boolean isTamingItem(ItemStack itemStack){
+        return false;
     }
 
     public boolean getShouldBailOut() {
