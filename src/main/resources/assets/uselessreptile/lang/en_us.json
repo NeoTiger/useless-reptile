@@ -87,6 +87,7 @@
 
     "other.uselessreptile.none": "None",
     "other.uselessreptile.sound_respond": "%1$s will now respond to the following sound: %2$s",
+    "other.uselessreptile.not_enough_capacity": "Not enough capacity",
 
     "config.uselessreptile.title": "Useless Reptile Configuration",
     "config.uselessreptile.category.gameplay" : "Gameplay Options",
