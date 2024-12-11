@@ -444,56 +444,6 @@ public class ModMenuIntegration implements ModMenuApi {
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.group.globalMultipliers.@Tooltip")).build());
 
-        Option<Float> dragonDamageMultiplier = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonDamageMultiplier"))
-                .description(OptionDescription.createBuilder()
-                        .text(Text.translatable("config.uselessreptile.option.dragonDamageMultiplier.@Tooltip"), requiresRestart()).build())
-                .binding(defaults.dragonDamageMultiplier,
-                        () -> config.dragonDamageMultiplier,
-                        val -> config.dragonDamageMultiplier = val)
-                .customController(FloatFieldController::new)
-                .build();
-
-        Option<Float> dragonKnockbackMultiplier = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonKnockbackMultiplier"))
-                .description(OptionDescription.createBuilder()
-                        .text(Text.translatable("config.uselessreptile.option.dragonKnockbackMultiplier.@Tooltip"), requiresRestart()).build())
-                .binding(defaults.dragonKnockbackMultiplier,
-                        () -> config.dragonKnockbackMultiplier,
-                        val -> config.dragonKnockbackMultiplier = val)
-                .customController(FloatFieldController::new)
-                .build();
-
-        Option<Float> dragonHealthMultiplier = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonHealthMultiplier"))
-                .description(OptionDescription.createBuilder()
-                        .text(Text.translatable("config.uselessreptile.option.dragonHealthMultiplier.@Tooltip"), requiresRestart()).build())
-                .binding(defaults.dragonHealthMultiplier,
-                        () -> config.dragonHealthMultiplier,
-                        val -> config.dragonHealthMultiplier = val)
-                .customController(FloatFieldController::new)
-                .build();
-
-        Option<Float> dragonArmorMultiplier = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonArmorMultiplier"))
-                .description(OptionDescription.createBuilder()
-                        .text(Text.translatable("config.uselessreptile.option.dragonArmorMultiplier.@Tooltip"), requiresRestart()).build())
-                .binding(defaults.dragonArmorMultiplier,
-                        () -> config.dragonArmorMultiplier,
-                        val -> config.dragonArmorMultiplier = val)
-                .customController(FloatFieldController::new)
-                .build();
-
-        Option<Float> dragonArmorToughnessMultiplier = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonArmorToughnessMultiplier"))
-                .description(OptionDescription.createBuilder()
-                        .text(Text.translatable("config.uselessreptile.option.dragonArmorToughnessMultiplier.@Tooltip"), requiresRestart()).build())
-                .binding(defaults.dragonArmorToughnessMultiplier,
-                        () -> config.dragonArmorToughnessMultiplier,
-                        val -> config.dragonArmorToughnessMultiplier = val)
-                .customController(FloatFieldController::new)
-                .build();
-
         Option<Float> dragonGroundSpeedMultiplier = Option.<Float>createBuilder()
                 .name(Text.translatable("config.uselessreptile.option.dragonGroundSpeedMultiplier"))
                 .description(OptionDescription.createBuilder()
@@ -514,11 +464,6 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(FloatFieldController::new)
                 .build();
 
-        globalMultipliersGroup.option(dragonDamageMultiplier);
-        globalMultipliersGroup.option(dragonKnockbackMultiplier);
-        globalMultipliersGroup.option(dragonHealthMultiplier);
-        globalMultipliersGroup.option(dragonArmorMultiplier);
-        globalMultipliersGroup.option(dragonArmorToughnessMultiplier);
         globalMultipliersGroup.option(dragonGroundSpeedMultiplier);
         globalMultipliersGroup.option(dragonFlyingSpeedMultiplier);
         mobAttributesCategory.group(globalMultipliersGroup.build());

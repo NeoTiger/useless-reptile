@@ -46,7 +46,6 @@ import nordmods.primitive_multipart_entities.common.entity.EntityPart;
 import nordmods.primitive_multipart_entities.common.entity.MultipartEntity;
 import nordmods.uselessreptile.UselessReptile;
 import nordmods.uselessreptile.common.config.URConfig;
-import nordmods.uselessreptile.common.config.URMobAttributesConfig;
 import nordmods.uselessreptile.common.entity.ai.goal.common.*;
 import nordmods.uselessreptile.common.entity.ai.goal.lightning_chaser.LightningChaserAttackGoal;
 import nordmods.uselessreptile.common.entity.ai.goal.lightning_chaser.LightningChaserBailOutGoal;
@@ -96,6 +95,8 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
     private final URDragonPart[] parts = new URDragonPart[]{wing1Left, wing2Left, wing1Right, wing2Right, neck1, neck2, head, tail1, tail2, tail3};
     protected final EntityGameEventHandler<LightningStrikeEventListener> lightningStrikeEventHandler = new EntityGameEventHandler<>(new LightningStrikeEventListener
             (new EntityPositionSource(this, getStandingEyeHeight()), URGameEvents.LIGHTNING_STRIKE_FAR.value().notificationRadius()));
+
+    public static float BASE_GROUND_SPEED = 0.25f;
 
     public LightningChaserEntity(EntityType<? extends TameableEntity> entityType, World world) {
         super(entityType, world);
@@ -239,11 +240,11 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
 
     public static DefaultAttributeContainer.Builder createLightningChaserAttributes() {
         return createDragonAttributes()
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, attributes().lightningChaserDamage * attributes().dragonDamageMultiplier)
-                .add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, attributes().lightningChaserKnockback * URMobAttributesConfig.getConfig().dragonKnockbackMultiplier)
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, attributes().lightningChaserHealth * attributes().dragonHealthMultiplier)
-                .add(EntityAttributes.GENERIC_ARMOR, attributes().lightningChaserArmor * attributes().dragonArmorMultiplier)
-                .add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, attributes().lightningChaserArmorToughness * attributes().dragonArmorToughnessMultiplier)
+                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, attributes().lightningChaserDamage)
+                .add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, attributes().lightningChaserKnockback)
+                .add(EntityAttributes.GENERIC_MAX_HEALTH, attributes().lightningChaserHealth)
+                .add(EntityAttributes.GENERIC_ARMOR, attributes().lightningChaserArmor)
+                .add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, attributes().lightningChaserArmorToughness)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, attributes().lightningChaserGroundSpeed * attributes().dragonGroundSpeedMultiplier)
                 .add(EntityAttributes.GENERIC_FLYING_SPEED, attributes().lightningChaserFlyingSpeed * attributes().dragonFlyingSpeedMultiplier)
                 .add(URAttributes.DRAGON_VERTICAL_SPEED, attributes().lightningChaserVerticalSpeed)
@@ -371,6 +372,11 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
         }
 
         updateChildParts();
+    }
+
+    @Override
+    protected float getBaseGroundSpeed() {
+        return BASE_GROUND_SPEED;
     }
 
     @Override

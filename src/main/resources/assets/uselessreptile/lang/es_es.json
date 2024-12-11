@@ -77,10 +77,6 @@
     "config.uselessreptile.option.enableCameraOffset.@Tooltip": "Activa el offset de la cámara en tercera persona mientras montas el dragón\nIf off, los offsets no serán aplicados",
     "config.uselessreptile.option.enableCrosshair.@Tooltip": "Activa la mira mientras montas el dragón",
     "config.uselessreptile.option.autoThirdPerson.@Tooltip": "Automaticamente cambia perspectivas cuando empiezas y terminas de montar el dragón",
-    "config.uselessreptile.option.dragonHealthMultiplier.@Tooltip": "Multiplica la vida maxima de todos los dragones",
-    "config.uselessreptile.option.dragonDamageMultiplier.@Tooltip": "Multiplica el daño de ataque en algunos dragones\nPuede que no se aplique a ciertos ataques",
-    "config.uselessreptile.option.dragonHealthMultiplier": "Multiplicador de Vida del Dragón",
-    "config.uselessreptile.option.dragonDamageMultiplier": "Multiplicador de Daño del Dragón",
     "effect.uselessreptile.acid": "Ácido",
 
     "death.attack.acid": "%1$s se fundió",

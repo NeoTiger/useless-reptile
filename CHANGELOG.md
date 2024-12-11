@@ -28,5 +28,11 @@
   - In case of River Pikehorn, those are also items that it'll seek during hunt
   - Taming items tags represent items that can be used to tame certain dragons. Note that since Lightning Chaser is tamed in different way, there's no taming item for it, but you still can use its food to instantly tame it
 
+- Remove all attribute multipliers except speed ones, since there's no practical reason to keep those
+
+- Walking animation speed will now account for speed multiplier and changes in base ground speed
+
+- Fix River Pikehorn always having incorrect flying speed and inability to affect those via configs
+
 ### Known Issues:
 - Dragon rotations in some scenarios may be very out of sync with the server

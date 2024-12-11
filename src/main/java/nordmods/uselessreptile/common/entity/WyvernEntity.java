@@ -34,7 +34,6 @@ import net.minecraft.world.World;
 import nordmods.primitive_multipart_entities.common.entity.EntityPart;
 import nordmods.primitive_multipart_entities.common.entity.MultipartEntity;
 import nordmods.uselessreptile.common.config.URConfig;
-import nordmods.uselessreptile.common.config.URMobAttributesConfig;
 import nordmods.uselessreptile.common.entity.ai.goal.common.*;
 import nordmods.uselessreptile.common.entity.ai.goal.wyvern.WyvernAttackGoal;
 import nordmods.uselessreptile.common.entity.base.URDragonPart;
@@ -63,6 +62,8 @@ public class WyvernEntity extends URRideableFlyingDragonEntity implements Multip
     private final URDragonPart tail2 = new URDragonPart(this);
     private final URDragonPart tail3 = new URDragonPart(this);
     private final URDragonPart[] parts = new URDragonPart[]{wingLeft, wingRight, neck, head, tail1, tail2, tail3};
+
+    public static float BASE_GROUND_SPEED = 0.2f;
 
     public WyvernEntity(EntityType<? extends URRideableFlyingDragonEntity> entityType, World world) {
         super(entityType, world);
@@ -94,11 +95,11 @@ public class WyvernEntity extends URRideableFlyingDragonEntity implements Multip
 
     public static DefaultAttributeContainer.Builder createWyvernAttributes() {
         return createDragonAttributes()
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, attributes().wyvernDamage * attributes().dragonDamageMultiplier)
-                .add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, attributes().wyvernKnockback * URMobAttributesConfig.getConfig().dragonKnockbackMultiplier)
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, attributes().wyvernHealth * attributes().dragonHealthMultiplier)
-                .add(EntityAttributes.GENERIC_ARMOR, attributes().wyvernArmor * attributes().dragonArmorMultiplier)
-                .add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, attributes().wyvernArmorToughness * attributes().dragonArmorToughnessMultiplier)
+                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, attributes().wyvernDamage)
+                .add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, attributes().wyvernKnockback)
+                .add(EntityAttributes.GENERIC_MAX_HEALTH, attributes().wyvernHealth)
+                .add(EntityAttributes.GENERIC_ARMOR, attributes().wyvernArmor)
+                .add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, attributes().wyvernArmorToughness)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, attributes().wyvernGroundSpeed * attributes().dragonGroundSpeedMultiplier)
                 .add(EntityAttributes.GENERIC_FLYING_SPEED, attributes().wyvernFlyingSpeed * attributes().dragonFlyingSpeedMultiplier)
                 .add(EntityAttributes.GENERIC_JUMP_STRENGTH, 0.42 * 1.5)
@@ -243,6 +244,11 @@ public class WyvernEntity extends URRideableFlyingDragonEntity implements Multip
         }
 
         updateChildParts();
+    }
+
+    @Override
+    protected float getBaseGroundSpeed() {
+        return BASE_GROUND_SPEED;
     }
 
     @Override

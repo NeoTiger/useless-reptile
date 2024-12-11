@@ -567,7 +567,7 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
 
     protected float getMovementSpeedModifier() {
         double baseSpeed = getAttributeBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED);
-        double speed = getAttributeBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED);
+        double speed = getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED);
         return (float) (speed / baseSpeed);
     }
 
@@ -586,10 +586,10 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
         super.tick();
         if (!getWorld().isClient()) updateRotationProgress();
 
-        double baseSpeed;
-        if (this instanceof FlyingDragon flyingDragon && flyingDragon.isFlying()) baseSpeed = getAttributeBaseValue(EntityAttributes.GENERIC_FLYING_SPEED);
-        else baseSpeed = getAttributeBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED);
-        animationSpeed = getMovementSpeed() / baseSpeed;
+        animationSpeed = getMovementSpeedModifier();
+        if (this instanceof FlyingDragon flyingDragon && !flyingDragon.isFlying() || !(this instanceof FlyingDragon)) {
+            animationSpeed *= attributes().dragonGroundSpeedMultiplier * getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED) / getBaseGroundSpeed();
+        }
 
         if (getSecondaryAttackCooldown() > 0) setSecondaryAttackCooldown(getSecondaryAttackCooldown() - 1);
         if (getPrimaryAttackCooldown() > 0) setPrimaryAttackCooldown(getPrimaryAttackCooldown() - 1);
@@ -600,6 +600,8 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
             healTimer = getTicksUntilHeal();
         }
     }
+
+    protected abstract float getBaseGroundSpeed();
 
     @Override
     public boolean canImmediatelyDespawn(double distanceSquared) {

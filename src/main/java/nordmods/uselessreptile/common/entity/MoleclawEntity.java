@@ -30,7 +30,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.*;
 import nordmods.uselessreptile.common.config.URConfig;
-import nordmods.uselessreptile.common.config.URMobAttributesConfig;
 import nordmods.uselessreptile.common.entity.ai.goal.common.*;
 import nordmods.uselessreptile.common.entity.ai.goal.moleclaw.MoleclawAttackGoal;
 import nordmods.uselessreptile.common.entity.ai.goal.moleclaw.MoleclawEscapeLightGoal;
@@ -58,6 +57,8 @@ public class MoleclawEntity extends URRideableDragonEntity {
     public static final float defaultWidth = 2f;
     public static final float defaultHeight = 2.9f;
     private int panicSoundDelay = 0;
+
+    public static float BASE_GROUND_SPEED = 0.25f;
 
     public MoleclawEntity(EntityType<? extends URRideableDragonEntity> entityType, World world) {
         super(entityType, world);
@@ -103,11 +104,11 @@ public class MoleclawEntity extends URRideableDragonEntity {
 
     public static DefaultAttributeContainer.Builder createMoleclawAttributes() {
         return createDragonAttributes()
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, attributes().moleclawDamage * attributes().dragonDamageMultiplier)
-                .add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, attributes().moleclawKnockback * URMobAttributesConfig.getConfig().dragonKnockbackMultiplier)
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, attributes().moleclawHealth * attributes().dragonHealthMultiplier)
-                .add(EntityAttributes.GENERIC_ARMOR, attributes().moleclawArmor * attributes().dragonArmorMultiplier)
-                .add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, attributes().moleclawArmorToughness * attributes().dragonArmorToughnessMultiplier)
+                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, attributes().moleclawDamage)
+                .add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, attributes().moleclawKnockback)
+                .add(EntityAttributes.GENERIC_MAX_HEALTH, attributes().moleclawHealth)
+                .add(EntityAttributes.GENERIC_ARMOR, attributes().moleclawArmor)
+                .add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, attributes().moleclawArmorToughness)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, attributes().moleclawGroundSpeed * attributes().dragonGroundSpeedMultiplier)
                 .add(URAttributes.DRAGON_GROUND_ROTATION_SPEED, attributes().moleclawRotationSpeedGround)
                 .add(URAttributes.DRAGON_PRIMARY_ATTACK_COOLDOWN, attributes().moleclawBasePrimaryAttackCooldown)
@@ -197,6 +198,11 @@ public class MoleclawEntity extends URRideableDragonEntity {
                 attackDelay = 0;
             }
         }
+    }
+
+    @Override
+    protected float getBaseGroundSpeed() {
+        return BASE_GROUND_SPEED;
     }
 
     @Override

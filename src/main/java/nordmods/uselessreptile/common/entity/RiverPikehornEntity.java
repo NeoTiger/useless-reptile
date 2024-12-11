@@ -24,7 +24,6 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import nordmods.uselessreptile.common.config.URConfig;
-import nordmods.uselessreptile.common.config.URMobAttributesConfig;
 import nordmods.uselessreptile.common.entity.ai.goal.common.*;
 import nordmods.uselessreptile.common.entity.ai.goal.river_pikehorn.*;
 import nordmods.uselessreptile.common.entity.base.URFlyingDragonEntity;
@@ -47,6 +46,8 @@ public class RiverPikehornEntity extends URFlyingDragonEntity {
     public boolean forceTargetInWater = false;
     private final int eatCooldown = 200;
     private int eatTimer = eatCooldown;
+
+    public static float BASE_GROUND_SPEED = 0.2f;
 
     public RiverPikehornEntity(EntityType<? extends TameableEntity> entityType, World world) {
         super(entityType, world);
@@ -219,14 +220,20 @@ public class RiverPikehornEntity extends URFlyingDragonEntity {
         } else getLookControl().setLockRotation(false);
     }
 
+    @Override
+    protected float getBaseGroundSpeed() {
+        return BASE_GROUND_SPEED;
+    }
+
     public static DefaultAttributeContainer.Builder createPikehornAttributes() {
         return createDragonAttributes()
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, attributes().riverPikehornDamage * attributes().dragonDamageMultiplier)
-                .add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, attributes().riverPikehornKnockback * URMobAttributesConfig.getConfig().dragonKnockbackMultiplier)
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, attributes().riverPikehornHealth * attributes().dragonHealthMultiplier)
-                .add(EntityAttributes.GENERIC_ARMOR, attributes().riverPikehornArmor * attributes().dragonArmorMultiplier)
-                .add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, attributes().riverPikehornArmorToughness * attributes().dragonArmorToughnessMultiplier)
+                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, attributes().riverPikehornDamage)
+                .add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, attributes().riverPikehornKnockback )
+                .add(EntityAttributes.GENERIC_MAX_HEALTH, attributes().riverPikehornHealth)
+                .add(EntityAttributes.GENERIC_ARMOR, attributes().riverPikehornArmor)
+                .add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, attributes().riverPikehornArmorToughness)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, attributes().riverPikehornGroundSpeed * attributes().dragonGroundSpeedMultiplier)
+                .add(EntityAttributes.GENERIC_FLYING_SPEED, attributes().riverPikehornFlyingSpeed * attributes().dragonFlyingSpeedMultiplier)
                 .add(URAttributes.DRAGON_VERTICAL_SPEED, attributes().riverPikehornVerticalSpeed)
                 .add(URAttributes.DRAGON_ACCELERATION_DURATION, attributes().riverPikehornBaseAccelerationDuration)
                 .add(URAttributes.DRAGON_GROUND_ROTATION_SPEED, attributes().riverPikehornRotationSpeedGround)

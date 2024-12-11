@@ -78,8 +78,6 @@
     "config.uselessreptile.option.enableCameraOffset": "Activer le décalage de la caméra",
     "config.uselessreptile.option.enableCrosshair": "Activer le réticule en 3ème personne",
     "config.uselessreptile.option.autoThirdPerson": "Changer de perspective automatiquement",
-    "config.uselessreptile.option.dragonHealthMultiplier": "Multiplicateur de vie pour les dragons",
-    "config.uselessreptile.option.dragonDamageMultiplier": "Multiplicateur de dégâts pour les dragons",
     "config.uselessreptile.option.pikehornSpawnWeight": "Taux d'apparition de Narval fluvial",
     "config.uselessreptile.option.disableEmissiveTextures": "Désactiver les textures brillantes",
 
@@ -92,8 +90,6 @@
     "config.uselessreptile.option.enableCameraOffset.@Tooltip": "Active le décalage de la caméra en 3ème personne lorsque le joueur chevauche un dragon\nSi désactivé, les décalages ne s'appliqueront pas.",
     "config.uselessreptile.option.enableCrosshair.@Tooltip": "Active le réticule en 3ème personne lorsque le joueur chevauche un dragon",
     "config.uselessreptile.option.autoThirdPerson.@Tooltip": "Change automatiquement les perspectives lors de la chevauche et de la descente d'un dragon.",
-    "config.uselessreptile.option.dragonHealthMultiplier.@Tooltip": "Décuple la vie des dragons",
-    "config.uselessreptile.option.dragonDamageMultiplier.@Tooltip": "Décuple les dégâts de tous les dragons\nCertaines attaques peuvent ignorer cet effet",
     "config.uselessreptile.option.disableEmissiveTextures.@Tooltip": "Empêche le rendu de textures brillantes sur les dragons",
 
     "effect.uselessreptile.acid": "Acide",
