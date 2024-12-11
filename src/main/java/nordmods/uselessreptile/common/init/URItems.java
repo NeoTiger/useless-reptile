@@ -57,9 +57,9 @@ public class URItems {
     public static final FluteItem FLUTE = new FluteItem(new Item.Settings().maxCount(1).component(FLUTE_MODE_COMPONENT, FluteComponent.DEFAULT));
     public static final VortexHornItem VORTEX_HORN = new VortexHornItem(createVortexHornItemSettings(), 1);
     public static final VortexHornItem IRON_VORTEX_HORN = new VortexHornItem(createVortexHornItemSettings(), 3);
-    public static final VortexHornItem GOLD_VORTEX_HORN = new VortexHornItem(createVortexHornItemSettings(), 5);
-    public static final VortexHornItem DIAMOND_VORTEX_HORN = new VortexHornItem(createVortexHornItemSettings(), 7);
-    public static final VortexHornItem NETHERITE_VORTEX_HORN = new VortexHornItem(createVortexHornItemSettings().fireproof(), 14);
+    public static final VortexHornItem GOLD_VORTEX_HORN = new VortexHornItem(createVortexHornItemSettings(), 6);
+    public static final VortexHornItem DIAMOND_VORTEX_HORN = new VortexHornItem(createVortexHornItemSettings(), 9);
+    public static final VortexHornItem NETHERITE_VORTEX_HORN = new VortexHornItem(createVortexHornItemSettings().fireproof(), 15);
 
     public static final RegistryKey<ItemGroup> UR_ITEM_GROUP = RegistryKey.of(RegistryKeys.ITEM_GROUP, UselessReptile.id("item_group"));
 
