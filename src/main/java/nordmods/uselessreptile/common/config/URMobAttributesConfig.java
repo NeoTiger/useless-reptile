@@ -106,11 +106,11 @@ public class URMobAttributesConfig {
     @SerialEntry
     public int riverPikehornBasePrimaryAttackCooldown = 20;
     @SerialEntry
-    public int riverPikehornBaseAccelerationDuration = 100;
+    public int riverPikehornBaseAccelerationDuration = 200;
     @SerialEntry
     public float riverPikehornRotationSpeedGround = 10;
     @SerialEntry
-    public float riverPikehornRotationSpeedAir = 10;
+    public float riverPikehornRotationSpeedAir = 20;
     @SerialEntry
     public float riverPikehornVerticalSpeed = 0.2f;
     @SerialEntry

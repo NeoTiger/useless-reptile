@@ -7,31 +7,33 @@ import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageTypes;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.event.EntityPositionSource;
+import net.minecraft.world.event.GameEvent;
+import net.minecraft.world.event.PositionSource;
+import net.minecraft.world.event.listener.EntityGameEventHandler;
+import net.minecraft.world.event.listener.GameEventListener;
 import nordmods.uselessreptile.common.config.URConfig;
 import nordmods.uselessreptile.common.entity.ai.goal.common.*;
 import nordmods.uselessreptile.common.entity.ai.goal.river_pikehorn.*;
 import nordmods.uselessreptile.common.entity.base.URFlyingDragonEntity;
-import nordmods.uselessreptile.common.init.URAttributes;
-import nordmods.uselessreptile.common.init.URItems;
-import nordmods.uselessreptile.common.init.URSounds;
-import nordmods.uselessreptile.common.init.URTags;
-import nordmods.uselessreptile.common.item.FluteItem;
+import nordmods.uselessreptile.common.init.*;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animation.AnimatableManager;
@@ -40,12 +42,18 @@ import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.animation.keyframe.event.SoundKeyframeEvent;
 
+import java.util.function.BiConsumer;
+
 public class RiverPikehornEntity extends URFlyingDragonEntity {
-    private final int huntCooldown = 3000;
-    private int huntTimer = huntCooldown;
+    private final int huntCooldown = 1200;
+    private int huntTimer = getRandom().nextInt(huntCooldown);
     public boolean forceTargetInWater = false;
     private final int eatCooldown = 200;
     private int eatTimer = eatCooldown;
+    private boolean isHunting = false;
+    public boolean shouldFollow = false;
+    protected final EntityGameEventHandler<FluteUsedEventListener> fluteUsedEventHandler = new EntityGameEventHandler<>(new FluteUsedEventListener
+            (new EntityPositionSource(this, getStandingEyeHeight()), URGameEvents.LIGHTNING_STRIKE_FAR.value().notificationRadius()));
 
     public static float BASE_GROUND_SPEED = 0.2f;
 
@@ -61,14 +69,18 @@ public class RiverPikehornEntity extends URFlyingDragonEntity {
         ticksUntilHeal = 400;
     }
 
-    @Override
-    protected void initDataTracker(DataTracker.Builder builder) {
-        super.initDataTracker(builder);
-        builder.add(IS_HUNTING, false);
+    public boolean isHunting() {
+        return isHunting;
     }
-    public static final TrackedData<Boolean> IS_HUNTING = DataTracker.registerData(RiverPikehornEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-    public boolean isHunting() {return dataTracker.get(IS_HUNTING);}
-    public void setIsHunting (boolean state) {dataTracker.set(IS_HUNTING, state);}
+    public void setIsHunting (boolean state) {
+        isHunting = state;
+    }
+
+    @Override
+    public void updateEventHandler(BiConsumer<EntityGameEventHandler<?>, ServerWorld> callback) {
+        if (getWorld() instanceof ServerWorld serverWorld) callback.accept(fluteUsedEventHandler, serverWorld);
+        super.updateEventHandler(callback);
+    }
 
     @Nullable
     @Override
@@ -173,11 +185,10 @@ public class RiverPikehornEntity extends URFlyingDragonEntity {
         dropLootToOwner();
 
         if (!isTamed()) {
-            if (huntTimer > 0 && !isHunting()) huntTimer--;
-            else setIsHunting(true);
+            if (!isHunting() && --huntTimer <= 0) setIsHunting(true);
 
             ItemStack itemStack = getMainHandStack();
-            if (eatTimer <= 0 || getMaxHealth() > getHealth()) {
+            if (isHunting() && !itemStack.isEmpty() && --eatTimer <= 0) {
                 if (isFavoriteFood(itemStack)) {
                     consumeGivenItem(this, itemStack);
                     tryApplyFoodEffects(itemStack);
@@ -185,18 +196,6 @@ public class RiverPikehornEntity extends URFlyingDragonEntity {
                 } else dropStack(itemStack);
                 stopHunt();
             } else eatTimer--;
-
-        }
-
-        if (isTamed()) {
-            PlayerEntity owner = (PlayerEntity) getOwner();
-            if (owner != null) {
-                ItemStack main = owner.getMainHandStack();
-                ItemStack offhand = owner.getOffHandStack();
-                boolean mainCanTarget = main.getItem() instanceof FluteItem fluteItem && fluteItem.getFluteMode(main) == 1;
-                boolean offhandCanTarget = offhand.getItem() instanceof FluteItem fluteItem && fluteItem.getFluteMode(offhand) == 1;
-                if (owner.getItemCooldownManager().isCoolingDown(URItems.FLUTE) && (mainCanTarget || offhandCanTarget)) setIsHunting(true);
-            }
         }
 
         if (isInsideWaterOrBubbleColumn()) {
@@ -255,7 +254,6 @@ public class RiverPikehornEntity extends URFlyingDragonEntity {
         goalSelector.add(9, new DragonLookAroundGoal(this));
         targetSelector.add(3, (new DragonRevengeGoal(this, new Class[0])).setGroupRevenge(new Class[0]));
         targetSelector.add(4, new DragonAttackWithOwnerGoal(this));
-        targetSelector.add(4, new PikehornFluteTargetGoal(this));
         targetSelector.add(5, new DragonTrackOwnerAttackerGoal(this));
         if (URConfig.getConfig().dragonMadness) targetSelector.add(4, new UntamedActiveTargetGoal<>(this, PlayerEntity.class, true, null));
     }
@@ -328,7 +326,12 @@ public class RiverPikehornEntity extends URFlyingDragonEntity {
 
     @Override
     protected float getMovementSpeedModifier() {
-        return super.getMovementSpeedModifier() / (isTouchingWater() ? 2 : 1);
+        return super.getMovementSpeedModifier() / (isTouchingWater() ? 2f : 1f);
+    }
+
+    @Override
+    public float getRotationSpeed() {
+        return super.getRotationSpeed() * (isTouchingWater() ? 2f : 1f);
     }
 
     public void stopHunt() {
@@ -370,6 +373,50 @@ public class RiverPikehornEntity extends URFlyingDragonEntity {
 
     @Override
     public boolean isArmorSlot(EquipmentSlot slot) {
-        return false;
+        return slot != EquipmentSlot.MAINHAND;
+    }
+
+    protected class FluteUsedEventListener implements GameEventListener {
+        private final PositionSource positionSource;
+        private final int range;
+
+        public FluteUsedEventListener(PositionSource positionSource, int range) {
+            this.positionSource = positionSource;
+            this.range = range;
+        }
+
+        public PositionSource getPositionSource() {return this.positionSource;}
+
+        public int getRange() {return this.range;}
+
+        @Override
+        public boolean listen(ServerWorld world, RegistryEntry<GameEvent> event, GameEvent.Emitter emitter, Vec3d emitterPos) {
+            if (event != URGameEvents.FLUTE_USED) return false;
+            if (!(emitter.sourceEntity() instanceof PlayerEntity player)) return false;
+            if (getOwner() != player) return false;
+
+            if (!(player.getItemCooldownManager().isCoolingDown(URItems.FLUTE))) return false;
+            ItemStack stack = player.getMainHandStack();
+            if (!stack.isOf(URItems.FLUTE)) stack = player.getOffHandStack();
+            if (!stack.isOf(URItems.FLUTE)) return false;
+
+            switch (URItems.FLUTE.getFluteMode(stack)) {
+                default -> shouldFollow = true;
+                case 1 -> setIsHunting(true);
+                case 2 -> {
+                    Vec3d rot = player.getRotationVec(1);
+                    EntityHitResult hitResult = ProjectileUtil
+                            .raycast(player,
+                                    player.getCameraPosVec(1),
+                                    player.getCameraPosVec(1).add(rot.multiply(range)),
+                                    player.getBoundingBox().stretch(rot.multiply(range)).expand(1.0, 1.0, 1.0),
+                                    entity -> entity instanceof LivingEntity && !entity.isSpectator() && entity.canHit(), range);
+
+                    if (hitResult != null) setTarget((LivingEntity) hitResult.getEntity());
+                }
+            }
+
+            return true;
+        }
     }
 }
