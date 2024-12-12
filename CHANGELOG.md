@@ -34,5 +34,7 @@
 
 - Fix River Pikehorn always having incorrect flying speed and inability to affect those via configs
 
+- Fix River Pikehorn occasionally suffocating in walls
+
 ### Known Issues:
 - Dragon rotations in some scenarios may be very out of sync with the server

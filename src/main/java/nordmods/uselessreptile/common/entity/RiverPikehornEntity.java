@@ -168,8 +168,7 @@ public class RiverPikehornEntity extends URFlyingDragonEntity {
     public void tick() {
         super.tick();
         if (getVehicle() instanceof PlayerEntity) setHitboxModifiers(0.7f, 0.6f, 0);
-        else if (isFlying() && isMoving()) setHitboxModifiers(0.6f, 1f, 0);
-        else setHitboxModifiers(0.8f, 0.8f, 0);
+        else setHitboxModifiers(0.7f, 0.8f, 0);
 
         dropLootToOwner();
 

@@ -17,6 +17,8 @@ public class UselessReptile implements ModInitializer, PreLaunchEntrypoint {
     @Override
     public void onInitialize() {
         //ModonomiconIntegration.init();
+        URMobAttributesConfig.init();
+
         DragonSpawnReloadListener.init();
         URMobAttributesConfig.init();
         URSounds.init();
@@ -35,7 +37,6 @@ public class UselessReptile implements ModInitializer, PreLaunchEntrypoint {
     @Override
     public void onPreLaunch() {
         URConfig.init();
-        URMobAttributesConfig.init();
     }
 
     public static Identifier id(String id) {
