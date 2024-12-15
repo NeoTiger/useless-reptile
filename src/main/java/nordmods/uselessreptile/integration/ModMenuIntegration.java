@@ -275,6 +275,15 @@ public class ModMenuIntegration implements ModMenuApi {
                         val -> config.blockDropChance = val)
                 .customController(opt -> new IntegerSliderController(opt, 0, 100, 1))
                 .build();
+        Option<Boolean> allowDragonTeleport = Option.<Boolean>createBuilder()
+                .name(Text.translatable("config.uselessreptile.option.allowDragonTeleport"))
+                .description(OptionDescription.createBuilder()
+                        .text(Text.translatable("config.uselessreptile.option.allowDragonTeleport.@Tooltip")).build())
+                .binding(config.allowDragonTeleport,
+                        () -> config.allowDragonTeleport,
+                        val -> config.allowDragonTeleport = val)
+                .customController(TickBoxController::new)
+                .build();
         Option<Boolean> dragonMadness = Option.<Boolean>createBuilder()
                 .name(Text.translatable("config.uselessreptile.option.dragonMadness"))
                 .description(OptionDescription.createBuilder()
@@ -308,6 +317,7 @@ public class ModMenuIntegration implements ModMenuApi {
         dragonBehaviourGroup.option(moleclawGriefing);
         dragonBehaviourGroup.option(lightningChaserGriefing);
         dragonBehaviourGroup.option(blockDropChance);
+        dragonBehaviourGroup.option(allowDragonTeleport);
         dragonBehaviourGroup.option(dragonMadness);
 
         gameplayCategory.group(spawnWeightGroup.build());

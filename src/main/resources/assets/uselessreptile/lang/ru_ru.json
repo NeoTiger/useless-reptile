@@ -137,6 +137,8 @@
     "config.uselessreptile.option.dragonMadness": "Драконье безумие",
     "config.uselessreptile.option.moleclawGriefing": "Разрушение блоков кротолапом",
     "config.uselessreptile.option.lightningChaserGriefing": "Разрушение блоков ловцом молний",
+    "config.uselessreptile.option.allowDragonTeleport": "Разрешить прирученным драконам телепортироваться",
+
 
     "config.uselessreptile.requires_restart.@Tooltip" : "\nИзменение данной опции требует перезапуска игры",
     "config.uselessreptile.group.spawnWeight.@Tooltip": "Шансы появления для каждого дракона. Каждая настройка позволяет контролировать частоту появления для конкретного дракона. \nИзменение любого параметра потребует перезапуска игры",
@@ -148,7 +150,7 @@
     "config.uselessreptile.group.globalMultipliers.@Tooltip" : "Множители для базовых значений конкретных аттрибутов для ВСЕХ драконов",
     "config.uselessreptile.group.dragonAttributes.@Tooltip" : "Базовые значения аттрибутов драконов. Учтите, что аттрибуты в ванильной игре ограничены определенным диапазоном (это может быть изменено другими модами): \n§6Урон: §c[0;2048] \n§6Отдача: §c[0;5] \n§6Здоровье: §c[1;1024] \n§6Броня: §c[0;30] \n§6AТвердость брони: §c[0;20]  \n§Скорость на земле, в полете и по вертикали: §c[0;1024] \n§6Скорость поворота: §c[0;180] \n§6Перезарядка атаки: §c[0;2048] \n§6Время разгона: §c[0;2048] \n§6Восстановление здоровья от еды: §c[0;1024] \n§fПерезарядки атак и время разгона измеряются в тиках, скорости поворота - в градусах. Скорости перемещения измеряются в метеоритах размером с корги",
 
-    "config.uselessreptile.option.dragonSpawnWeight.@Tooltip": "Отвечает за то, как часто дракон будет появляться в мире.\nУстановление значения в 0 отключает появление \n§cЗначение ниже 0 могут привести к вылету игры",
+    "config.uselessreptile.option.dragonSpawnWeight.@Tooltip": "Отвечает за то, как часто дракон будет появляться в мире.\nУстановка значения на 0 отключает появление \n§cЗначение ниже 0 могут привести к вылету игры",
     "config.uselessreptile.option.blockDropChance.@Tooltip": "Определяет процент блоков, который будет выпадать после некоторых атак драконов, которые могут разрущать блоки",
     "config.uselessreptile.option.allowDragonGriefing.@Tooltip": "Определяет, могут ли драконы разрушать блоки или нет. \nДопустимые значения: \n§3ALL §f(все могут ломать), \n§3TAMED §f(только прирученные могут), \n§3NONE §f(никто не может ломать)",
     "config.uselessreptile.option.enableCameraOffset.@Tooltip": "Включает сдвиг камеры в режиме от 3его лица верхом на драконе\nЕсли отключено, сдвиги не будут применены",
@@ -162,7 +164,7 @@
     "config.uselessreptile.option.dragonKnockback.@Tooltip": "Базовая отдача дракона",
     "config.uselessreptile.option.dragonHealth.@Tooltip": "Базовое здоровье дракона",
     "config.uselessreptile.option.dragonArmor.@Tooltip": "Базовые очки брони дракона",
-    "config.uselessreptile.option.dragonArmorToughness.@Tooltip": "Базоваая твердости брони дракона",
+    "config.uselessreptile.option.dragonArmorToughness.@Tooltip": "Базоваая твердость брони дракона",
     "config.uselessreptile.option.dragonGroundSpeed.@Tooltip": "Базовая скорость на земле дракона",
     "config.uselessreptile.option.dragonFlyingSpeed.@Tooltip": "Базовая скорость полета дракона",
     "config.uselessreptile.option.dragonMinGroupSize.@Tooltip": "Минимальный размер группы сущностей, появившейся естественным образом",
@@ -185,6 +187,7 @@
     "config.uselessreptile.option.lightningChaserThunderstormSpawnTimerCooldown.@Tooltip": "Колличество времени (в тиках), которое должно пройти прежде чем ловец молний снова сможет появиться рядом с одним и тем же игроком",
     "config.uselessreptile.option.dragonMadness.@Tooltip": "Все (неприрученные) драконы теперь атакуют игроков, только завидев",
     "config.uselessreptile.option.lightningChaserBaseSpecialAttackCooldown.@Tooltip": "Перезарядка атаки шоковой волной",
+    "config.uselessreptile.option.allowDragonTeleport.@Tooltip": "Позволяет прирученным драконам пытаться телепортироваться, если они пытаются следовать за владельцем и оказались слишком далеко",
 
     "effect.uselessreptile.acid": "Кислота",
     "effect.uselessreptile.shock": "Шок",

@@ -10,6 +10,7 @@ import net.minecraft.component.EnchantmentEffectComponentTypes;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.pathing.EntityNavigation;
+import net.minecraft.entity.ai.pathing.PathNodeType;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.data.DataTracker;
@@ -59,6 +60,7 @@ import nordmods.uselessreptile.common.entity.ai.navigation.DragonNavigation;
 import nordmods.uselessreptile.common.event.DragonOnItemConsumedEvent;
 import nordmods.uselessreptile.common.gui.URDragonScreenHandler;
 import nordmods.uselessreptile.common.init.URAttributes;
+import nordmods.uselessreptile.common.init.URGameEvents;
 import nordmods.uselessreptile.common.init.URStatusEffects;
 import nordmods.uselessreptile.common.init.URTags;
 import nordmods.uselessreptile.common.item.VortexHornItem;
@@ -92,8 +94,11 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
     private BlockPos homePoint = BlockPos.ORIGIN;
     protected final EntityGameEventHandler<URDragonEntity.JukeboxEventListener> jukeboxEventHandler = new EntityGameEventHandler<>(new URDragonEntity.JukeboxEventListener
             (new EntityPositionSource(this, getStandingEyeHeight()), GameEvent.JUKEBOX_PLAY.value().notificationRadius()));
+    protected final EntityGameEventHandler<URDragonEntity.HornUsedEventListener> hornUsedEventHandler = new EntityGameEventHandler<>(new URDragonEntity.HornUsedEventListener
+            (new EntityPositionSource(this, getStandingEyeHeight()), URGameEvents.INSTRUMENT_USED.value().notificationRadius()));
     protected @Nullable BlockPos jukeboxPos;
     protected SimpleInventory inventory = new SimpleInventory(URDragonScreenHandler.maxStorageSize);
+    public boolean shouldFollow = false;
 
     protected URDragonEntity(EntityType<? extends TameableEntity> entityType, World world) {
         super(entityType, world);
@@ -307,42 +312,12 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
         setHomePoint(getBlockPos());
     }
 
-    protected class JukeboxEventListener implements GameEventListener {
-        private final PositionSource positionSource;
-        private final int range;
-
-        public JukeboxEventListener(PositionSource positionSource, int range) {
-            this.positionSource = positionSource;
-            this.range = range;
-        }
-
-        public PositionSource getPositionSource() {return this.positionSource;}
-
-        public int getRange() {return this.range;}
-
-        @Override
-        public boolean listen(ServerWorld world, RegistryEntry<GameEvent> event, GameEvent.Emitter emitter, Vec3d emitterPos) {
-            Vec3i vec3i;
-            if (emitterPos != null) vec3i = new Vec3i((int) emitterPos.x, (int) emitterPos.y, (int) emitterPos.z);
-            else return false;
-
-            boolean isJukebox = false;
-            if (jukeboxPos != null) isJukebox = world.getBlockState(jukeboxPos).isOf(Blocks.JUKEBOX);
-            if (event == GameEvent.JUKEBOX_PLAY) {
-                updateJukeboxPos(new BlockPos(vec3i), true);
-                return true;
-            } else if (event == GameEvent.JUKEBOX_STOP_PLAY || !isJukebox) {
-                updateJukeboxPos(new BlockPos(vec3i), false);
-                return true;
-            } else {
-                return false;
-            }
-        }
-    }
-
     @Override
     public void updateEventHandler(BiConsumer<EntityGameEventHandler<?>, ServerWorld> callback) {
-        if (getWorld() instanceof ServerWorld serverWorld) callback.accept(this.jukeboxEventHandler, serverWorld);
+        if (getWorld() instanceof ServerWorld serverWorld) {
+            callback.accept(this.jukeboxEventHandler, serverWorld);
+            callback.accept(this.hornUsedEventHandler, serverWorld);
+        }
         super.updateEventHandler(callback);
     }
 
@@ -795,6 +770,18 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
     }
 
     @Override
+    protected boolean canTeleportTo(BlockPos pos) {
+        PathNodeType pathNodeType = getNavigation().getNodeMaker().getDefaultNodeType(this, pos);
+        if (getPathfindingPenalty(pathNodeType) != 0) return false;
+        if (getWorld().getBlockState(pos.down()).getCollisionShape(getWorld(), pos.down()).isEmpty()) {
+            if (this instanceof FlyingDragon flyingDragon) flyingDragon.setFlying(true);
+            else return false;
+        }
+        BlockPos blockPos = pos.subtract(getBlockPos());
+        return getWorld().isSpaceEmpty(this, getBoundingBox().offset(blockPos));
+    }
+
+    @Override
     public boolean canBeLeashed() {
         return isTamed();
     }
@@ -834,5 +821,70 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
 
     public DragonAssetCache getAssetCache() {
         return assetCache;
+    }
+
+    protected class JukeboxEventListener implements GameEventListener {
+        private final PositionSource positionSource;
+        private final int range;
+
+        public JukeboxEventListener(PositionSource positionSource, int range) {
+            this.positionSource = positionSource;
+            this.range = range;
+        }
+
+        public PositionSource getPositionSource() {return this.positionSource;}
+
+        public int getRange() {return this.range;}
+
+        @Override
+        public boolean listen(ServerWorld world, RegistryEntry<GameEvent> event, GameEvent.Emitter emitter, Vec3d emitterPos) {
+            Vec3i vec3i;
+            if (emitterPos != null) vec3i = new Vec3i((int) emitterPos.x, (int) emitterPos.y, (int) emitterPos.z);
+            else return false;
+
+            boolean isJukebox = false;
+            if (jukeboxPos != null) isJukebox = world.getBlockState(jukeboxPos).isOf(Blocks.JUKEBOX);
+            if (event == GameEvent.JUKEBOX_PLAY) {
+                updateJukeboxPos(new BlockPos(vec3i), true);
+                return true;
+            } else if (event == GameEvent.JUKEBOX_STOP_PLAY || !isJukebox) {
+                updateJukeboxPos(new BlockPos(vec3i), false);
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    protected class HornUsedEventListener implements GameEventListener {
+        private final PositionSource positionSource;
+        private final int range;
+
+        public HornUsedEventListener(PositionSource positionSource, int range) {
+            this.positionSource = positionSource;
+            this.range = range;
+        }
+
+        public PositionSource getPositionSource() {return this.positionSource;}
+
+        public int getRange() {return this.range;}
+
+        @Override
+        public boolean listen(ServerWorld world, RegistryEntry<GameEvent> event, GameEvent.Emitter emitter, Vec3d emitterPos) {
+            if (event != URGameEvents.INSTRUMENT_USED) return false;
+            if (!(emitter.sourceEntity() instanceof PlayerEntity player)) return false;
+            if (getOwner() != player) return false;
+
+            ItemStack stack = player.getMainHandStack();
+            if (!stack.getComponents().contains(DataComponentTypes.INSTRUMENT)) stack = player.getOffHandStack();
+            if (!stack.getComponents().contains(DataComponentTypes.INSTRUMENT)) return false;
+
+            if (getInstrument(stack).equals(getBoundedInstrumentSound())) {
+                setIsSitting(false);
+                shouldFollow = true;
+                return true;
+            }
+            return false;
+        }
     }
 }

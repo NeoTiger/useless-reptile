@@ -51,7 +51,6 @@ public class RiverPikehornEntity extends URFlyingDragonEntity {
     private final int eatCooldown = 200;
     private int eatTimer = eatCooldown;
     private boolean isHunting = false;
-    public boolean shouldFollow = false;
     protected final EntityGameEventHandler<FluteUsedEventListener> fluteUsedEventHandler = new EntityGameEventHandler<>(new FluteUsedEventListener
             (new EntityPositionSource(this, getStandingEyeHeight()), URGameEvents.LIGHTNING_STRIKE_FAR.value().notificationRadius()));
 
@@ -395,7 +394,6 @@ public class RiverPikehornEntity extends URFlyingDragonEntity {
             if (!(emitter.sourceEntity() instanceof PlayerEntity player)) return false;
             if (getOwner() != player) return false;
 
-            if (!(player.getItemCooldownManager().isCoolingDown(URItems.FLUTE))) return false;
             ItemStack stack = player.getMainHandStack();
             if (!stack.isOf(URItems.FLUTE)) stack = player.getOffHandStack();
             if (!stack.isOf(URItems.FLUTE)) return false;

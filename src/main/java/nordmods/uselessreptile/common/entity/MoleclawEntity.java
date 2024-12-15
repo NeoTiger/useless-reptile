@@ -349,7 +349,7 @@ public class MoleclawEntity extends URRideableDragonEntity {
     }
 
     public boolean isTooBrightAtPos(BlockPos blockPos) {
-        return getLightAtPos(blockPos, this) > 7 && !hasLightProtection();
+        return !hasLightProtection() && getLightAtPos(blockPos, this) > 7;
     }
 
     public static int getLightAtPos(BlockPos blockPos, LivingEntity entity) {
@@ -439,5 +439,11 @@ public class MoleclawEntity extends URRideableDragonEntity {
     @Override
     public int getLimitPerChunk() {
         return URConfig.getConfig().moleclawMaxGroupSize * 2;
+    }
+
+    @Override
+    protected boolean canTeleportTo(BlockPos pos) {
+        if (isTooBrightAtPos(pos)) return false;
+        return super.canTeleportTo(pos);
     }
 }

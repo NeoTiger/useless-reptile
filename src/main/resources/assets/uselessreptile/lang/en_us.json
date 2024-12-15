@@ -137,6 +137,7 @@
     "config.uselessreptile.option.dragonMadness": "Dragon Madness",
     "config.uselessreptile.option.moleclawGriefing": "Moleclaw Griefing",
     "config.uselessreptile.option.lightningChaserGriefing": "Lightning Chaser Griefing",
+    "config.uselessreptile.option.allowDragonTeleport": "Allow Tamed Dragons to Teleport",
 
     "config.uselessreptile.requires_restart.@Tooltip" : "\nChanging this option requires game restart",
     "config.uselessreptile.group.spawnWeight.@Tooltip" : "Spawn weights for each dragon. Each option allows you to control frequency of appearing of specific dragon",
@@ -185,6 +186,7 @@
     "config.uselessreptile.option.lightningChaserThunderstormSpawnTimerCooldown.@Tooltip": "Amount of time (in ticks) that must pass before Lightning Chaser can attempt to spawn near the same player",
     "config.uselessreptile.option.dragonMadness.@Tooltip": "All (untamed) dragons now attack players on sight",
     "config.uselessreptile.option.lightningChaserBaseSpecialAttackCooldown.@Tooltip": "Shockwave attack cooldown",
+    "config.uselessreptile.option.allowDragonTeleport.@Tooltip": "Allows tamed dragons to teleport whenever they attempt to follow the owner and happen to be too far away",
 
     "effect.uselessreptile.acid": "Acid",
     "effect.uselessreptile.shock": "Shock",

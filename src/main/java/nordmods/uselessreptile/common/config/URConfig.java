@@ -56,6 +56,8 @@ public class URConfig {
     public DragonGriefing lightningChaserGriefing = DragonGriefing.ALL;
     @SerialEntry
     public int blockDropChance = 100;
+    @SerialEntry(comment = "allows dragon to teleport to owner whenever it tries to follow")
+    public boolean allowDragonTeleport = true;
     @SerialEntry
     public boolean dragonMadness = false;
 
