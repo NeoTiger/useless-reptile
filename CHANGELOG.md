@@ -4,6 +4,7 @@
   - Different dragons take up different amount of capacity. Small dragons take only 1, big dragons take up 3
   - To store dragon inside the horn just use it on __your__ dragon, to release the dragon click on the block. When released, last added dragon will always be released first
   - You also can mass capture/release your dragons when crouching
+  - When attempting to dp this, sitting dragons will be skipped. You still can capture them in horn individually
   - When released, dragon will automatically be bound to the sound of Vortex Horn in which it was stored in
   - Attempting to release not your dragon may result in an injury
   - Vortex Horn has 5 tiers: normal, iron, gold, diamond and netherite. Each tier increases capacity of the horn
@@ -35,6 +36,8 @@
 - Fix River Pikehorn always having incorrect flying speed and inability to affect those via configs
 
 - Fix River Pikehorn occasionally suffocating in walls
+
+- Dragons now can teleport to owner if they attempt to follow when happen to be too far or stuck. If you don't like this behaviour, you can disable it in config
 
 ### Known Issues:
 - Dragon rotations in some scenarios may be very out of sync with the server
