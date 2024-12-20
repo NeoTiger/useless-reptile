@@ -31,7 +31,10 @@ import net.minecraft.world.event.listener.EntityGameEventHandler;
 import net.minecraft.world.event.listener.GameEventListener;
 import nordmods.uselessreptile.common.config.URConfig;
 import nordmods.uselessreptile.common.entity.ai.goal.common.*;
-import nordmods.uselessreptile.common.entity.ai.goal.river_pikehorn.*;
+import nordmods.uselessreptile.common.entity.ai.goal.river_pikehorn.PikehornAttackGoal;
+import nordmods.uselessreptile.common.entity.ai.goal.river_pikehorn.PikehornFluteCallGoal;
+import nordmods.uselessreptile.common.entity.ai.goal.river_pikehorn.PikehornFollowGoal;
+import nordmods.uselessreptile.common.entity.ai.goal.river_pikehorn.PikehornHuntGoal;
 import nordmods.uselessreptile.common.entity.base.URFlyingDragonEntity;
 import nordmods.uselessreptile.common.init.*;
 import org.jetbrains.annotations.Nullable;
@@ -52,7 +55,7 @@ public class RiverPikehornEntity extends URFlyingDragonEntity {
     private int eatTimer = eatCooldown;
     private boolean isHunting = false;
     protected final EntityGameEventHandler<FluteUsedEventListener> fluteUsedEventHandler = new EntityGameEventHandler<>(new FluteUsedEventListener
-            (new EntityPositionSource(this, getStandingEyeHeight()), URGameEvents.LIGHTNING_STRIKE_FAR.value().notificationRadius()));
+            (new EntityPositionSource(this, getStandingEyeHeight()), URGameEvents.FLUTE_USED.value().notificationRadius()));
 
     public static float BASE_GROUND_SPEED = 0.2f;
 
@@ -408,7 +411,7 @@ public class RiverPikehornEntity extends URFlyingDragonEntity {
                                     player.getCameraPosVec(1),
                                     player.getCameraPosVec(1).add(rot.multiply(range)),
                                     player.getBoundingBox().stretch(rot.multiply(range)).expand(1.0, 1.0, 1.0),
-                                    entity -> entity instanceof LivingEntity && !entity.isSpectator() && entity.canHit(), range);
+                                    entity -> entity instanceof LivingEntity && !entity.isSpectator() && entity.canHit(), range * range);
 
                     if (hitResult != null) setTarget((LivingEntity) hitResult.getEntity());
                 }
