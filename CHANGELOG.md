@@ -39,5 +39,9 @@
 
 - Dragons now can teleport to owner if they attempt to follow when happen to be too far or stuck. If you don't like this behaviour, you can disable it in config
 
+- `pikehornMinGroupSize` and `pikehornMaxGroupSize` config options were renamed to `riverPikehornMinGroupSize` and `riverPikehornMaxGroupSize` respectively for consistency
+
+- Replaced spawn weight config options with boolean fields that define if dragon can spawn naturally. This change was made since changing spawn weight wasn't actually changing much in terms of spawning and at best could only disable it
+
 ### Known Issues:
 - Dragon rotations in some scenarios may be very out of sync with the server

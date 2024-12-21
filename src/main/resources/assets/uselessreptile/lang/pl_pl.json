@@ -51,8 +51,6 @@
     "other.uselessreptile.sound_respond": "%1$s będzie teraz reagował/a na następujący dźwięk: %2$s",
 
     "config.uselessreptile.title": "Useless Reptile konfiguracja",
-    "config.uselessreptile.option.wyvernSpawnWeight": "Waga generowania Wiwerny bagiennej",
-    "config.uselessreptile.option.moleclawSpawnWeight": "Waga generowania Kretoszpona",
     "config.uselessreptile.option.blockDropChance": "Szansa upuszczenia bloku",
     "config.uselessreptile.option.cameraDistanceOffset": "Odsunięcie kamery",
     "config.uselessreptile.option.cameraVerticalOffset": "Pionowe przesunięcie kamery",

@@ -370,7 +370,7 @@ public class RiverPikehornEntity extends URFlyingDragonEntity {
 
     @Override
     public int getLimitPerChunk() {
-        return URConfig.getConfig().pikehornMaxGroupSize * 2;
+        return URConfig.getConfig().riverPikehornMaxGroupSize * 2;
     }
 
     @Override
