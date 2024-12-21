@@ -22,6 +22,7 @@ import nordmods.uselessreptile.common.event.DragonOnItemConsumedEvent;
 import nordmods.uselessreptile.common.event.MoleclawGetBlockMiningLevelEvent;
 import nordmods.uselessreptile.common.network.URPacketHelper;
 import nordmods.uselessreptile.common.util.LightningChaserSpawnTimer;
+import nordmods.uselessreptile.common.util.dragon_spawn.DragonSpawnUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +46,7 @@ public class URModEvents {
                 }
                 for (ServerPlayerEntity player : world.getPlayers()) {
                     if (!(player instanceof LightningChaserSpawnTimer playerTimer)) continue;
-                    if (player.getY() < 60) continue;
+                    if (player.getY() < 62) continue;
                     if (playerTimer.useless_reptile$getTimer() > 0) continue;
                     if (URConfig.getConfig().lightningChaserThunderstormSpawnChance >= player.getRandom().nextFloat() * 100) {
                         double cos = Math.cos(Math.toRadians(player.getHeadYaw() + 180)); //Lightning Chaser will always spawn behind the player
@@ -55,6 +56,10 @@ public class URModEvents {
                                 world.getTopY(Heightmap.Type.WORLD_SURFACE, (int) (pos.getX() + sin * 128), (int) (pos.getZ() + cos * 128)) + 16,
                                 (int) (pos.getZ() + cos * 128));
                         while (!world.getBlockState(spawnPos).isAir()) spawnPos = spawnPos.up();
+                        if (DragonSpawnUtil.getAvailableVariants(world, spawnPos, "lightning_chaser").isEmpty()) {
+                            worldTimer.useless_reptile$setTimer(1200);
+                            return;
+                        }
                         LightningChaserEntity lightningChaser = UREntities.LIGHTNING_CHASER_ENTITY.spawn(world, spawnPos, SpawnReason.EVENT);
                         if (lightningChaser != null) {
                             lightningChaser.setFlying(true);
@@ -110,12 +115,12 @@ public class URModEvents {
     private static void onItemConsumedEvents() {
         DragonOnItemConsumedEvent.EVENT.register((user, itemStack) -> {
             if (itemStack.isIn(ConventionalItemTags.ENTITY_WATER_BUCKETS)) {
-                if (user instanceof PlayerEntity player) player.giveItemStack(Items.WATER_BUCKET.getDefaultStack());
+                if (user instanceof PlayerEntity player && !player.isCreative()) player.giveItemStack(Items.WATER_BUCKET.getDefaultStack());
                 if (user instanceof URDragonEntity dragon) dragon.giveItemStack(Items.WATER_BUCKET.getDefaultStack());
                 return;
             }
             if (itemStack.getItem().hasRecipeRemainder()) {
-                if (user instanceof PlayerEntity player) player.giveItemStack(itemStack.getItem().getRecipeRemainder().getDefaultStack());
+                if (user instanceof PlayerEntity player && !player.isCreative()) player.giveItemStack(itemStack.getItem().getRecipeRemainder().getDefaultStack());
                 if (user instanceof URDragonEntity dragon) dragon.giveItemStack(itemStack.getItem().getRecipeRemainder().getDefaultStack());
             }
         });

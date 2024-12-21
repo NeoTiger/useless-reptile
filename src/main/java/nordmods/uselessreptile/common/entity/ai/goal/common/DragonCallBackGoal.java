@@ -69,7 +69,7 @@ public class DragonCallBackGoal extends Goal {
             entity.getNavigation().startMovingTo(owner, 1);
             entity.setHomePoint(owner.getBlockPos());
             if (URConfig.getConfig().allowDragonTeleport
-                    && (distance > 4096 || entity.getNavigation() instanceof PathTime pathTime && pathTime.getPathTime() > 70 && distance > 144)) entity.tryTeleportToOwner();
+                    && (distance > 4096 || entity.getNavigation() instanceof PathTime pathTime && pathTime.getPathTime() > 70)) entity.tryTeleportToOwner();
         }
     }
 
