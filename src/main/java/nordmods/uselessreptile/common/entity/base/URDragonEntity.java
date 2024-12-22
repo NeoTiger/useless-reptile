@@ -375,8 +375,7 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
         ItemStack itemStack = player.getStackInHand(hand);
         if (isTamed()) {
             if (isFavoriteFood(itemStack) && getHealth() != getAttributeValue(EntityAttributes.GENERIC_MAX_HEALTH)) {
-                DragonOnItemConsumedEvent.EVENT.invoker().onItemConsumed(player, itemStack);
-                tryApplyFoodEffects(itemStack);
+                consumeGivenItem(player, itemStack, SoundEvents.ENTITY_GENERIC_EAT);
                 heal(getHealthRegenerationFromFood());
                 return ActionResult.SUCCESS;
             }
@@ -807,8 +806,14 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
     }
 
     public ItemStack consumeGivenItem(@Nullable LivingEntity user, ItemStack itemStack) {
+        return consumeGivenItem(user,itemStack, null);
+    }
+
+    public ItemStack consumeGivenItem(@Nullable LivingEntity user, ItemStack itemStack, @Nullable SoundEvent sound) {
         DragonOnItemConsumedEvent.EVENT.invoker().onItemConsumed(user, itemStack);
+        tryApplyFoodEffects(itemStack);
         if (user == null || !user.isInCreativeMode()) itemStack.decrement(1);
+        if (sound != null) playSound(sound, 1, 1);
         return itemStack;
     }
 

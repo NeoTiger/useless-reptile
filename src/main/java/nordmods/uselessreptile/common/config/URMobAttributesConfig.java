@@ -110,7 +110,7 @@ public class URMobAttributesConfig {
     @SerialEntry
     public float riverPikehornRotationSpeedGround = 10;
     @SerialEntry
-    public float riverPikehornRotationSpeedAir = 20;
+    public float riverPikehornRotationSpeedAir = 16;
     @SerialEntry
     public float riverPikehornVerticalSpeed = 0.2f;
     @SerialEntry

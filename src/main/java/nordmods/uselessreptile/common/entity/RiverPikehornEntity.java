@@ -192,14 +192,13 @@ public class RiverPikehornEntity extends URFlyingDragonEntity {
             ItemStack itemStack = getMainHandStack();
             if (isHunting() && !itemStack.isEmpty() && --eatTimer <= 0) {
                 if (isFavoriteFood(itemStack)) {
-                    consumeGivenItem(this, itemStack);
-                    tryApplyFoodEffects(itemStack);
+                    consumeGivenItem(this, itemStack, SoundEvents.ENTITY_GENERIC_EAT);
                     heal(getHealthRegenerationFromFood());
                 } else dropStack(itemStack);
                 stopHunt();
-            } else eatTimer--;
+            }
         }
-
+        setSpeedMod(isInsideWaterOrBubbleColumn() ? 0.5f : 1);
         if (isInsideWaterOrBubbleColumn()) {
             setSwimming(true);
             setFlying(true);
@@ -265,8 +264,7 @@ public class RiverPikehornEntity extends URFlyingDragonEntity {
         ItemStack itemStack = player.getStackInHand(hand);
 
         if (isTamingItem(itemStack) && !isTamed()) {
-            player.setStackInHand(hand, consumeGivenItem(player, itemStack));
-            tryApplyFoodEffects(itemStack);
+            player.setStackInHand(hand, consumeGivenItem(player, itemStack, SoundEvents.ENTITY_GENERIC_EAT));
             setOwner(player);
             getWorld().sendEntityStatus(this, EntityStatuses.ADD_POSITIVE_PLAYER_REACTION_PARTICLES);
             setPersistent();
@@ -324,11 +322,6 @@ public class RiverPikehornEntity extends URFlyingDragonEntity {
             getEquippedStack(EquipmentSlot.MAINHAND).decrement(stack.getCount());
             setIsHunting(false);
         }
-    }
-
-    @Override
-    protected float getMovementSpeedModifier() {
-        return super.getMovementSpeedModifier() / (isTouchingWater() ? 2f : 1f);
     }
 
     @Override
