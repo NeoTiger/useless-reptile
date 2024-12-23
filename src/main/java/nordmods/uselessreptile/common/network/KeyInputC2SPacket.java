@@ -22,14 +22,11 @@ public record KeyInputC2SPacket(boolean jump, boolean forward, boolean back, boo
                 dragon.isSecondaryAttackPressed = packet.secondaryAttack;
                 dragon.isPrimaryAttackPressed = packet.primaryAttack;
                 dragon.updateInputs(packet.forward, packet.back, packet.jump, packet.down, packet.sprint);
-            } else {
-                if (entity != null) UselessReptile.LOGGER.warn("{} tried to send key input packet for {} (UUID:{}) while not controlling it", context.player().getName().getString(), entity.getName().getString(), entity.getUuid().toString());
-                else UselessReptile.LOGGER.warn("{} tried to send key input packet for an invalid entity", context.player().getName().getString());
             }
         });
     }
 
-    private static KeyInputC2SPacket read (RegistryByteBuf buffer) {
+    private static KeyInputC2SPacket read(RegistryByteBuf buffer) {
         boolean jump = buffer.readBoolean();
         boolean forward = buffer.readBoolean();
         boolean back = buffer.readBoolean();

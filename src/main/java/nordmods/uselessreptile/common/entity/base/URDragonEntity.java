@@ -462,15 +462,15 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
 
             if (yawDiff < -getRotationSpeed()) {
                 currentYaw += getRotationSpeed();
-                setTurningState((byte)2);
+                if (!getWorld().isClient()) setTurningState((byte)2);
             }
             else if (yawDiff > getRotationSpeed()) {
                 currentYaw -= getRotationSpeed();
-                setTurningState((byte)1);
+                if (!getWorld().isClient()) setTurningState((byte)1);
             }
             else currentYaw = destinationYaw;
         } else {
-            setTurningState((byte)0);
+            if (!getWorld().isClient()) setTurningState((byte)0);
         }
         prevYaw = bodyYaw = getYaw();
         super.setRotation(currentYaw, MathHelper.clamp(pitch, -getPitchLimit(), getPitchLimit()));

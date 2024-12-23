@@ -13,7 +13,6 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.packet.s2c.play.VehicleMoveS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
@@ -23,6 +22,7 @@ import net.minecraft.world.World;
 import nordmods.uselessreptile.client.init.URKeybinds;
 import nordmods.uselessreptile.common.network.GUIEntityToRenderS2CPacket;
 import nordmods.uselessreptile.common.network.KeyInputC2SPacket;
+import nordmods.uselessreptile.common.network.PositionSyncS2CPacket;
 
 public abstract class URRideableDragonEntity extends URDragonEntity implements RideableInventory {
     public boolean isSecondaryAttackPressed = false;
@@ -93,22 +93,11 @@ public abstract class URRideableDragonEntity extends URDragonEntity implements R
     @Override
     public void tick() {
         super.tick();
-        LivingEntity rider = getControllingPassenger();
-        if (rider == null) updateInputs(false, false, false, false, false);
-
-        if (getWorld() instanceof ServerWorld world && canBeControlledByRider()) {
-            setHomePoint(getBlockPos());
-            //05.10.24 - I'm done trying to fix this desync. I give no clue why it even happens
-            for (ServerPlayerEntity player : PlayerLookup.around(world, getBlockPos(), 512)) {
-                if (player.getVehicle() == this) continue;
-                world.sendToPlayerIfNearby(player, true, getX(), getY(), getZ(), new VehicleMoveS2CPacket(this));
-            }
-        }
+        if (!canBeControlledByRider()) updateInputs(false, false, false, false, false);
     }
 
     @Override
     protected void tickControlled(PlayerEntity rider, Vec3d movementInput) {
-        super.tickControlled(rider, movementInput);
         if (getWorld().isClient() && rider == MinecraftClient.getInstance().player) {
             boolean isSprintPressed = MinecraftClient.getInstance().options.sprintKey.isPressed();
             boolean isMoveForwardPressed = MinecraftClient.getInstance().options.forwardKey.isPressed();
@@ -128,6 +117,15 @@ public abstract class URRideableDragonEntity extends URDragonEntity implements R
                             isDownPressed,
                             getId()));
         }
+        if (getWorld() instanceof ServerWorld world) {
+            setHomePoint(getBlockPos());
+            //05.10.24 - I'm done trying to fix this desync. I give no clue why it even happens
+            for (ServerPlayerEntity player : PlayerLookup.around(world, getBlockPos(), 512)) {
+                if (player.getVehicle() == this) continue;
+                PositionSyncS2CPacket.send(player, this);
+            }
+        }
+        super.tickControlled(rider, movementInput);
     }
 
     @Override
