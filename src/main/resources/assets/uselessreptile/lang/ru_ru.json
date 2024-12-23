@@ -138,7 +138,7 @@
     "config.uselessreptile.option.naturalMoleclawSpawn": "Естественное появление кротолапа",
     "config.uselessreptile.option.naturalRiverPikehornSpawn": "Естественное появление речного пикорога",
     "config.uselessreptile.option.naturalLightningChaserSpawn": "Естественное появление ловца молний",
-
+    "config.uselessreptile.option.hideEquipmentInfo": "Спрятать информацию о снаряжении",
 
     "config.uselessreptile.requires_restart.@Tooltip" : "\nИзменение данной опции требует перезапуска игры",
     "config.uselessreptile.group.spawnGroups.@Tooltip" : "Вместимость групп сущностей, добавленных данным модом",
@@ -189,6 +189,7 @@
     "config.uselessreptile.group.inWorldSpawn.@Tooltip": "Позволяет настроить, могут ли те или иные драконы появляться в мире",
     "config.uselessreptile.option.naturalSpawn.@Tooltip": "Включает естественное появление данного дракона",
     "config.uselessreptile.option.naturalLightningChaserSpawn.@Tooltip": "Включает естественное появление ловца молний в мире. Эта опция не затрагивает появление ловца молний во время шторма\nУчтите, что ловец молний не имеет вариантов, которые могут появиться естественным путем. Для этого вам требуется вручную добавить спавны вариантов через датапак, или в противном случае дракон не сможет появиться таким путем из-за отсутствия доступных вариантов",
+    "config.uselessreptile.option.hideEquipmentInfo.@Tooltip": "Скрывает информацию о том, какие драконы могут экипировать определенный предмет",
 
     "effect.uselessreptile.acid": "Кислота",
     "effect.uselessreptile.shock": "Шок",

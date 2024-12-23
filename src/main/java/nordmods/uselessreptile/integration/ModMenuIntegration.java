@@ -424,6 +424,15 @@ public class ModMenuIntegration implements ModMenuApi {
                         val -> clientConfig.attackBoxesInDebug = val)
                 .customController(BooleanController::new)
                 .build();
+        Option<Boolean> hideEquipmentInfo = Option.<Boolean>createBuilder()
+                .name(Text.translatable("config.uselessreptile.option.hideEquipmentInfo"))
+                .description(OptionDescription.createBuilder()
+                        .text(Text.translatable("config.uselessreptile.option.hideEquipmentInfo.@Tooltip")).build())
+                .binding(clientDefaults.hideEquipmentInfo,
+                        () -> clientConfig.hideEquipmentInfo,
+                        val -> clientConfig.hideEquipmentInfo = val)
+                .customController(BooleanController::new)
+                .build();
 
         cameraGroup.option(cameraDistanceOffset);
         cameraGroup.option(cameraVerticalOffset);
@@ -435,6 +444,7 @@ public class ModMenuIntegration implements ModMenuApi {
         dragonAppearanceGroup.option(disableNamedTextures);
         dragonAppearanceGroup.option(disableEmissiveTextures);
         dragonAppearanceGroup.option(attackBoxesInDebug);
+        dragonAppearanceGroup.option(hideEquipmentInfo);
 
         clientCategory.group(cameraGroup.build());
         clientCategory.group(dragonAppearanceGroup.build());

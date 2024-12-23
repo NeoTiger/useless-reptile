@@ -43,5 +43,4 @@
 
 - Replaced spawn weight config options with boolean fields that define if dragon can spawn naturally. This change was made since changing spawn weight wasn't actually changing much in terms of spawning and at best could only disable it
 
-### Known Issues:
-- Dragon rotations in some scenarios may be very out of sync with the server
+- Added client config option to hide info about which dragons can equip specific item
