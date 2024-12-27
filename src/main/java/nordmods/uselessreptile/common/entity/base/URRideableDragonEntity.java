@@ -112,14 +112,9 @@ public abstract class URRideableDragonEntity extends URDragonEntity implements R
                             isDownPressed,
                             getId()));
         }
-        if (getWorld() instanceof ServerWorld world) {
+        if (getWorld() instanceof ServerWorld) {
             setHomePoint(getBlockPos());
             if (!canBeControlledByRider()) updateInputs(false, false, false, false, false);
-            //05.10.24 - I'm done trying to fix this desync. I give no clue why it even happens
-            //for (ServerPlayerEntity player : PlayerLookup.around(world, getBlockPos(), 512)) {
-            //    if (player.getVehicle() == this) continue;
-            //    PositionSyncS2CPacket.send(player, this);
-            //}
         }
 
         if (isLogicalSideForUpdatingMovement() && getControllingPassenger() instanceof PlayerEntity player) movementInput = updateMovementInput(player, movementInput);
