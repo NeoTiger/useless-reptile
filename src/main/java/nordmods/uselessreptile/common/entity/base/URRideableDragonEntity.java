@@ -1,12 +1,12 @@
 package nordmods.uselessreptile.common.entity.base;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.RideableInventory;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
@@ -17,12 +17,12 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import nordmods.uselessreptile.client.init.URKeybinds;
 import nordmods.uselessreptile.common.network.GUIEntityToRenderS2CPacket;
 import nordmods.uselessreptile.common.network.KeyInputC2SPacket;
-import nordmods.uselessreptile.common.network.PositionSyncS2CPacket;
 
 public abstract class URRideableDragonEntity extends URDragonEntity implements RideableInventory {
     public boolean isSecondaryAttackPressed = false;
@@ -86,19 +86,14 @@ public abstract class URRideableDragonEntity extends URDragonEntity implements R
 
     @Override
     public boolean isLogicalSideForUpdatingMovement() {
-        if (canBeControlledByRider()) return true;
+        if (canBeControlledByRider()
+                && (getControllingPassenger() instanceof PlayerEntity player && player.isMainPlayer() || !getWorld().isClient())) return true;
         return this.canMoveVoluntarily();
     }
 
     @Override
-    public void tick() {
-        super.tick();
-        if (!canBeControlledByRider()) updateInputs(false, false, false, false, false);
-    }
-
-    @Override
-    protected void tickControlled(PlayerEntity rider, Vec3d movementInput) {
-        if (getWorld().isClient() && rider == MinecraftClient.getInstance().player) {
+    public void travel(Vec3d movementInput) {
+        if (getWorld().isClient() && getControllingPassenger() instanceof PlayerEntity player && player.isMainPlayer()) {
             boolean isSprintPressed = MinecraftClient.getInstance().options.sprintKey.isPressed();
             boolean isMoveForwardPressed = MinecraftClient.getInstance().options.forwardKey.isPressed();
             boolean isJumpPressed = MinecraftClient.getInstance().options.jumpKey.isPressed();
@@ -119,12 +114,42 @@ public abstract class URRideableDragonEntity extends URDragonEntity implements R
         }
         if (getWorld() instanceof ServerWorld world) {
             setHomePoint(getBlockPos());
+            if (!canBeControlledByRider()) updateInputs(false, false, false, false, false);
             //05.10.24 - I'm done trying to fix this desync. I give no clue why it even happens
-            for (ServerPlayerEntity player : PlayerLookup.around(world, getBlockPos(), 512)) {
-                if (player.getVehicle() == this) continue;
-                PositionSyncS2CPacket.send(player, this);
-            }
+            //for (ServerPlayerEntity player : PlayerLookup.around(world, getBlockPos(), 512)) {
+            //    if (player.getVehicle() == this) continue;
+            //    PositionSyncS2CPacket.send(player, this);
+            //}
         }
+
+        if (isLogicalSideForUpdatingMovement() && getControllingPassenger() instanceof PlayerEntity player) movementInput = updateMovementInput(player, movementInput);
+
+        super.travel(movementInput);
+    }
+
+    public Vec3d updateMovementInput(PlayerEntity rider, Vec3d movementInput) {
+        if (!isMoving()) setSprinting(false);
+        if (isSprinting()) setSpeedMod(1.1f);
+        else setSpeedMod(1f);
+        if (isMovingBackwards()) setSpeedMod(0.6f);
+        float speed = (float) getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED);
+        setMovementSpeed(speed * getSpeedModifier());
+
+        double landSpeed = rider.forwardSpeed * speed;
+
+        if (isSprintPressed()) setSprinting(true);
+        setMovingBackwards(isMoveBackPressed() || (!isMoveForwardPressed() && !isMoveBackPressed() && isMoving()));
+        if (isMovingBackwards()) setSprinting(false);
+        setRotation(rider);
+        setPitch(MathHelper.clamp(rider.getPitch(), -getPitchLimit(), getPitchLimit()));
+        if (isJumpPressed() && isOnGround()) jump();
+
+        //adding some extra small number to Y velocity so on client it checks isOnGround() correctly
+        return new Vec3d(0, movementInput.y  - 0.001, landSpeed);
+    }
+
+    @Override
+    protected void tickControlled(PlayerEntity rider, Vec3d movementInput) {
         super.tickControlled(rider, movementInput);
     }
 

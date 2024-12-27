@@ -118,8 +118,17 @@ public abstract class URRideableFlyingDragonEntity extends URRideableDragonEntit
         }
     }
 
-    @Override
-    protected Vec3d getControlledMovementInput(PlayerEntity rider, Vec3d movementInput) {
+    public Vec3d updateMovementInput(PlayerEntity rider, Vec3d movementInput) {
+        if ((!isMoving() || isFlying())) setSprinting(false);
+        if (isSprinting()) setSpeedMod(1.5f);
+        else if (isMovingBackwards() && isFlying()) setSpeedMod(0.6f);
+        else setSpeedMod(1f);
+        float speed = isFlying() ? (float) getAttributeValue(EntityAttributes.GENERIC_FLYING_SPEED) : (float) getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED);
+        setMovementSpeed(speed * getSpeedModifier());
+
+        if (isOnGround()) setFlying(false);
+        setNoGravity(isFlying());
+
         boolean isInputGiven = isMoveBackPressed() || isMoveForwardPressed() || isDownPressed() || isJumpPressed();
         //The acceleration logic. Looks like a mess, but it's still understandable I guess
         int accelerationDuration = getAccelerationDuration();
