@@ -93,31 +93,10 @@ public abstract class URRideableDragonEntity extends URDragonEntity implements R
 
     @Override
     public void travel(Vec3d movementInput) {
-        if (getWorld().isClient() && getControllingPassenger() instanceof PlayerEntity player && player.isMainPlayer()) {
-            boolean isSprintPressed = MinecraftClient.getInstance().options.sprintKey.isPressed();
-            boolean isMoveForwardPressed = MinecraftClient.getInstance().options.forwardKey.isPressed();
-            boolean isJumpPressed = MinecraftClient.getInstance().options.jumpKey.isPressed();
-            boolean isMoveBackPressed = MinecraftClient.getInstance().options.backKey.isPressed();
-            boolean isDownPressed = URKeybinds.flyDownKey.isUnbound() ? isSprintPressed : URKeybinds.flyDownKey.isPressed();
-            isSecondaryAttackPressed = URKeybinds.secondaryAttackKey.isPressed();
-            isPrimaryAttackPressed = URKeybinds.primaryAttackKey.isPressed();
-
-            ClientPlayNetworking.send(
-                    new KeyInputC2SPacket(isJumpPressed,
-                            isMoveForwardPressed,
-                            isMoveBackPressed,
-                            isSprintPressed,
-                            isSecondaryAttackPressed,
-                            isPrimaryAttackPressed,
-                            isDownPressed,
-                            getId()));
-        }
         if (getWorld() instanceof ServerWorld) {
             setHomePoint(getBlockPos());
             if (!canBeControlledByRider()) updateInputs(false, false, false, false, false);
         }
-
-        if (isLogicalSideForUpdatingMovement() && getControllingPassenger() instanceof PlayerEntity player) movementInput = updateMovementInput(player, movementInput);
 
         super.travel(movementInput);
     }
@@ -138,13 +117,44 @@ public abstract class URRideableDragonEntity extends URDragonEntity implements R
         setRotation(rider);
         setPitch(MathHelper.clamp(rider.getPitch(), -getPitchLimit(), getPitchLimit()));
         if (isJumpPressed() && isOnGround()) jump();
-
         //adding some extra small number to Y velocity so on client it checks isOnGround() correctly
         return new Vec3d(0, movementInput.y  - 0.001, landSpeed);
     }
 
     @Override
+    protected Vec3d getControlledMovementInput(PlayerEntity rider, Vec3d movementInput) {
+        return super.getControlledMovementInput(rider, updateMovementInput(rider, movementInput));
+    }
+
+    @Override
     protected void tickControlled(PlayerEntity rider, Vec3d movementInput) {
+        if (getWorld().isClient() && getControllingPassenger() instanceof PlayerEntity player && player.isMainPlayer()) {
+            boolean isSprintPressed = MinecraftClient.getInstance().options.sprintKey.isPressed();
+            boolean isMoveForwardPressed = MinecraftClient.getInstance().options.forwardKey.isPressed();
+            boolean isJumpPressed = MinecraftClient.getInstance().options.jumpKey.isPressed();
+            boolean isMoveBackPressed = MinecraftClient.getInstance().options.backKey.isPressed();
+            boolean isDownPressed = URKeybinds.flyDownKey.isUnbound() ? isSprintPressed : URKeybinds.flyDownKey.isPressed();
+            boolean isSecondaryAttackPressed = URKeybinds.secondaryAttackKey.isPressed();
+            boolean isPrimaryAttackPressed = URKeybinds.primaryAttackKey.isPressed();
+
+            if (isSprintPressed != isSprintPressed()
+                    || isMoveForwardPressed != isMoveForwardPressed()
+                    || isJumpPressed != isJumpPressed()
+                    || isMoveBackPressed != isMoveBackPressed()
+                    || isDownPressed != isDownPressed()
+                    || isSecondaryAttackPressed != this.isSecondaryAttackPressed
+                    || isPrimaryAttackPressed != this.isPrimaryAttackPressed) {
+                ClientPlayNetworking.send(
+                        new KeyInputC2SPacket(isJumpPressed,
+                                isMoveForwardPressed,
+                                isMoveBackPressed,
+                                isSprintPressed,
+                                isSecondaryAttackPressed,
+                                isPrimaryAttackPressed,
+                                isDownPressed,
+                                getId()));
+            }
+        }
         super.tickControlled(rider, movementInput);
     }
 
