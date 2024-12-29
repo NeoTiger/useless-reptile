@@ -236,11 +236,11 @@ public class WyvernEntity extends URRideableFlyingDragonEntity implements Multip
         setHitboxModifiers(dHeight, dWidth, dMountedOffset);
 
         if (canBeControlledByRider()) {
-            if (isSecondaryAttackPressed && getSecondaryAttackCooldown() == 0) {
+            if (isSecondaryAttackPressed() && getSecondaryAttackCooldown() == 0) {
                 LivingEntity target = getWorld().getClosestEntity(LivingEntity.class, TargetPredicate.DEFAULT, this, getX(), getY(), getZ(), getAttackBox());
                 meleeAttack(target);
             }
-            if (isPrimaryAttackPressed && getPrimaryAttackCooldown() == 0) shoot();
+            if (isPrimaryAttackPressed() && getPrimaryAttackCooldown() == 0) shoot();
         }
 
         updateChildParts();

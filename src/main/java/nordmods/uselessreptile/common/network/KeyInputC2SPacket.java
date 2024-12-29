@@ -19,9 +19,7 @@ public record KeyInputC2SPacket(boolean jump, boolean forward, boolean back, boo
         ServerPlayNetworking.registerGlobalReceiver(PACKET_ID, (packet, context) -> {
             Entity entity = context.player().getWorld().getEntityById(packet.id);
             if (entity instanceof URRideableDragonEntity dragon && dragon.canBeControlledByRider() && context.player().getVehicle() == entity) {
-                dragon.isSecondaryAttackPressed = packet.secondaryAttack;
-                dragon.isPrimaryAttackPressed = packet.primaryAttack;
-                dragon.updateInputs(packet.forward, packet.back, packet.jump, packet.down, packet.sprint);
+                dragon.updateInputs(packet.forward, packet.back, packet.jump, packet.down, packet.secondaryAttack, packet.primaryAttack, packet.sprint);
             }
         });
     }

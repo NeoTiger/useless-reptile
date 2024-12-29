@@ -25,9 +25,6 @@ import nordmods.uselessreptile.common.network.GUIEntityToRenderS2CPacket;
 import nordmods.uselessreptile.common.network.KeyInputC2SPacket;
 
 public abstract class URRideableDragonEntity extends URDragonEntity implements RideableInventory {
-    public boolean isSecondaryAttackPressed = false;
-    public boolean isPrimaryAttackPressed = false;
-
     protected URRideableDragonEntity(EntityType<? extends TameableEntity> entityType, World world) {
         super(entityType, world);
     }
@@ -40,6 +37,8 @@ public abstract class URRideableDragonEntity extends URDragonEntity implements R
         builder.add(JUMP_PRESSED, false);
         builder.add(MOVE_DOWN_PRESSED, false);
         builder.add(SPRINT_PRESSED, false);
+        builder.add(SECONDARY_ATTACK_PRESSED, false);
+        builder.add(PRIMARY_ATTACK_PRESSED, false);
     }
 
     public static final TrackedData<Boolean> MOVE_FORWARD_PRESSED = DataTracker.registerData(URRideableDragonEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
@@ -47,12 +46,16 @@ public abstract class URRideableDragonEntity extends URDragonEntity implements R
     public static final TrackedData<Boolean> JUMP_PRESSED = DataTracker.registerData(URRideableDragonEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
     public static final TrackedData<Boolean> MOVE_DOWN_PRESSED = DataTracker.registerData(URRideableDragonEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
     public static final TrackedData<Boolean> SPRINT_PRESSED = DataTracker.registerData(URRideableDragonEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+    public static final TrackedData<Boolean> SECONDARY_ATTACK_PRESSED = DataTracker.registerData(URRideableDragonEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+    public static final TrackedData<Boolean> PRIMARY_ATTACK_PRESSED = DataTracker.registerData(URRideableDragonEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 
-    public void updateInputs(boolean forward, boolean back, boolean jump, boolean down, boolean sprint) {
+    public void updateInputs(boolean forward, boolean back, boolean jump, boolean down, boolean isSecondaryAttackPressed, boolean isPrimaryAttackPressed, boolean sprint) {
         dataTracker.set(MOVE_FORWARD_PRESSED, forward);
         dataTracker.set(MOVE_BACK_PRESSED, back);
         dataTracker.set(JUMP_PRESSED, jump);
         dataTracker.set(MOVE_DOWN_PRESSED, down);
+        dataTracker.set(SECONDARY_ATTACK_PRESSED, isSecondaryAttackPressed);
+        dataTracker.set(PRIMARY_ATTACK_PRESSED, isPrimaryAttackPressed);
         dataTracker.set(SPRINT_PRESSED, sprint);
     }
 
@@ -61,6 +64,8 @@ public abstract class URRideableDragonEntity extends URDragonEntity implements R
     public boolean isJumpPressed() {return dataTracker.get(JUMP_PRESSED);}
     public boolean isDownPressed() {return dataTracker.get(MOVE_DOWN_PRESSED);}
     public boolean isSprintPressed() {return dataTracker.get(SPRINT_PRESSED);}
+    public boolean isSecondaryAttackPressed() {return dataTracker.get(SECONDARY_ATTACK_PRESSED);}
+    public boolean isPrimaryAttackPressed() {return dataTracker.get(PRIMARY_ATTACK_PRESSED);}
 
     @Override
     public LivingEntity getControllingPassenger() {
@@ -95,7 +100,7 @@ public abstract class URRideableDragonEntity extends URDragonEntity implements R
     public void travel(Vec3d movementInput) {
         if (getWorld() instanceof ServerWorld) {
             setHomePoint(getBlockPos());
-            if (!canBeControlledByRider()) updateInputs(false, false, false, false, false);
+            if (!canBeControlledByRider()) updateInputs(false, false, false, false, false, false, false);
         }
 
         super.travel(movementInput);
@@ -142,8 +147,8 @@ public abstract class URRideableDragonEntity extends URDragonEntity implements R
                     || isJumpPressed != isJumpPressed()
                     || isMoveBackPressed != isMoveBackPressed()
                     || isDownPressed != isDownPressed()
-                    || isSecondaryAttackPressed != this.isSecondaryAttackPressed
-                    || isPrimaryAttackPressed != this.isPrimaryAttackPressed) {
+                    || isSecondaryAttackPressed != isSecondaryAttackPressed()
+                    || isPrimaryAttackPressed != isPrimaryAttackPressed()) {
                 ClientPlayNetworking.send(
                         new KeyInputC2SPacket(isJumpPressed,
                                 isMoveForwardPressed,

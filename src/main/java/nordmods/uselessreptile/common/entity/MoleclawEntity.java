@@ -186,8 +186,8 @@ public class MoleclawEntity extends URRideableDragonEntity {
         tryPanic();
 
         if (canBeControlledByRider()) {
-            if (isSecondaryAttackPressed && getSecondaryAttackCooldown() == 0) scheduleNormalAttack();
-            if (isPrimaryAttackPressed && getPrimaryAttackCooldown() == 0) scheduleStrongAttack();
+            if (isSecondaryAttackPressed() && getSecondaryAttackCooldown() == 0) scheduleNormalAttack();
+            if (isPrimaryAttackPressed() && getPrimaryAttackCooldown() == 0) scheduleStrongAttack();
         }
 
         if (attackDelay > 0) {
