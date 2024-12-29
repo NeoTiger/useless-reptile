@@ -102,7 +102,7 @@ public abstract class URRideableDragonEntity extends URDragonEntity implements R
             setHomePoint(getBlockPos());
             if (!canBeControlledByRider()) updateInputs(false, false, false, false, false, false, false);
         }
-
+        getLookControl().setLockRotation(canBeControlledByRider());
         super.travel(movementInput);
     }
 
