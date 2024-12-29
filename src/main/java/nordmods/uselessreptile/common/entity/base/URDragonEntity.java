@@ -422,12 +422,13 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
     }
 
     @Override
-    public boolean startRiding(Entity entity) {
-        boolean result = super.startRiding(entity);
+    public boolean startRiding(Entity entity, boolean force) {
+        boolean result = super.startRiding(entity, force);
         if (this instanceof HeadMountDragon && result && entity instanceof HeadMountDragonOwner owner) {
             NbtCompound nbtCompound = new NbtCompound();
             saveSelfNbt(nbtCompound);
             owner.setHeadMountDragon(nbtCompound);
+            setPortalCooldown(0);
         }
         return result;
     }
@@ -435,7 +436,7 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
     @Override
     public void stopRiding() {
         if (this instanceof HeadMountDragon && getVehicle() instanceof HeadMountDragonOwner owner) {
-            if (owner instanceof ServerPlayerEntity player && player.isDisconnected()) return; //TODO fix dragons stopping riding player when changing dimensions
+            if (owner instanceof ServerPlayerEntity player && player.isDisconnected()) return;
             owner.setHeadMountDragon(new NbtCompound());
         }
         super.stopRiding();
