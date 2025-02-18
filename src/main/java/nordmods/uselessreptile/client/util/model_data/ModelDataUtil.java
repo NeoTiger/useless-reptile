@@ -36,7 +36,7 @@ public class ModelDataUtil {
 
     @Nullable
     public static EquipmentModelData getDefaultEquipmentModelData(URDragonEntity dragon, Identifier id) {
-        for (EquipmentModelData data : EquipmentModelData.getModelData(dragon.getDragonIdPath())) {
+        for (EquipmentModelData data : EquipmentModelData.getModelData(dragon.getDragonId())) {
             if (data.item().equals(id)) return data;
         }
         return null;

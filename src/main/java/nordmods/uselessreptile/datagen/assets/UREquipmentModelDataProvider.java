@@ -40,10 +40,10 @@ public class UREquipmentModelDataProvider implements DataProvider {
             addEntries();
             List<CompletableFuture<?>> list = new ArrayList<>();
             EquipmentModelData.getEntries().forEach(entry -> {
-                String dragon = entry.getKey();
-                List<EquipmentModelData> equipmentModelData = entry.getValue();
-                Path path = this.pathResolver.resolveJson(UselessReptile.id(dragon));
-                list.add(DataProvider.writeCodecToPath(writer, registryLookupFuture, EquipmentModelData.CODEC.listOf(), equipmentModelData, path));
+                Identifier dragon = entry.getKey();
+                Path path = this.pathResolver.resolveJson(dragon);
+                EquipmentModelData.EquipmentModelDataJson jsonData = new EquipmentModelData.EquipmentModelDataJson(dragon, entry.getValue());
+                list.add(DataProvider.writeCodecToPath(writer, registryLookupFuture, EquipmentModelData.EquipmentModelDataJson.CODEC, jsonData, path));
             });
             return CompletableFuture.allOf(list.toArray(CompletableFuture[]::new));
         });
@@ -66,7 +66,7 @@ public class UREquipmentModelDataProvider implements DataProvider {
 
     protected void addEntry(EntityType<? extends URDragonEntity> type, Item item, Identifier texture, Identifier model, boolean translucent) {
         EquipmentModelData equipmentModelData = new EquipmentModelData(Registries.ITEM.getId(item), new ModelData(texture, Optional.of(model), Optional.empty(), false, translucent));
-        EquipmentModelData.add(EntityType.getId(type).getPath(), equipmentModelData);
+        EquipmentModelData.add(EntityType.getId(type), equipmentModelData);
     }
 
     protected void addSaddle(EntityType<? extends URDragonEntity> type) {

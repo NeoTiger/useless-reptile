@@ -1,7 +1,6 @@
 package nordmods.uselessreptile.client.util.model_data;
 
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
@@ -23,10 +22,7 @@ public class EquipmentModelDataReloadListener extends JsonDataLoader implements 
     @Override
     protected void apply(Map<Identifier, JsonElement> prepared, ResourceManager manager, Profiler profiler) {
         EquipmentModelData.reset();
-        for (Map.Entry<Identifier, JsonElement> entry : prepared.entrySet()) {
-            JsonArray array = entry.getValue().getAsJsonArray();
-            for (JsonElement elem : array) EquipmentModelData.add(entry.getKey().getPath(), EquipmentModelData.deserialize(elem));
-        }
+        prepared.forEach((key, val) -> val.getAsJsonArray().forEach(elem -> EquipmentModelData.deserialize(elem).add()));
         EquipmentModelData.debugPrint();
     }
 
