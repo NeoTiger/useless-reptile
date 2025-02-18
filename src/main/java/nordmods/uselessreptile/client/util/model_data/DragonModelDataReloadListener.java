@@ -22,16 +22,7 @@ public class DragonModelDataReloadListener extends JsonDataLoader implements Ide
     @Override
     protected void apply(Map<Identifier, JsonElement> prepared, ResourceManager manager, Profiler profiler) {
         DragonModelData.reset();
-        for (Map.Entry<Identifier, JsonElement> entry : prepared.entrySet()) {
-            String path = entry.getKey().getPath();
-            if (path.contains("equipment_model_data")) continue;
-
-            String dragon = path.substring(0, path.indexOf("/"));
-            String variant = path.substring(path.indexOf("/") + 1);
-            JsonElement element = entry.getValue();
-            DragonModelData data = DragonModelData.deserialize(element);
-            DragonModelData.add(dragon, variant, data);
-        }
+        prepared.forEach((key, value) -> DragonModelData.deserializeJson(value).add());
         DragonModelData.debugPrint();
     }
 

@@ -732,8 +732,12 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
         return (int) getRotationSpeed();
     }
 
-    public String getDragonID() {
-        return EntityType.getId(getType()).getPath();
+    public String getDragonIdPath() {
+        return getDragonId().getPath();
+    }
+
+    public Identifier getDragonId() {
+        return EntityType.getId(getType());
     }
 
     private void updateRotationProgress() {

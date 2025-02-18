@@ -27,7 +27,7 @@ public class URDragonModel<T extends URDragonEntity> extends GeoModel<T> {
             if (ResourceUtil.doesExist(id)) {
                 assetCache.setAnimationLocationCache(id);
                 return id;
-            } else UselessReptile.LOGGER.warn("Failed to get animation for {} ({}) of variant {}. Default will be used instead", entity.getName().getString(), entity.getDragonID(), entity.getVariant());
+            } else UselessReptile.LOGGER.warn("Failed to get animation for {} ({}) of variant {}. Default will be used instead", entity.getName().getString(), entity.getDragonIdPath(), entity.getVariant());
         }
 
         id = getDefaultAnimation(entity);
@@ -49,7 +49,7 @@ public class URDragonModel<T extends URDragonEntity> extends GeoModel<T> {
             if (ResourceUtil.doesExist(id)) {
                 assetCache.setModelLocationCache(id);
                 return id;
-            } else UselessReptile.LOGGER.warn("Failed to get model for {} ({}) of variant {}. Default will be used instead", entity.getName().getString(), entity.getDragonID(), entity.getVariant());
+            } else UselessReptile.LOGGER.warn("Failed to get model for {} ({}) of variant {}. Default will be used instead", entity.getName().getString(), entity.getDragonIdPath(), entity.getVariant());
         }
 
         id = getDefaultModel(entity);
@@ -70,7 +70,7 @@ public class URDragonModel<T extends URDragonEntity> extends GeoModel<T> {
             id = data.modelData().texture();
             assetCache.setTextureLocationCache(id);
             return id;
-        } else UselessReptile.LOGGER.warn("Failed to get texture for {} ({}) of variant {}. Default will be used instead", entity.getName().getString(), entity.getDragonID(), entity.getVariant());
+        } else UselessReptile.LOGGER.warn("Failed to get texture for {} ({}) of variant {}. Default will be used instead", entity.getName().getString(), entity.getDragonIdPath(), entity.getVariant());
 
         id = getDefaultTexture(entity);
         assetCache.setTextureLocationCache(id);
@@ -78,15 +78,15 @@ public class URDragonModel<T extends URDragonEntity> extends GeoModel<T> {
     }
 
     protected final Identifier getDefaultTexture(T entity) {
-        return UselessReptile.id("textures/entity/"+ entity.getDragonID() + "/" + entity.getDefaultVariant() + ".png");
+        return UselessReptile.id("textures/entity/"+ entity.getDragonIdPath() + "/" + entity.getDefaultVariant() + ".png");
     }
 
     protected final Identifier getDefaultAnimation(T entity) {
-        return UselessReptile.id("animations/entity/" + entity.getDragonID() + "/" + entity.getDragonID() + ".animation.json");
+        return UselessReptile.id("animations/entity/" + entity.getDragonIdPath() + "/" + entity.getDragonIdPath() + ".animation.json");
     }
 
     protected final Identifier getDefaultModel(T entity) {
-        return UselessReptile.id("geo/entity/" + entity.getDragonID() + "/" + entity.getDragonID() + ".geo.json");
+        return UselessReptile.id("geo/entity/" + entity.getDragonIdPath() + "/" + entity.getDragonIdPath() + ".geo.json");
     }
 
     @Override

@@ -67,7 +67,7 @@ public class DragonSpawnUtil {
     }
 
     public static List<DragonSpawn> getAvailableVariants(WorldAccess world, URDragonEntity entity) {
-        return getAvailableVariants(world, entity.getBlockPos(), entity.getDragonID());
+        return getAvailableVariants(world, entity.getBlockPos(), entity.getDragonIdPath());
     }
 
     public static List<DragonSpawn> getAvailableVariants(WorldAccess world, BlockPos pos, String name) {

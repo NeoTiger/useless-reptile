@@ -116,6 +116,7 @@ loom {
             runDir "build/datagen"
 
             programArgs "--username", "Nord_Act"
+            programArgs "-uuid", "ce6764cd-4578-4d6a-8f29-7eb379beb0ef"
         }
     }
 }

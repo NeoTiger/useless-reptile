@@ -36,12 +36,23 @@ public class URDragonModelDataProvider implements DataProvider {
         return registryLookupFuture.thenCompose((registryLookupFuture) -> {
             addEntries();
             List<CompletableFuture<?>> list = new ArrayList<>();
-            DragonModelData.getEntries().forEach(entry -> {
-                String dragon = entry.getKey();
+            DragonModelData.getVariantEntries().forEach(entry -> {
+                Identifier dragon = entry.getKey();
                 Map<String, DragonModelData> dragonModelDataMap = entry.getValue();
                 dragonModelDataMap.forEach((variant, dragonModelData) -> {
-                    Path path = this.pathResolver.resolveJson(UselessReptile.id(dragon + "/" + variant));
-                    list.add(DataProvider.writeCodecToPath(writer, registryLookupFuture, DragonModelData.CODEC, dragonModelData, path));
+                    Path path = this.pathResolver.resolveJson(UselessReptile.id(dragon.getPath() + "/" + variant));
+                    DragonModelData.DragonModelDataJson jsonData = new DragonModelData.DragonModelDataJson(dragon, Optional.of(variant), Optional.empty(), dragonModelData.modelData(), dragonModelData.equipmentModelDataOverrides());
+                    list.add(DataProvider.writeCodecToPath(writer, registryLookupFuture, DragonModelData.DragonModelDataJson.CODEC, jsonData, path));
+                });
+            });
+
+            DragonModelData.getCustomNameEntries().forEach(entry -> {
+                Identifier dragon = entry.getKey();
+                Map<String, DragonModelData> dragonModelDataMap = entry.getValue();
+                dragonModelDataMap.forEach((variant, dragonModelData) -> {
+                    Path path = this.pathResolver.resolveJson(UselessReptile.id(dragon.getPath() + "/" + variant));
+                    DragonModelData.DragonModelDataJson jsonData = new DragonModelData.DragonModelDataJson(dragon, Optional.empty(), Optional.of(variant), dragonModelData.modelData(), dragonModelData.equipmentModelDataOverrides());
+                    list.add(DataProvider.writeCodecToPath(writer, registryLookupFuture, DragonModelData.DragonModelDataJson.CODEC, jsonData, path));
                 });
             });
             return CompletableFuture.allOf(list.toArray(CompletableFuture[]::new));
@@ -73,13 +84,14 @@ public class URDragonModelDataProvider implements DataProvider {
         addEntry(UREntities.RIVER_PIKEHORN_ENTITY, "dark_teal", true);
     }
 
-    protected void addEntry(EntityType<? extends URDragonEntity> type, String variant, boolean cull, boolean nametagAccessibe) {
+    protected void addEntry(EntityType<? extends URDragonEntity> type, String variant, boolean cull, boolean isName) {
         Identifier id = EntityType.getId(type);
         Identifier texture = Identifier.of(id.getNamespace(), "textures/entity/" + id.getPath() + "/" + variant +".png");
         Identifier model = Identifier.of(id.getNamespace(), "geo/entity/" + id.getPath() + "/" + id.getPath() +".geo.json");
         Identifier animation = Identifier.of(id.getNamespace(), "animations/entity/" + id.getPath() + "/" + id.getPath() +".animation.json");
-        DragonModelData dragonModelData = new DragonModelData(new ModelData(texture, Optional.of(model), Optional.of(animation), cull, false), Optional.empty(), nametagAccessibe);
-        DragonModelData.add(EntityType.getId(type).getPath(), variant, dragonModelData);
+        DragonModelData dragonModelData = new DragonModelData(new ModelData(texture, Optional.of(model), Optional.of(animation), cull, false), Optional.empty());
+        if (isName) DragonModelData.addCustomName(EntityType.getId(type), variant, dragonModelData);
+        else DragonModelData.addVariant(EntityType.getId(type), variant, dragonModelData);
     }
 
     protected void addEntry(EntityType<? extends URDragonEntity> type, String variant, boolean cull) {

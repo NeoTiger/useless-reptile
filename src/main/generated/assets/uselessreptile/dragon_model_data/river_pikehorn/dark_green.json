@@ -1,8 +1,9 @@
 {
+  "dragon_id": "uselessreptile:river_pikehorn",
   "model_data": {
     "animation": "uselessreptile:animations/entity/river_pikehorn/river_pikehorn.animation.json",
     "model": "uselessreptile:geo/entity/river_pikehorn/river_pikehorn.geo.json",
     "texture": "uselessreptile:textures/entity/river_pikehorn/dark_green.png"
   },
-  "nametag_accessible": false
+  "variant": "dark_green"
 }

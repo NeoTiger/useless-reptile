@@ -10,31 +10,15 @@ import nordmods.uselessreptile.client.util.model_data.base.EquipmentModelData;
 import nordmods.uselessreptile.common.entity.base.URDragonEntity;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
-
 public class ModelDataUtil {
     @Nullable
-    public static DragonModelData getDragonModelData(URDragonEntity dragon, boolean viaNametag) {
-        if (!ResourceUtil.isResourceReloadFinished) return null;
-
-        String dragonID = dragon.getDragonID();
-        Map<String, DragonModelData> dragonModelDataMap = DragonModelData.getModelData(dragonID);
-        DragonModelData dragonModelData;
-        if (!viaNametag || URClientConfig.getConfig().disableNamedEntityModels) dragonModelData = dragonModelDataMap.get(dragon.getVariant());
-        else {
-            DragonModelData temp = dragonModelDataMap.get(ResourceUtil.parseName(dragon));
-            if (temp != null && temp.nametagAccessible()) dragonModelData = temp;
-            else dragonModelData = dragonModelDataMap.get(dragon.getVariant());
-        }
-        return dragonModelData;
-    }
-
-    @Nullable
     public static DragonModelData getDragonModelData(URDragonEntity dragon) {
-        DragonModelData dragonModelData
-                = URClientConfig.getConfig().disableNamedEntityModels || dragon.getCustomName() == null ? null : getDragonModelData(dragon, true);
-        if (dragonModelData == null) dragonModelData = getDragonModelData(dragon, false);
-        return dragonModelData;
+        DragonModelData dragonModelData;
+        if (!URClientConfig.getConfig().disableNamedEntityModels && dragon.getCustomName() != null) {
+            dragonModelData = DragonModelData.getCustomNameModelData(dragon.getDragonId()).get(dragon.getCustomName().getString());
+            if (dragonModelData != null) return dragonModelData;
+        }
+        return DragonModelData.getVariantModelData(dragon.getDragonId()).get(dragon.getVariant());
     }
 
     @Nullable
@@ -52,7 +36,7 @@ public class ModelDataUtil {
 
     @Nullable
     public static EquipmentModelData getDefaultEquipmentModelData(URDragonEntity dragon, Identifier id) {
-        for (EquipmentModelData data : EquipmentModelData.getModelData(dragon.getDragonID())) {
+        for (EquipmentModelData data : EquipmentModelData.getModelData(dragon.getDragonIdPath())) {
             if (data.item().equals(id)) return data;
         }
         return null;
