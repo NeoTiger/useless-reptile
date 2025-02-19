@@ -13,9 +13,10 @@ import org.jetbrains.annotations.Nullable;
 public class ModelDataUtil {
     @Nullable
     public static DragonModelData getDragonModelData(URDragonEntity dragon) {
-        DragonModelData dragonModelData;
+        DragonModelData dragonModelData = null;
         if (!URClientConfig.getConfig().disableNamedEntityModels && dragon.getCustomName() != null) {
-            dragonModelData = DragonModelData.getCustomNameModelData(dragon.getDragonId()).get(dragon.getCustomName().getString());
+            if (DragonModelData.getCustomNameModelData(dragon.getDragonId()) != null)
+                dragonModelData = DragonModelData.getCustomNameModelData(dragon.getDragonId()).get(dragon.getCustomName().getString());
             if (dragonModelData != null) return dragonModelData;
         }
         return DragonModelData.getVariantModelData(dragon.getDragonId()).get(dragon.getVariant());

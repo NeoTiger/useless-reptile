@@ -22,7 +22,7 @@ public class EquipmentModelDataReloadListener extends JsonDataLoader implements 
     @Override
     protected void apply(Map<Identifier, JsonElement> prepared, ResourceManager manager, Profiler profiler) {
         EquipmentModelData.reset();
-        prepared.forEach((key, val) -> val.getAsJsonArray().forEach(elem -> EquipmentModelData.deserialize(elem).add()));
+        prepared.forEach((key, val) -> EquipmentModelData.deserialize(val).add());
         EquipmentModelData.debugPrint();
     }
 
