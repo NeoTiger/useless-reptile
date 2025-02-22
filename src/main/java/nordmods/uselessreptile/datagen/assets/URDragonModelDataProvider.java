@@ -41,8 +41,8 @@ public class URDragonModelDataProvider implements DataProvider {
                 Map<String, DragonModelData> dragonModelDataMap = entry.getValue();
                 dragonModelDataMap.forEach((variant, dragonModelData) -> {
                     Path path = this.pathResolver.resolveJson(UselessReptile.id(dragon.getPath() + "/" + variant));
-                    DragonModelData.DragonModelDataJson jsonData = new DragonModelData.DragonModelDataJson(dragon, Optional.of(variant), Optional.empty(), dragonModelData.modelData(), dragonModelData.equipmentModelDataOverrides());
-                    list.add(DataProvider.writeCodecToPath(writer, registryLookupFuture, DragonModelData.DragonModelDataJson.CODEC, jsonData, path));
+                    DragonModelData.Json jsonData = new DragonModelData.Json(dragon, Optional.of(variant), Optional.empty(), dragonModelData.modelData(), dragonModelData.equipmentModelDataOverrides());
+                    list.add(DataProvider.writeCodecToPath(writer, registryLookupFuture, DragonModelData.Json.CODEC, jsonData, path));
                 });
             });
 
@@ -51,8 +51,8 @@ public class URDragonModelDataProvider implements DataProvider {
                 Map<String, DragonModelData> dragonModelDataMap = entry.getValue();
                 dragonModelDataMap.forEach((variant, dragonModelData) -> {
                     Path path = this.pathResolver.resolveJson(UselessReptile.id(dragon.getPath() + "/" + variant));
-                    DragonModelData.DragonModelDataJson jsonData = new DragonModelData.DragonModelDataJson(dragon, Optional.empty(), Optional.of(variant), dragonModelData.modelData(), dragonModelData.equipmentModelDataOverrides());
-                    list.add(DataProvider.writeCodecToPath(writer, registryLookupFuture, DragonModelData.DragonModelDataJson.CODEC, jsonData, path));
+                    DragonModelData.Json jsonData = new DragonModelData.Json(dragon, Optional.empty(), Optional.of(variant), dragonModelData.modelData(), dragonModelData.equipmentModelDataOverrides());
+                    list.add(DataProvider.writeCodecToPath(writer, registryLookupFuture, DragonModelData.Json.CODEC, jsonData, path));
                 });
             });
             return CompletableFuture.allOf(list.toArray(CompletableFuture[]::new));

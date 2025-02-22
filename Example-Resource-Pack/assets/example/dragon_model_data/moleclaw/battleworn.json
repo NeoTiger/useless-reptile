@@ -1,4 +1,6 @@
 {
+  "dragon_id": "uselessreptile:moleclaw",
+  "custom_name": "Battleworn",
   "model_data" : {
     "texture": "example:textures/moleclaw/battleworn.png",
     "model": "example:geo/moleclaw/battleworn.geo.json",

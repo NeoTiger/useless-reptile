@@ -9,6 +9,7 @@ import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.Identifier;
 import nordmods.uselessreptile.UselessReptile;
+import nordmods.uselessreptile.client.util.ResourceUtil;
 
 import java.util.*;
 
@@ -22,9 +23,9 @@ public record DragonModelData(ModelData modelData, Optional<List<EquipmentModelD
                     EquipmentModelData.CODEC.listOf().optionalFieldOf("equipment_model_overrides").forGetter(DragonModelData::equipmentModelDataOverrides))
             .apply(instance, DragonModelData::new));
 
-    public static DragonModelDataJson deserializeJson(JsonElement element) throws JsonParseException {
+    public static Json deserializeJson(JsonElement element) throws JsonParseException {
         JsonObject input = element.getAsJsonObject();
-        DataResult<DragonModelDataJson> result = DragonModelDataJson.CODEC.parse(JsonOps.INSTANCE, input);
+        DataResult<Json> result = Json.CODEC.parse(JsonOps.INSTANCE, input);
         return result.getOrThrow();
     }
 
@@ -50,13 +51,38 @@ public record DragonModelData(ModelData modelData, Optional<List<EquipmentModelD
         }
     }
 
-    //TODO: make it more readable
     public static void debugPrint() {
         for (Map.Entry<Identifier, Map<String, DragonModelData>> entry : variantModelDataHolder.entrySet()) {
-            for ( Map.Entry<String, DragonModelData> data : entry.getValue().entrySet()) {
-                UselessReptile.LOGGER.debug("{}: {}, {}", entry.getKey(), data.getKey(), data.getValue());
+            Identifier dragonId = entry.getKey();
+            for (Map.Entry<String, DragonModelData> data : entry.getValue().entrySet()) {
+                StringBuilder builder = new StringBuilder().append(dragonId.toString()).append(" - found model data for variant \"").append(data.getKey()).append("\":");
+                builder.append(getInfoForPrint(data.getValue()).append(ResourceUtil.TAB_NEWLINE));
+                UselessReptile.LOGGER.info(builder.toString());
             }
         }
+
+        for (Map.Entry<Identifier, Map<String, DragonModelData>> entry : customNameModelDataHolder.entrySet()) {
+            Identifier dragonId = entry.getKey();
+            for (Map.Entry<String, DragonModelData> data : entry.getValue().entrySet()) {
+                StringBuilder builder = new StringBuilder().append(dragonId.toString()).append(" - found model data for custom name \"").append(data.getKey()).append("\":");
+                builder.append(getInfoForPrint(data.getValue()).append(ResourceUtil.TAB_NEWLINE));
+                UselessReptile.LOGGER.info(builder.toString());
+            }
+        }
+    }
+
+    public static StringBuilder getInfoForPrint(DragonModelData dragonModelData) {
+        StringBuilder builder = new StringBuilder();
+        String modelData = ModelData.getInfoForPrint(dragonModelData.modelData()).toString().replaceAll(ResourceUtil.TAB_NEWLINE, ResourceUtil.TAB_NEWLINE + ResourceUtil.TAB);
+        builder.append(ResourceUtil.TAB_NEWLINE).append("Model Data: ").append(modelData);
+        dragonModelData.equipmentModelDataOverrides().ifPresent(equipmentModelDataList -> {
+            builder.append(ResourceUtil.TAB_NEWLINE).append("Equipment Model Data Overrides: ");
+            equipmentModelDataList.forEach(equipmentModelData -> {
+                String data = EquipmentModelData.getInfoForPrint(equipmentModelData).toString().replaceAll(ResourceUtil.TAB_NEWLINE, ResourceUtil.TAB_NEWLINE + ResourceUtil.TAB);
+                builder.append(data).append(ResourceUtil.TAB_NEWLINE);
+            });
+        });
+        return builder;
     }
 
     public static void reset() {
@@ -80,14 +106,14 @@ public record DragonModelData(ModelData modelData, Optional<List<EquipmentModelD
         return customNameModelDataHolder.get(dragon);
     }
 
-    public record DragonModelDataJson(Identifier dragonId, Optional<String> variant, Optional<String> customName, ModelData modelData, Optional<List<EquipmentModelData>> equipmentModelDataOverrides) {
-        public static final Codec<DragonModelDataJson> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                        Identifier.CODEC.fieldOf("dragon_id").forGetter(DragonModelDataJson::dragonId),
-                        Codec.STRING.optionalFieldOf("variant").forGetter(DragonModelDataJson::variant),
-                        Codec.STRING.optionalFieldOf("custom_name").forGetter(DragonModelDataJson::customName),
-                        ModelData.CODEC.fieldOf("model_data").forGetter(DragonModelDataJson::modelData),
-                        EquipmentModelData.CODEC.listOf().optionalFieldOf("equipment_model_overrides").forGetter(DragonModelDataJson::equipmentModelDataOverrides))
-                .apply(instance, DragonModelDataJson::new));
+    public record Json(Identifier dragonId, Optional<String> variant, Optional<String> customName, ModelData modelData, Optional<List<EquipmentModelData>> equipmentModelDataOverrides) {
+        public static final Codec<Json> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                        Identifier.CODEC.fieldOf("dragon_id").forGetter(Json::dragonId),
+                        Codec.STRING.optionalFieldOf("variant").forGetter(Json::variant),
+                        Codec.STRING.optionalFieldOf("custom_name").forGetter(Json::customName),
+                        ModelData.CODEC.fieldOf("model_data").forGetter(Json::modelData),
+                        EquipmentModelData.CODEC.listOf().optionalFieldOf("equipment_model_overrides").forGetter(Json::equipmentModelDataOverrides))
+                .apply(instance, Json::new));
 
         public DragonModelData getData() {
             return new DragonModelData(modelData(), equipmentModelDataOverrides());

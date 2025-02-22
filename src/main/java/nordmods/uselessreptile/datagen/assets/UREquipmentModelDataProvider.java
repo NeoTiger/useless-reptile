@@ -42,8 +42,8 @@ public class UREquipmentModelDataProvider implements DataProvider {
             EquipmentModelData.getEntries().forEach(entry -> {
                 Identifier dragon = entry.getKey();
                 Path path = this.pathResolver.resolveJson(dragon);
-                EquipmentModelData.EquipmentModelDataJson jsonData = new EquipmentModelData.EquipmentModelDataJson(dragon, entry.getValue());
-                list.add(DataProvider.writeCodecToPath(writer, registryLookupFuture, EquipmentModelData.EquipmentModelDataJson.CODEC, jsonData, path));
+                EquipmentModelData.Json jsonData = new EquipmentModelData.Json(dragon, entry.getValue());
+                list.add(DataProvider.writeCodecToPath(writer, registryLookupFuture, EquipmentModelData.Json.CODEC, jsonData, path));
             });
             return CompletableFuture.allOf(list.toArray(CompletableFuture[]::new));
         });

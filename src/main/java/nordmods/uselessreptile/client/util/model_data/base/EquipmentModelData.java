@@ -7,6 +7,7 @@ import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.Identifier;
 import nordmods.uselessreptile.UselessReptile;
+import nordmods.uselessreptile.client.util.ResourceUtil;
 
 import java.util.*;
 
@@ -19,8 +20,8 @@ public record EquipmentModelData(Identifier item, ModelData modelData) {
             ModelData.CODEC.fieldOf("model_data").forGetter(EquipmentModelData::modelData))
             .apply(instance, EquipmentModelData::new));
 
-    public static EquipmentModelDataJson deserialize(JsonElement input) {
-        DataResult<EquipmentModelDataJson> result = EquipmentModelDataJson.CODEC.parse(JsonOps.INSTANCE, input);
+    public static Json deserialize(JsonElement input) {
+        DataResult<Json> result = Json.CODEC.parse(JsonOps.INSTANCE, input);
         return result.getOrThrow();
     }
 
@@ -35,13 +36,24 @@ public record EquipmentModelData(Identifier item, ModelData modelData) {
         }
     }
 
-    //TODO: make it more readable
     public static void debugPrint() {
         for (Map.Entry<Identifier, List<EquipmentModelData>> entry : equipmentModelDataHolder.entrySet()) {
-            for (EquipmentModelData data : entry.getValue()) {
-                UselessReptile.LOGGER.debug("{}: {}", entry.getKey(), data);
-            }
+            Identifier dragonId = entry.getKey();
+            StringBuilder builder = new StringBuilder().append(dragonId.toString()).append(" - found following equipment model data :");
+            entry.getValue().forEach(equipmentModelData -> {
+                String data = EquipmentModelData.getInfoForPrint(equipmentModelData).toString().replaceAll(ResourceUtil.TAB_NEWLINE, ResourceUtil.TAB_NEWLINE + ResourceUtil.TAB);
+                builder.append(data).append(ResourceUtil.TAB_NEWLINE);
+            });
+            UselessReptile.LOGGER.info(builder.toString());
         }
+    }
+    
+    public static StringBuilder getInfoForPrint(EquipmentModelData equipmentModelData) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(ResourceUtil.TAB_NEWLINE).append("Item: ").append(equipmentModelData.item().toString());
+        String modelData = ModelData.getInfoForPrint(equipmentModelData.modelData()).toString().replaceAll(ResourceUtil.TAB_NEWLINE, ResourceUtil.TAB_NEWLINE + ResourceUtil.TAB);
+        builder.append(ResourceUtil.TAB_NEWLINE).append("Model Data: ").append(modelData);
+        return builder;
     }
 
     public static void reset() {
@@ -56,12 +68,16 @@ public record EquipmentModelData(Identifier item, ModelData modelData) {
         return equipmentModelDataHolder.get(dragon);
     }
 
-    public record EquipmentModelDataJson(Identifier dragonId, List<EquipmentModelData> equipmentModelData) {
-        public static final Codec<EquipmentModelDataJson> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                        Identifier.CODEC.fieldOf("dragon_id").forGetter(EquipmentModelDataJson::dragonId),
-                        EquipmentModelData.CODEC.listOf().fieldOf("equipment_model_data").forGetter(EquipmentModelDataJson::equipmentModelData))
-                .apply(instance, EquipmentModelDataJson::new));
+    public record Json(Identifier dragonId, List<EquipmentModelData> equipmentModelData) {
+        public static final Codec<Json> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                        Identifier.CODEC.fieldOf("dragon_id").forGetter(Json::dragonId),
+                        EquipmentModelData.CODEC.listOf().fieldOf("equipment_model_data").forGetter(Json::equipmentModelData))
+                .apply(instance, Json::new));
 
+        public List<EquipmentModelData> getData() {
+            return equipmentModelData();
+        }
+        
         public void add() {
             equipmentModelData().forEach(equipmentModelData -> EquipmentModelData.add(dragonId(), equipmentModelData));
         }
