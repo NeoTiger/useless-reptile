@@ -5,6 +5,7 @@ import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import nordmods.uselessreptile.client.model.URDragonModel;
@@ -41,19 +42,18 @@ public abstract class URDragonRenderer <T extends URDragonEntity> extends GeoEnt
         if (!ResourceUtil.isResourceReloadFinished) return;
 
         DragonAssetCache dragonAssetCache = dragon.getAssetCache();
-        int i = 0;
-        for (ItemStack itemStack : dragon.getArmorItems()) {
-            int j = i;
-            i++;
+
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            ItemStack itemStack = dragon.getEquippedStack(slot);
             if (itemStack.isEmpty()) {
-                dragonAssetCache.setEquipmentAnimatable(j, null);
+                dragonAssetCache.setEquipmentAnimatable(slot, null);
                 continue;
             }
 
-            DragonEquipmentAnimatable dragonEquipmentAnimatable = dragonAssetCache.getEquipmentAnimatable(j);
+            DragonEquipmentAnimatable dragonEquipmentAnimatable = dragonAssetCache.getEquipmentAnimatable(slot);
             if (dragonEquipmentAnimatable == null || dragonEquipmentAnimatable.item != itemStack.getItem()) {
                 dragonEquipmentAnimatable = new DragonEquipmentAnimatable(dragon, itemStack.getItem());
-                dragonAssetCache.setEquipmentAnimatable(j, dragonEquipmentAnimatable);
+                dragonAssetCache.setEquipmentAnimatable(slot, dragonEquipmentAnimatable);
             }
 
             DragonEquipmentRenderer usedRenderer = itemStack.isIn(URTags.DRAGON_SADDLES) ? saddleEquipmentRenderer : dragonEquipmentRenderer;
