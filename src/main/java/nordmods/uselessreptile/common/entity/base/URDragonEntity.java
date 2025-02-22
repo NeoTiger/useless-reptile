@@ -254,6 +254,7 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
             }
             inventory.addListener(this);
         }
+        updateEquipment();
     }
 
     @Override
