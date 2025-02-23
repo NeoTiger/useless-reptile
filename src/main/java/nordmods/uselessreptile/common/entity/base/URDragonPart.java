@@ -7,6 +7,7 @@ import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec2f;
 import nordmods.primitive_multipart_entities.common.entity.EntityPart;
 import org.joml.Vector3f;
@@ -64,6 +65,11 @@ public class URDragonPart extends EntityPart {
     @Override
     public boolean canHit() {
         return owner.canHit();
+    }
+
+    @Override
+    protected Text getDefaultName() {
+        return owner.getDefaultName();
     }
 
     public void setScale(float destinationHeight, float destinationWidth) {

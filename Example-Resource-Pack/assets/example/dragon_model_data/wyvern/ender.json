@@ -1,6 +1,7 @@
 {
   "dragon_id": "uselessreptile:wyvern",
   "variant": "Ender",
+  "display_name_key": "entity.example.wyvern.ender",
   "model_data" : {
     "texture": "example:textures/wyvern/end.png",
     "model": "uselessreptile:geo/entity/wyvern/wyvern.geo.json",

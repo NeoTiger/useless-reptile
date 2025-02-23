@@ -63,6 +63,7 @@ dependencies {
 
     //modCompileOnly "dev.emi:emi-fabric:${project.emi_version}:api"
     //modLocalRuntime "dev.emi:emi-fabric:${project.emi_version}"
+    modRuntimeOnly("maven.modrinth:jade:15.9.3+fabric")
 }
 
 processResources {

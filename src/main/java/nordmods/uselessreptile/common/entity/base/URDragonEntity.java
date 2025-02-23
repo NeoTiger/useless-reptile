@@ -879,6 +879,14 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
         if (itemStack.getComponents().contains(DataComponentTypes.FOOD)) applyFoodEffects(itemStack.getComponents().get(DataComponentTypes.FOOD));
     }
 
+    @Override
+    protected Text getDefaultName() {
+        if (getWorld().isClient() && getAssetCache().getDefaultDisplayName(this) != null) {
+            return getAssetCache().getDefaultDisplayName(this);
+        }
+        return super.getDefaultName();
+    }
+
     //asset location caching so mod doesn't have to make stupid amount of checks if file even exists each frame
     private final DragonAssetCache assetCache = new DragonAssetCache();
 

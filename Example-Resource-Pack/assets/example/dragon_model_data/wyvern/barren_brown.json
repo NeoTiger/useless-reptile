@@ -1,6 +1,7 @@
 {
   "dragon_id": "uselessreptile:wyvern",
   "variant": "Barren Brown",
+  "display_name_key": "entity.example.wyvern.barren",
   "model_data" : {
     "texture": "example:textures/wyvern/barren_brown.png",
     "model": "example:geo/wyvern/barren.geo.json",
