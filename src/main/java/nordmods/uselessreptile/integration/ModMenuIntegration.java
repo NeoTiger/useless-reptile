@@ -88,6 +88,10 @@ public class ModMenuIntegration implements ModMenuApi {
                 .name(Text.translatable("config.uselessreptile.group.dragonBehaviour"))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.group.dragonBehaviour.@Tooltip")).build());
+        OptionGroup.Builder debugGroup = OptionGroup.createBuilder()
+                .name(Text.translatable("config.uselessreptile.group.debug"))
+                .description(OptionDescription.createBuilder()
+                        .text(Text.translatable("config.uselessreptile.group.debug.@Tooltip")).build());
 
         //options
         Option<Boolean> naturalWyvernSpawn = Option.<Boolean>createBuilder()
@@ -294,6 +298,16 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(BooleanController::new)
                 .build();
 
+        Option<Boolean> logDragonSpawns = Option.<Boolean>createBuilder()
+                .name(Text.translatable("config.uselessreptile.option.logDragonSpawns"))
+                .description(OptionDescription.createBuilder()
+                        .text(Text.translatable("config.uselessreptile.option.logDragonSpawns.@Tooltip")).build())
+                .binding(config.logDragonSpawns,
+                        () -> config.logDragonSpawns,
+                        val -> config.logDragonSpawns = val)
+                .customController(BooleanController::new)
+                .build();
+
         inWorldSpawnGroup.option(naturalWyvernSpawn);
         inWorldSpawnGroup.option(naturalMoleclawSpawn);
         inWorldSpawnGroup.option(naturalPikehornSpawn);
@@ -320,11 +334,13 @@ public class ModMenuIntegration implements ModMenuApi {
         dragonBehaviourGroup.option(allowDragonTeleport);
         dragonBehaviourGroup.option(dragonMadness);
 
+        debugGroup.option(logDragonSpawns);
+
         gameplayCategory.group(inWorldSpawnGroup.build());
         gameplayCategory.group(spawnGroupsGroup.build());
         gameplayCategory.group(groupSizeGroup.build());
         gameplayCategory.group(dragonBehaviourGroup.build());
-
+        gameplayCategory.group(debugGroup.build());
 
         return gameplayCategory.build();
     }
@@ -346,6 +362,10 @@ public class ModMenuIntegration implements ModMenuApi {
                 .name(Text.translatable("config.uselessreptile.group.dragonAppearance"))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.group.dragonAppearance.@Tooltip")).build());
+        OptionGroup.Builder debugGroup = OptionGroup.createBuilder()
+                .name(Text.translatable("config.uselessreptile.group.debug"))
+                .description(OptionDescription.createBuilder()
+                        .text(Text.translatable("config.uselessreptile.group.debug.@Tooltip")).build());
 
 
         Option<Float> cameraDistanceOffset = Option.<Float>createBuilder()
@@ -415,6 +435,16 @@ public class ModMenuIntegration implements ModMenuApi {
                         val -> clientConfig.disableEmissiveTextures = val)
                 .customController(BooleanController::new)
                 .build();
+        Option<Boolean> hideEquipmentInfo = Option.<Boolean>createBuilder()
+                .name(Text.translatable("config.uselessreptile.option.hideEquipmentInfo"))
+                .description(OptionDescription.createBuilder()
+                        .text(Text.translatable("config.uselessreptile.option.hideEquipmentInfo.@Tooltip")).build())
+                .binding(clientDefaults.hideEquipmentInfo,
+                        () -> clientConfig.hideEquipmentInfo,
+                        val -> clientConfig.hideEquipmentInfo = val)
+                .customController(BooleanController::new)
+                .build();
+
         Option<Boolean> attackBoxesInDebug = Option.<Boolean>createBuilder()
                 .name(Text.translatable("config.uselessreptile.option.attackBoxesInDebug"))
                 .description(OptionDescription.createBuilder()
@@ -424,13 +454,22 @@ public class ModMenuIntegration implements ModMenuApi {
                         val -> clientConfig.attackBoxesInDebug = val)
                 .customController(BooleanController::new)
                 .build();
-        Option<Boolean> hideEquipmentInfo = Option.<Boolean>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.hideEquipmentInfo"))
+        Option<Boolean> logEquipmentModelData = Option.<Boolean>createBuilder()
+                .name(Text.translatable("config.uselessreptile.option.logEquipmentModelData"))
                 .description(OptionDescription.createBuilder()
-                        .text(Text.translatable("config.uselessreptile.option.hideEquipmentInfo.@Tooltip")).build())
-                .binding(clientDefaults.hideEquipmentInfo,
-                        () -> clientConfig.hideEquipmentInfo,
-                        val -> clientConfig.hideEquipmentInfo = val)
+                        .text(Text.translatable("config.uselessreptile.option.logEquipmentModelData.@Tooltip")).build())
+                .binding(clientDefaults.logEquipmentModelData,
+                        () -> clientConfig.logEquipmentModelData,
+                        val -> clientConfig.logEquipmentModelData = val)
+                .customController(BooleanController::new)
+                .build();
+        Option<Boolean> logDragonModelData = Option.<Boolean>createBuilder()
+                .name(Text.translatable("config.uselessreptile.option.logDragonModelData"))
+                .description(OptionDescription.createBuilder()
+                        .text(Text.translatable("config.uselessreptile.option.logDragonModelData.@Tooltip")).build())
+                .binding(clientDefaults.logDragonModelData,
+                        () -> clientConfig.logDragonModelData,
+                        val -> clientConfig.logDragonModelData = val)
                 .customController(BooleanController::new)
                 .build();
 
@@ -443,11 +482,15 @@ public class ModMenuIntegration implements ModMenuApi {
 
         dragonAppearanceGroup.option(disableNamedTextures);
         dragonAppearanceGroup.option(disableEmissiveTextures);
-        dragonAppearanceGroup.option(attackBoxesInDebug);
         dragonAppearanceGroup.option(hideEquipmentInfo);
+
+        debugGroup.option(logDragonModelData);
+        debugGroup.option(logEquipmentModelData);
+        debugGroup.option(attackBoxesInDebug);
 
         clientCategory.group(cameraGroup.build());
         clientCategory.group(dragonAppearanceGroup.build());
+        clientCategory.group(debugGroup.build());
 
         return clientCategory.build();
     }

@@ -13,6 +13,7 @@ import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.world.biome.Biome;
 import nordmods.uselessreptile.UselessReptile;
+import nordmods.uselessreptile.common.config.URConfig;
 import nordmods.uselessreptile.common.entity.base.URDragonEntity;
 import org.jetbrains.annotations.NotNull;
 
@@ -68,7 +69,9 @@ public class DragonSpawn {
         DragonSpawn.dragonSpawnsHolder.put(name, content);
     }
 
+    //TODO make more readable
     public static void debugPrint() {
+        if (!URConfig.getConfig().logDragonSpawns) return;
         for (Map.Entry<String, List<DragonSpawn>> entry : DragonSpawn.dragonSpawnsHolder.entrySet()) {
             for (DragonSpawn spawn : entry.getValue()) {
                 UselessReptile.LOGGER.debug("{}: added spawn entry for variant \"{}\" with conditions: {}", entry.getKey(), spawn.variant(), spawn.conditions());

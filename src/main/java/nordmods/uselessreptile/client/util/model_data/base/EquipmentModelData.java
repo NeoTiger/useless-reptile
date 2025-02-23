@@ -7,6 +7,7 @@ import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.Identifier;
 import nordmods.uselessreptile.UselessReptile;
+import nordmods.uselessreptile.client.config.URClientConfig;
 import nordmods.uselessreptile.client.util.ResourceUtil;
 
 import java.util.*;
@@ -37,6 +38,7 @@ public record EquipmentModelData(Identifier item, ModelData modelData) {
     }
 
     public static void debugPrint() {
+        if (!URClientConfig.getConfig().logEquipmentModelData) return;
         for (Map.Entry<Identifier, List<EquipmentModelData>> entry : equipmentModelDataHolder.entrySet()) {
             Identifier dragonId = entry.getKey();
             StringBuilder builder = new StringBuilder().append(dragonId.toString()).append(" - found following equipment model data :");

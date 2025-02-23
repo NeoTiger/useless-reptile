@@ -10,6 +10,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import nordmods.uselessreptile.UselessReptile;
+import nordmods.uselessreptile.client.config.URClientConfig;
 import nordmods.uselessreptile.client.util.ResourceUtil;
 
 import java.util.*;
@@ -54,6 +55,7 @@ public record DragonModelData(ModelData modelData, Optional<String> displayNameK
     }
 
     public static void debugPrint() {
+        if (!URClientConfig.getConfig().logDragonModelData) return;
         for (Map.Entry<Identifier, Map<String, DragonModelData>> entry : variantModelDataHolder.entrySet()) {
             Identifier dragonId = entry.getKey();
             for (Map.Entry<String, DragonModelData> data : entry.getValue().entrySet()) {
