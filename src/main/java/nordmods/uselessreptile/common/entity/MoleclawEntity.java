@@ -18,10 +18,8 @@ import net.minecraft.entity.passive.ChickenEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
@@ -133,8 +131,7 @@ public class MoleclawEntity extends URRideableDragonEntity {
 
     private <ENTITY extends GeoEntity> void soundListenerMain(SoundKeyframeEvent<ENTITY> event) {
         if (getWorld().isClient())
-            if (event.getKeyframeData().getSound().equals("step"))
-                playSound(getStepSound(getBlockPos(), getWorld().getBlockState(getBlockPos())), 1, 1);
+            if (event.getKeyframeData().getSound().equals("step")) playSound(URSounds.DRAGON_STEP, 1, 0.7f);
     }
 
     private <ENTITY extends GeoEntity> void soundListenerAttack(SoundKeyframeEvent<ENTITY> event) {
@@ -353,15 +350,6 @@ public class MoleclawEntity extends URRideableDragonEntity {
     public void scheduleStrongAttack() {
         if (attackDelay == 0) attackDelay = 6;
         setPrimaryAttackCooldown(getMaxPrimaryAttackCooldown());
-    }
-
-    private SoundEvent getStepSound(BlockPos pos, BlockState state) {
-        if (state.getFluidState().isEmpty()) {
-            BlockState blockState = getWorld().getBlockState(pos.up());
-            BlockSoundGroup blockSoundGroup = blockState.isIn(BlockTags.INSIDE_STEP_SOUND_BLOCKS) ? blockState.getSoundGroup() : state.getSoundGroup();
-            return blockSoundGroup.getStepSound();
-        }
-        return getSwimSound();
     }
 
     @Override

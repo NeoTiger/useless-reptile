@@ -166,7 +166,7 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
             switch (event.getKeyframeData().getSound()) {
                 case "flap" -> playSound(SoundEvents.ENTITY_ENDER_DRAGON_FLAP, 3, 0.6F);
                 case "woosh" -> playSound(URSounds.DRAGON_WOOSH, 2, 1);
-                case "step" -> playSound(URSounds.LIGHTNING_CHASER_STEP, 1, 1);
+                case "step" -> playSound(URSounds.DRAGON_STEP, 1, 1);
                 case "flap_heavy" -> playSound(SoundEvents.ENTITY_ENDER_DRAGON_FLAP, 3, 0.5F);
             }
     }
