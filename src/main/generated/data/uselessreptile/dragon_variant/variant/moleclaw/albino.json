@@ -1,0 +1,7 @@
+{
+  "dragon_equipment": "uselessreptile:moleclaw",
+  "dragon_model_data": "uselessreptile:moleclaw/albino",
+  "dragon_spawn_conditions": "uselessreptile:moleclaw/rare",
+  "id": "uselessreptile:moleclaw",
+  "name": "albino"
+}

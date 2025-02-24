@@ -6,9 +6,9 @@ import nordmods.uselessreptile.UselessReptile;
 import nordmods.uselessreptile.client.util.AssetCache;
 import nordmods.uselessreptile.client.util.DragonAssetCache;
 import nordmods.uselessreptile.client.util.ResourceUtil;
-import nordmods.uselessreptile.client.util.model_data.ModelDataUtil;
-import nordmods.uselessreptile.client.util.model_data.base.DragonModelData;
-import nordmods.uselessreptile.client.util.model_data.base.ModelData;
+import nordmods.uselessreptile.common.util.dragon_variant.DragonVariantUtil;
+import nordmods.uselessreptile.common.util.dragon_variant.model.DragonModel;
+import nordmods.uselessreptile.common.util.dragon_variant.model.ModelData;
 import nordmods.uselessreptile.common.entity.base.URDragonEntity;
 import software.bernie.geckolib.model.GeoModel;
 
@@ -21,13 +21,13 @@ public class URDragonModel<T extends URDragonEntity> extends GeoModel<T> {
         Identifier id = assetCache.getAnimationLocationCache();
         if (id != null) return id;
 
-        DragonModelData data  = ModelDataUtil.getDragonModelData(entity);
+        DragonModel data  = DragonVariantUtil.getDragonModelData(entity);
         if (data != null && data.modelData().animation().isPresent()) {
             id = data.modelData().animation().get();
             if (ResourceUtil.doesExist(id)) {
                 assetCache.setAnimationLocationCache(id);
                 return id;
-            } else UselessReptile.LOGGER.warn("Failed to get animation for {} ({}) of variant {}. Default will be used instead", entity.getName().getString(), entity.getDragonIdPath(), entity.getVariant());
+            } else UselessReptile.LOGGER.warn("Failed to get animation for {} ({}) of name {}. Default will be used instead", entity.getName().getString(), entity.getDragonIdPath(), entity.getVariant());
         }
 
         id = getDefaultAnimation(entity);
@@ -43,13 +43,13 @@ public class URDragonModel<T extends URDragonEntity> extends GeoModel<T> {
         Identifier id = assetCache.getModelLocationCache();
         if (id != null) return id;
 
-        DragonModelData data  = ModelDataUtil.getDragonModelData(entity);
+        DragonModel data  = DragonVariantUtil.getDragonModelData(entity);
         if (data != null && data.modelData().model().isPresent()) {
             id = data.modelData().model().get();
             if (ResourceUtil.doesExist(id)) {
                 assetCache.setModelLocationCache(id);
                 return id;
-            } else UselessReptile.LOGGER.warn("Failed to get model for {} ({}) of variant {}. Default will be used instead", entity.getName().getString(), entity.getDragonIdPath(), entity.getVariant());
+            } else UselessReptile.LOGGER.warn("Failed to get model for {} ({}) of name {}. Default will be used instead", entity.getName().getString(), entity.getDragonIdPath(), entity.getVariant());
         }
 
         id = getDefaultModel(entity);
@@ -65,12 +65,12 @@ public class URDragonModel<T extends URDragonEntity> extends GeoModel<T> {
         Identifier id = assetCache.getTextureLocationCache();
         if (id != null) return id;
 
-        DragonModelData data = ModelDataUtil.getDragonModelData(entity);
+        DragonModel data = DragonVariantUtil.getDragonModelData(entity);
         if (data != null && ResourceUtil.doesExist(data.modelData().texture())) {
             id = data.modelData().texture();
             assetCache.setTextureLocationCache(id);
             return id;
-        } else UselessReptile.LOGGER.warn("Failed to get texture for {} ({}) of variant {}. Default will be used instead", entity.getName().getString(), entity.getDragonIdPath(), entity.getVariant());
+        } else UselessReptile.LOGGER.warn("Failed to get texture for {} ({}) of name {}. Default will be used instead", entity.getName().getString(), entity.getDragonIdPath(), entity.getVariant());
 
         id = getDefaultTexture(entity);
         assetCache.setTextureLocationCache(id);
@@ -97,7 +97,7 @@ public class URDragonModel<T extends URDragonEntity> extends GeoModel<T> {
         RenderLayer renderType = assetCache.getRenderTypeCache();
         if (renderType != null) return renderType;
 
-        DragonModelData data = ModelDataUtil.getDragonModelData(entity);
+        DragonModel data = DragonVariantUtil.getDragonModelData(entity);
         if (data != null) {
             ModelData modelData = data.modelData();
             if (modelData.cull()) renderType = modelData.translucent() ? RenderLayer.getEntityTranslucentCull(texture) : RenderLayer.getEntityCutout(texture);

@@ -7,7 +7,6 @@ import net.minecraft.util.Identifier;
 import nordmods.uselessreptile.common.config.URConfig;
 import nordmods.uselessreptile.common.config.URMobAttributesConfig;
 import nordmods.uselessreptile.common.init.*;
-import nordmods.uselessreptile.common.util.dragon_spawn.DragonSpawnReloadListener;
 import org.slf4j.Logger;
 
 public class UselessReptile implements ModInitializer, PreLaunchEntrypoint {
@@ -18,9 +17,9 @@ public class UselessReptile implements ModInitializer, PreLaunchEntrypoint {
     public void onInitialize() {
         //ModonomiconIntegration.init();
         URMobAttributesConfig.init();
-
-        DragonSpawnReloadListener.init();
+        
         URMobAttributesConfig.init();
+        URRegistryKeys.init();
         URSounds.init();
         UREntities.init();
         URItems.init();

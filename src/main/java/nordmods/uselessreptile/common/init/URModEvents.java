@@ -21,8 +21,8 @@ import nordmods.uselessreptile.common.event.DragonEquipmentTooltipEntryEvent;
 import nordmods.uselessreptile.common.event.DragonOnItemConsumedEvent;
 import nordmods.uselessreptile.common.event.MoleclawGetBlockMiningLevelEvent;
 import nordmods.uselessreptile.common.network.URPacketHelper;
+import nordmods.uselessreptile.common.util.dragon_variant.spawn.DragonSpawnUtil;
 import nordmods.uselessreptile.common.util.duck.LightningChaserSpawnTimer;
-import nordmods.uselessreptile.common.util.dragon_spawn.DragonSpawnUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +56,7 @@ public class URModEvents {
                                 world.getTopY(Heightmap.Type.WORLD_SURFACE, (int) (pos.getX() + sin * 128), (int) (pos.getZ() + cos * 128)) + 16,
                                 (int) (pos.getZ() + cos * 128));
                         while (!world.getBlockState(spawnPos).isAir()) spawnPos = spawnPos.up();
-                        if (DragonSpawnUtil.getAvailableVariants(world, spawnPos, "lightning_chaser").isEmpty()) {
+                        if (DragonSpawnUtil.getAvailableVariants(world, spawnPos, EntityType.getId(UREntities.LIGHTNING_CHASER_ENTITY)).isEmpty()) {
                             worldTimer.useless_reptile$setTimer(1200);
                             return;
                         }

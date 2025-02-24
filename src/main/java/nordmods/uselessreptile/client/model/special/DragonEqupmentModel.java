@@ -6,9 +6,9 @@ import nordmods.uselessreptile.UselessReptile;
 import nordmods.uselessreptile.client.util.AssetCache;
 import nordmods.uselessreptile.client.util.DragonEquipmentAnimatable;
 import nordmods.uselessreptile.client.util.ResourceUtil;
-import nordmods.uselessreptile.client.util.model_data.ModelDataUtil;
-import nordmods.uselessreptile.client.util.model_data.base.EquipmentModelData;
-import nordmods.uselessreptile.client.util.model_data.base.ModelData;
+import nordmods.uselessreptile.common.util.dragon_variant.DragonVariantUtil;
+import nordmods.uselessreptile.common.util.dragon_variant.model.DragonEquipment;
+import nordmods.uselessreptile.common.util.dragon_variant.model.ModelData;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.model.GeoModel;
 
@@ -24,13 +24,13 @@ public class DragonEqupmentModel extends GeoModel<DragonEquipmentAnimatable> {
         Identifier id = assetCache.getModelLocationCache();
         if (id != null) return id;
 
-        EquipmentModelData data = ModelDataUtil.getEquipmentModelData(entity.owner, entity.item);
+        DragonEquipment data = DragonVariantUtil.getEquipmentModelData(entity.owner, entity.item);
         if (data != null && data.modelData().model().isPresent()) {
             id = data.modelData().model().get();
             if (ResourceUtil.doesExist(id)) {
                 assetCache.setModelLocationCache(id);
                 return id;
-            } else UselessReptile.LOGGER.warn("Failed to get model for equipment ({}) for {} ({}) of variant {}", entity.item, entity.owner.getName().getString(), entity.owner.getDragonIdPath(), entity.owner.getVariant());
+            } else UselessReptile.LOGGER.warn("Failed to get model for equipment ({}) for {} ({}) of name {}", entity.item, entity.owner.getName().getString(), entity.owner.getDragonIdPath(), entity.owner.getVariant());
         }
 
         return null;
@@ -45,12 +45,12 @@ public class DragonEqupmentModel extends GeoModel<DragonEquipmentAnimatable> {
         Identifier id = assetCache.getTextureLocationCache();
         if (id != null) return id;
 
-        EquipmentModelData data = ModelDataUtil.getEquipmentModelData(entity.owner, entity.item);
+        DragonEquipment data = DragonVariantUtil.getEquipmentModelData(entity.owner, entity.item);
         if (data != null) {
             id = data.modelData().texture();
             assetCache.setTextureLocationCache(id);
             return id;
-        } else UselessReptile.LOGGER.warn("Failed to get texture for equipment ({}) for {} ({}) of variant {}", entity.item, entity.owner.getName().getString(), entity.owner.getDragonIdPath(), entity.owner.getVariant());
+        } else UselessReptile.LOGGER.warn("Failed to get texture for equipment ({}) for {} ({}) of name {}", entity.item, entity.owner.getName().getString(), entity.owner.getDragonIdPath(), entity.owner.getVariant());
 
         return null;
     }
@@ -64,13 +64,13 @@ public class DragonEqupmentModel extends GeoModel<DragonEquipmentAnimatable> {
         Identifier id = assetCache.getAnimationLocationCache();
         if (id != null) return id;
 
-        EquipmentModelData data = ModelDataUtil.getEquipmentModelData(entity.owner, entity.item);
+        DragonEquipment data = DragonVariantUtil.getEquipmentModelData(entity.owner, entity.item);
         if (data != null && data.modelData().animation().isPresent()) {
             id = data.modelData().animation().get();
             if (ResourceUtil.doesExist(id)) {
                 assetCache.setAnimationLocationCache(id);
                 return id;
-            } else UselessReptile.LOGGER.warn("Failed to get animation for equipment ({}) for {} ({}) of variant {}", entity.item, entity.owner.getName().getString(), entity.owner.getDragonIdPath(), entity.owner.getVariant());
+            } else UselessReptile.LOGGER.warn("Failed to get animation for equipment ({}) for {} ({}) of name {}", entity.item, entity.owner.getName().getString(), entity.owner.getDragonIdPath(), entity.owner.getVariant());
         }
 
         assetCache.setAnimationLocationCache(DEFAULT_ANIMATION);
@@ -85,7 +85,7 @@ public class DragonEqupmentModel extends GeoModel<DragonEquipmentAnimatable> {
         RenderLayer renderType = assetCache.getRenderTypeCache();
         if (renderType != null) return renderType;
 
-        EquipmentModelData data = ModelDataUtil.getEquipmentModelData(entity.owner, entity.item);
+        DragonEquipment data = DragonVariantUtil.getEquipmentModelData(entity.owner, entity.item);
         if (data != null) {
             ModelData modelData = data.modelData();
             if (modelData.cull()) renderType = modelData.translucent() ? RenderLayer.getEntityTranslucentCull(texture) : RenderLayer.getEntityCutout(texture);

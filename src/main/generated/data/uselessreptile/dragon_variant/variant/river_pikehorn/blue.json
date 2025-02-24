@@ -1,0 +1,7 @@
+{
+  "dragon_equipment": "uselessreptile:river_pikehorn",
+  "dragon_model_data": "uselessreptile:river_pikehorn/blue",
+  "dragon_spawn_conditions": "uselessreptile:river_pikehorn/default",
+  "id": "uselessreptile:river_pikehorn",
+  "name": "blue"
+}

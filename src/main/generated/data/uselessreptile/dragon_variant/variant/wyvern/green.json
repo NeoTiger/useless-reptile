@@ -1,0 +1,7 @@
+{
+  "dragon_equipment": "uselessreptile:wyvern",
+  "dragon_model_data": "uselessreptile:wyvern/green",
+  "dragon_spawn_conditions": "uselessreptile:wyvern/default",
+  "id": "uselessreptile:wyvern",
+  "name": "green"
+}

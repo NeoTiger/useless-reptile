@@ -37,10 +37,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.Util;
+import net.minecraft.util.*;
 import net.minecraft.util.function.BooleanBiFunction;
 import net.minecraft.util.math.*;
 import net.minecraft.util.math.random.Random;
@@ -60,14 +57,13 @@ import nordmods.uselessreptile.common.entity.ai.control.LandDragonMoveControl;
 import nordmods.uselessreptile.common.entity.ai.navigation.DragonNavigation;
 import nordmods.uselessreptile.common.event.DragonOnItemConsumedEvent;
 import nordmods.uselessreptile.common.gui.URDragonScreenHandler;
-import nordmods.uselessreptile.common.init.URAttributes;
-import nordmods.uselessreptile.common.init.URGameEvents;
-import nordmods.uselessreptile.common.init.URStatusEffects;
-import nordmods.uselessreptile.common.init.URTags;
+import nordmods.uselessreptile.common.init.*;
 import nordmods.uselessreptile.common.item.VortexHornItem;
 import nordmods.uselessreptile.common.network.URPacketHelper;
-import nordmods.uselessreptile.common.util.dragon_spawn.DragonSpawn;
-import nordmods.uselessreptile.common.util.dragon_spawn.DragonSpawnUtil;
+import nordmods.uselessreptile.common.util.dragon_variant.DragonVariant;
+import nordmods.uselessreptile.common.util.dragon_variant.model.DragonModel;
+import nordmods.uselessreptile.common.util.dragon_variant.spawn.DragonSpawnConditions;
+import nordmods.uselessreptile.common.util.dragon_variant.spawn.DragonSpawnUtil;
 import nordmods.uselessreptile.common.util.duck.HeadMountDragonOwner;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -101,6 +97,7 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
     protected @Nullable BlockPos jukeboxPos;
     protected SimpleInventory inventory = new SimpleInventory(URDragonScreenHandler.maxStorageSize);
     public boolean shouldFollow = false;
+    protected Text defaultDisplayName;
 
     protected URDragonEntity(EntityType<? extends TameableEntity> entityType, World world) {
         super(entityType, world);
@@ -354,7 +351,7 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
     }
 
     public static boolean canDragonSpawn(EntityType<? extends MobEntity> type, WorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
-        List<DragonSpawn> availableVariants = DragonSpawnUtil.getAvailableVariants(world, pos, EntityType.getId(type).getPath());
+        List<Pair<String, DragonSpawnConditions>> availableVariants = DragonSpawnUtil.getAvailableVariants(world, pos, EntityType.getId(type));
         return !availableVariants.isEmpty();
     }
 
@@ -881,10 +878,15 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
 
     @Override
     protected Text getDefaultName() {
-        if (getWorld().isClient() && getAssetCache().getDefaultDisplayName(this) != null) {
-            return getAssetCache().getDefaultDisplayName(this);
+        if (defaultDisplayName == null) {
+            DragonVariant variant = DragonVariant.getByVariant(this);
+            if (variant != null) {
+                DragonModel model = getWorld().getRegistryManager().get(URRegistryKeys.DRAGON_MODEL).get(variant.dragonModelData());
+                if (model != null && model.displayNameKey().isPresent()) defaultDisplayName = Text.translatable(model.displayNameKey().get());
+            }
+            if (defaultDisplayName == null) defaultDisplayName = super.getDefaultName();
         }
-        return super.getDefaultName();
+        return defaultDisplayName;
     }
 
     //asset location caching so mod doesn't have to make stupid amount of checks if file even exists each frame
