@@ -27,7 +27,7 @@ public class URDragonModelProvider implements DataProvider {
 
     public URDragonModelProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookupFuture) {
         this.output = output;
-        this.pathResolver = output.getResolver(DataOutput.OutputType.DATA_PACK, "dragon_variant/dragon_model");
+        this.pathResolver = output.getResolver(DataOutput.OutputType.DATA_PACK, "ur_dragon_variant/dragon_model");
         this.registryLookupFuture = registryLookupFuture;
     }
 
