@@ -1,6 +1,6 @@
 {
-  "dragon_id": "uselessreptile:moleclaw",
-  "equipment_model_data": [
+  "parent": "uselessreptile:moleclaw",
+  "equipment": [
     {
       "item": "minecraft:dirt",
       "model_data": {

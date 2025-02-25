@@ -1,0 +1,7 @@
+{
+  "equipment": "uselessreptile:empty",
+  "dragon_model_data": "example:striped",
+  "spawn_conditions": "uselessreptile:river_pikehorn/default",
+  "id": "uselessreptile:river_pikehorn",
+  "name": "striped"
+}

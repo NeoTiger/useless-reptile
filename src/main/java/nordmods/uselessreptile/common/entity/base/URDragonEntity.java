@@ -257,8 +257,10 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
     @Override
     public void onTrackedDataSet(TrackedData<?> data) {
         super.onTrackedDataSet(data);
-        if (getWorld().isClient)
-            if (CUSTOM_NAME.equals(data) || VARIANT.equals(data)) assetCache.cleanCache();
+        if (CUSTOM_NAME.equals(data) || VARIANT.equals(data)) {
+            assetCache.cleanCache();
+            defaultDisplayName = null;
+        }
     }
 
     @Override

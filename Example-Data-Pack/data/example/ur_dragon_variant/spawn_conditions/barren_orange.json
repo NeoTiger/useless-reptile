@@ -1,10 +1,10 @@
-{
-  "conditions": {
+[
+  {
     "allowed_biomes": [
       "#c:is_badlands"
     ],
     "altitude": {
-      "min": 80
+      "max": 80
     },
     "allowed_blocks": [
       "#minecraft:animals_spawnable_on",
@@ -12,6 +12,5 @@
       "#minecraft:terracotta"
     ],
     "weight": 1
-  },
-  "variant": "barren_brown"
-}
+  }
+]

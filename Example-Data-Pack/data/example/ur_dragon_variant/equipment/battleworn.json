@@ -1,13 +1,6 @@
 {
-  "dragon_id": "uselessreptile:moleclaw",
-  "custom_name": "Battleworn",
-  "model_data" : {
-    "texture": "example:textures/moleclaw/battleworn.png",
-    "model": "example:geo/moleclaw/battleworn.geo.json",
-    "animation": "uselessreptile:animations/entity/moleclaw/moleclaw.animation.json",
-    "cull" : false
-  },
-  "equipment_model_overrides": [
+  "parent": "uselessreptile:moleclaw",
+  "equipment": [
     {
       "item": "uselessreptile:moleclaw_helmet_iron",
       "model_data": {

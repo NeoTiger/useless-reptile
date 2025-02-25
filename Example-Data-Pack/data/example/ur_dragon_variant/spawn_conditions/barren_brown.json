@@ -1,10 +1,19 @@
-{
-  "conditions": {
+[
+  {
+    "allowed_biomes": [
+      "#c:is_savanna"
+    ],
+    "allowed_blocks": [
+      "#minecraft:animals_spawnable_on"
+    ],
+    "weight": 1
+  },
+  {
     "allowed_biomes": [
       "#c:is_badlands"
     ],
     "altitude": {
-      "max": 80
+      "min": 80
     },
     "allowed_blocks": [
       "#minecraft:animals_spawnable_on",
@@ -12,6 +21,5 @@
       "#minecraft:terracotta"
     ],
     "weight": 1
-  },
-  "variant": "barren_orange"
-}
+  }
+]

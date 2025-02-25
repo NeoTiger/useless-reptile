@@ -1,5 +1,5 @@
-{
-  "conditions": {
+[
+  {
     "allowed_biomes": [
       "#c:is_end"
     ],
@@ -7,6 +7,5 @@
       "minecraft:end_stone"
     ],
     "weight": 1
-  },
-  "variant": "ender"
-}
+  }
+]
