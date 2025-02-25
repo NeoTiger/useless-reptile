@@ -5,14 +5,24 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.Identifier;
 import nordmods.uselessreptile.client.config.URClientConfig;
 
-public record DragonEquipment(Identifier item, ModelData modelData) {
+import java.util.List;
+import java.util.Optional;
+
+public record DragonEquipment(Optional<Identifier> parent, List<Equipment>equipment) {
     public static final Codec<DragonEquipment> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                    Identifier.CODEC.fieldOf("item").forGetter(DragonEquipment::item),
-                    ModelData.CODEC.fieldOf("model_data").forGetter(DragonEquipment::modelData))
+                    Identifier.CODEC.optionalFieldOf("parent").forGetter(DragonEquipment::parent),
+                    Equipment.CODEC.listOf().fieldOf("equipment").forGetter(DragonEquipment::equipment))
             .apply(instance, DragonEquipment::new));
 
     public static void debugPrint() {
         if (!URClientConfig.getConfig().logEquipmentModelData) return;
         //TODO
+    }
+
+    public record Equipment(Identifier item, ModelData modelData) {
+        public static final Codec<Equipment> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                        Identifier.CODEC.fieldOf("item").forGetter(Equipment::item),
+                        ModelData.CODEC.fieldOf("model_data").forGetter(Equipment::modelData))
+                .apply(instance, Equipment::new));
     }
 }

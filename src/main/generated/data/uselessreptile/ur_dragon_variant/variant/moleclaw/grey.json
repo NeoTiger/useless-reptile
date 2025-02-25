@@ -1,7 +1,7 @@
 {
-  "dragon_equipment": "uselessreptile:moleclaw",
   "dragon_model_data": "uselessreptile:moleclaw/grey",
-  "dragon_spawn_conditions": "uselessreptile:moleclaw/default",
+  "equipment": "uselessreptile:moleclaw",
   "id": "uselessreptile:moleclaw",
-  "name": "grey"
+  "name": "grey",
+  "spawn_conditions": "uselessreptile:moleclaw/default"
 }

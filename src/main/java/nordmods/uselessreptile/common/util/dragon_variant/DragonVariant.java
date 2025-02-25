@@ -15,15 +15,15 @@ public record DragonVariant(Identifier dragonId, String name, Identifier dragonM
                     Identifier.CODEC.fieldOf("id").forGetter(DragonVariant::dragonId),
                     Codec.STRING.fieldOf("name").forGetter(DragonVariant::name),
                     Identifier.CODEC.fieldOf("dragon_model_data").forGetter(DragonVariant::dragonModelData),
-                    Identifier.CODEC.fieldOf("dragon_equipment").forGetter(DragonVariant::dragonEquipment),
-                    Identifier.CODEC.optionalFieldOf("dragon_spawn_conditions").forGetter(DragonVariant::spawnConditions))
+                    Identifier.CODEC.fieldOf("equipment").forGetter(DragonVariant::dragonEquipment),
+                    Identifier.CODEC.optionalFieldOf("spawn_conditions").forGetter(DragonVariant::spawnConditions))
             .apply(instance, DragonVariant::new));
 
     public static final Codec<DragonVariant> CODEC_NO_SPAWN_INFO = RecordCodecBuilder.create(instance -> instance.group(
                     Identifier.CODEC.fieldOf("id").forGetter(DragonVariant::dragonId),
                     Codec.STRING.fieldOf("name").forGetter(DragonVariant::name),
                     Identifier.CODEC.fieldOf("dragon_model_data").forGetter(DragonVariant::dragonModelData),
-                    Identifier.CODEC.fieldOf("dragon_equipment").forGetter(DragonVariant::dragonEquipment))
+                    Identifier.CODEC.fieldOf("equipment").forGetter(DragonVariant::dragonEquipment))
             .apply(instance, (id, variant, dragonModelData, dragonEquipment) -> new DragonVariant(id, variant, dragonModelData, dragonEquipment, Optional.empty())));
 
     @Nullable

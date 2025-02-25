@@ -1,7 +1,7 @@
 {
-  "dragon_equipment": "uselessreptile:moleclaw",
   "dragon_model_data": "uselessreptile:moleclaw/black",
-  "dragon_spawn_conditions": "uselessreptile:moleclaw/default",
+  "equipment": "uselessreptile:moleclaw",
   "id": "uselessreptile:moleclaw",
-  "name": "black"
+  "name": "black",
+  "spawn_conditions": "uselessreptile:moleclaw/default"
 }

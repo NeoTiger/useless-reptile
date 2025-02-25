@@ -24,7 +24,7 @@ public class DragonEqupmentModel extends GeoModel<DragonEquipmentAnimatable> {
         Identifier id = assetCache.getModelLocationCache();
         if (id != null) return id;
 
-        DragonEquipment data = DragonVariantUtil.getEquipmentModelData(entity.owner, entity.item);
+        DragonEquipment.Equipment data = DragonVariantUtil.getEquipmentModelData(entity.owner, entity.item);
         if (data != null && data.modelData().model().isPresent()) {
             id = data.modelData().model().get();
             if (ResourceUtil.doesExist(id)) {
@@ -45,7 +45,7 @@ public class DragonEqupmentModel extends GeoModel<DragonEquipmentAnimatable> {
         Identifier id = assetCache.getTextureLocationCache();
         if (id != null) return id;
 
-        DragonEquipment data = DragonVariantUtil.getEquipmentModelData(entity.owner, entity.item);
+        DragonEquipment.Equipment data = DragonVariantUtil.getEquipmentModelData(entity.owner, entity.item);
         if (data != null) {
             id = data.modelData().texture();
             assetCache.setTextureLocationCache(id);
@@ -64,7 +64,7 @@ public class DragonEqupmentModel extends GeoModel<DragonEquipmentAnimatable> {
         Identifier id = assetCache.getAnimationLocationCache();
         if (id != null) return id;
 
-        DragonEquipment data = DragonVariantUtil.getEquipmentModelData(entity.owner, entity.item);
+        DragonEquipment.Equipment data = DragonVariantUtil.getEquipmentModelData(entity.owner, entity.item);
         if (data != null && data.modelData().animation().isPresent()) {
             id = data.modelData().animation().get();
             if (ResourceUtil.doesExist(id)) {
@@ -85,7 +85,7 @@ public class DragonEqupmentModel extends GeoModel<DragonEquipmentAnimatable> {
         RenderLayer renderType = assetCache.getRenderTypeCache();
         if (renderType != null) return renderType;
 
-        DragonEquipment data = DragonVariantUtil.getEquipmentModelData(entity.owner, entity.item);
+        DragonEquipment.Equipment data = DragonVariantUtil.getEquipmentModelData(entity.owner, entity.item);
         if (data != null) {
             ModelData modelData = data.modelData();
             if (modelData.cull()) renderType = modelData.translucent() ? RenderLayer.getEntityTranslucentCull(texture) : RenderLayer.getEntityCutout(texture);

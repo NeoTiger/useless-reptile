@@ -25,7 +25,7 @@ public class UREquipmentProvider implements DataProvider {
     protected final FabricDataOutput output;
     private final DataOutput.PathResolver pathResolver;
     private final CompletableFuture<RegistryWrapper.WrapperLookup> registryLookupFuture;
-    private final Map<Identifier, List<DragonEquipment>> holder = new HashMap<>();
+    private final Map<Identifier, DragonEquipment> holder = new HashMap<>();
 
     public UREquipmentProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookupFuture) {
         this.output = output;
@@ -40,7 +40,7 @@ public class UREquipmentProvider implements DataProvider {
             List<CompletableFuture<?>> list = new ArrayList<>();
             holder.forEach((key, val) -> {
                 Path path = this.pathResolver.resolveJson(key);
-                list.add(DataProvider.writeCodecToPath(writer, registryLookupFuture, DragonEquipment.CODEC.listOf(), val, path));
+                list.add(DataProvider.writeCodecToPath(writer, registryLookupFuture, DragonEquipment.CODEC, val, path));
             });
             return CompletableFuture.allOf(list.toArray(CompletableFuture[]::new));
         });
@@ -59,13 +59,15 @@ public class UREquipmentProvider implements DataProvider {
         addEntry(UREntities.MOLECLAW_ENTITY, URItems.MOLECLAW_HELMET_GOLD, UselessReptile.id("textures/entity/moleclaw/moleclaw_helmet_gold.png"), moleclawHelmet, true);
         addEntry(UREntities.MOLECLAW_ENTITY, URItems.MOLECLAW_HELMET_DIAMOND, UselessReptile.id("textures/entity/moleclaw/moleclaw_helmet_diamond.png"), moleclawHelmet, true);
         addEntry(UREntities.MOLECLAW_ENTITY, URItems.MOLECLAW_HELMET_NETHERITE, UselessReptile.id("textures/entity/moleclaw/moleclaw_helmet_netherite.png"), moleclawHelmet, true);
+
+        holder.put(UselessReptile.id("empty"), new DragonEquipment(Optional.empty(), List.of()));
     }
 
     protected void addEntry(EntityType<? extends URDragonEntity> type, Item item, Identifier texture, Identifier model, boolean translucent) {
-        DragonEquipment equipmentModelData = new DragonEquipment(Registries.ITEM.getId(item), new ModelData(texture, Optional.of(model), Optional.empty(), false, translucent));
+        DragonEquipment.Equipment equipmentModelData = new DragonEquipment.Equipment(Registries.ITEM.getId(item), new ModelData(texture, Optional.of(model), Optional.empty(), false, translucent));
         Identifier id = EntityType.getId(type);
-        if (holder.containsKey(id)) holder.get(id).add(equipmentModelData);
-        else holder.put(id, new ArrayList<>(Collections.singleton(equipmentModelData)));
+        if (holder.containsKey(id)) holder.get(id).equipment().add(equipmentModelData);
+        else holder.put(id, new DragonEquipment(Optional.empty(), new ArrayList<>(Collections.singleton(equipmentModelData))));
     }
 
     protected void addSaddle(EntityType<? extends URDragonEntity> type) {

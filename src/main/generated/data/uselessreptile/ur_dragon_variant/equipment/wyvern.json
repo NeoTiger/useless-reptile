@@ -1,10 +1,12 @@
-[
-  {
-    "item": "minecraft:saddle",
-    "model_data": {
-      "cull": false,
-      "model": "uselessreptile:geo/entity/wyvern/saddle.geo.json",
-      "texture": "uselessreptile:textures/entity/wyvern/saddle.png"
+{
+  "equipment": [
+    {
+      "item": "minecraft:saddle",
+      "model_data": {
+        "cull": false,
+        "model": "uselessreptile:geo/entity/wyvern/saddle.geo.json",
+        "texture": "uselessreptile:textures/entity/wyvern/saddle.png"
+      }
     }
-  }
-]
+  ]
+}

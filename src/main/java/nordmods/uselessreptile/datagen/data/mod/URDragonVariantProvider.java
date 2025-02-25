@@ -125,7 +125,7 @@ public class URDragonVariantProvider implements DataProvider {
                 id,
                 name,
                 UselessReptile.id("river_pikehorn/" + name),
-                UselessReptile.id("river_pikehorn"),
+                UselessReptile.id("empty"),
                 Optional.of(UselessReptile.id("river_pikehorn/default"))
         );
         addEntry(getId(id, name), variant);
