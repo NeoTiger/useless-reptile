@@ -56,7 +56,7 @@ public class URModEvents {
                                 world.getTopY(Heightmap.Type.WORLD_SURFACE, (int) (pos.getX() + sin * 128), (int) (pos.getZ() + cos * 128)) + 16,
                                 (int) (pos.getZ() + cos * 128));
                         while (!world.getBlockState(spawnPos).isAir()) spawnPos = spawnPos.up();
-                        if (DragonSpawnUtil.getAvailableVariants(world, spawnPos, EntityType.getId(UREntities.LIGHTNING_CHASER_ENTITY)).isEmpty()) {
+                        if (DragonSpawnUtil.getAvailableVariants(world, spawnPos, EntityType.getId(UREntities.LIGHTNING_CHASER_ENTITY)).findFirst().isEmpty()) {
                             worldTimer.useless_reptile$setTimer(1200);
                             return;
                         }
