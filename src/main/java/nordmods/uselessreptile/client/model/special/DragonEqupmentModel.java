@@ -6,9 +6,9 @@ import nordmods.uselessreptile.UselessReptile;
 import nordmods.uselessreptile.client.util.AssetCache;
 import nordmods.uselessreptile.client.util.DragonEquipmentAnimatable;
 import nordmods.uselessreptile.client.util.ResourceUtil;
-import nordmods.uselessreptile.common.util.dragon_variant.DragonVariantUtil;
-import nordmods.uselessreptile.common.util.dragon_variant.model.DragonEquipment;
-import nordmods.uselessreptile.common.util.dragon_variant.model.ModelData;
+import nordmods.uselessreptile.common.dragon_variant.DragonVariantUtil;
+import nordmods.uselessreptile.common.dragon_variant.model.DragonEquipment;
+import nordmods.uselessreptile.common.dragon_variant.model.ModelData;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.model.GeoModel;
 

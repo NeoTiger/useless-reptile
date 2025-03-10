@@ -1,4 +1,4 @@
-package nordmods.uselessreptile.common.util.dragon_variant.spawn;
+package nordmods.uselessreptile.common.dragon_variant.spawn;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.SpawnReason;
@@ -15,7 +15,7 @@ import net.minecraft.world.biome.Biome;
 import nordmods.uselessreptile.UselessReptile;
 import nordmods.uselessreptile.common.entity.base.URDragonEntity;
 import nordmods.uselessreptile.common.init.URRegistryKeys;
-import nordmods.uselessreptile.common.util.dragon_variant.DragonVariant;
+import nordmods.uselessreptile.common.dragon_variant.DragonVariant;
 
 import java.util.ArrayList;
 import java.util.List;

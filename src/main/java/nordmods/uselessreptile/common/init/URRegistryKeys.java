@@ -7,10 +7,10 @@ import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
 import nordmods.uselessreptile.UselessReptile;
-import nordmods.uselessreptile.common.util.dragon_variant.DragonVariant;
-import nordmods.uselessreptile.common.util.dragon_variant.model.DragonEquipment;
-import nordmods.uselessreptile.common.util.dragon_variant.model.DragonModel;
-import nordmods.uselessreptile.common.util.dragon_variant.spawn.DragonSpawnConditions;
+import nordmods.uselessreptile.common.dragon_variant.DragonVariant;
+import nordmods.uselessreptile.common.dragon_variant.model.DragonEquipment;
+import nordmods.uselessreptile.common.dragon_variant.model.DragonModel;
+import nordmods.uselessreptile.common.dragon_variant.spawn.DragonSpawnConditions;
 
 import java.util.List;
 

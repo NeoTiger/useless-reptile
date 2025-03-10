@@ -14,8 +14,8 @@ import nordmods.uselessreptile.UselessReptile;
 import nordmods.uselessreptile.common.entity.base.URDragonEntity;
 import nordmods.uselessreptile.common.init.UREntities;
 import nordmods.uselessreptile.common.init.URItems;
-import nordmods.uselessreptile.common.util.dragon_variant.model.DragonEquipment;
-import nordmods.uselessreptile.common.util.dragon_variant.model.ModelData;
+import nordmods.uselessreptile.common.dragon_variant.model.DragonEquipment;
+import nordmods.uselessreptile.common.dragon_variant.model.ModelData;
 
 import java.nio.file.Path;
 import java.util.*;

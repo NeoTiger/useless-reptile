@@ -21,7 +21,7 @@ import nordmods.uselessreptile.common.event.DragonEquipmentTooltipEntryEvent;
 import nordmods.uselessreptile.common.event.DragonOnItemConsumedEvent;
 import nordmods.uselessreptile.common.event.MoleclawGetBlockMiningLevelEvent;
 import nordmods.uselessreptile.common.network.URPacketHelper;
-import nordmods.uselessreptile.common.util.dragon_variant.spawn.DragonSpawnUtil;
+import nordmods.uselessreptile.common.dragon_variant.spawn.DragonSpawnUtil;
 import nordmods.uselessreptile.common.util.duck.LightningChaserSpawnTimer;
 
 import java.util.ArrayList;

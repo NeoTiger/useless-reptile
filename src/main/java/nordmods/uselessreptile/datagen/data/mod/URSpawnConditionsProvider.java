@@ -13,7 +13,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import net.minecraft.world.biome.BiomeKeys;
 import nordmods.uselessreptile.UselessReptile;
-import nordmods.uselessreptile.common.util.dragon_variant.spawn.DragonSpawnConditions;
+import nordmods.uselessreptile.common.dragon_variant.spawn.DragonSpawnConditions;
 
 import java.nio.file.Path;
 import java.util.ArrayList;

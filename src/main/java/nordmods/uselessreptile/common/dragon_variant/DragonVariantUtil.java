@@ -1,4 +1,4 @@
-package nordmods.uselessreptile.common.util.dragon_variant;
+package nordmods.uselessreptile.common.dragon_variant;
 
 import net.minecraft.item.Item;
 import net.minecraft.registry.DynamicRegistryManager;
@@ -7,8 +7,8 @@ import net.minecraft.util.Identifier;
 import nordmods.uselessreptile.client.util.ResourceUtil;
 import nordmods.uselessreptile.common.entity.base.URDragonEntity;
 import nordmods.uselessreptile.common.init.URRegistryKeys;
-import nordmods.uselessreptile.common.util.dragon_variant.model.DragonEquipment;
-import nordmods.uselessreptile.common.util.dragon_variant.model.DragonModel;
+import nordmods.uselessreptile.common.dragon_variant.model.DragonEquipment;
+import nordmods.uselessreptile.common.dragon_variant.model.DragonModel;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;

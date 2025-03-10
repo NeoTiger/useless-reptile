@@ -1,4 +1,4 @@
-package nordmods.uselessreptile.common.util.dragon_variant.model;
+package nordmods.uselessreptile.common.dragon_variant.model;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

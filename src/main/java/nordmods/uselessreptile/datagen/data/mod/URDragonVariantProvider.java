@@ -10,7 +10,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import nordmods.uselessreptile.UselessReptile;
 import nordmods.uselessreptile.common.init.UREntities;
-import nordmods.uselessreptile.common.util.dragon_variant.DragonVariant;
+import nordmods.uselessreptile.common.dragon_variant.DragonVariant;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
