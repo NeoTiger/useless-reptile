@@ -18,15 +18,10 @@ import nordmods.uselessreptile.common.init.URRegistryKeys;
 import nordmods.uselessreptile.common.util.dragon_variant.DragonVariant;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Stream;
 
 public class DragonSpawnUtil {
-    //1st id - dragon id, 2nd id - biome id, pair<string, dragon spawn conditions> - variant and conditions (biome info stripped)
-    private static final Map<Identifier, Map<Identifier, List<Pair<String, DragonSpawnConditions>>>> variantsPerBiomeCache = new HashMap<>();
-
     public static boolean isBiomeInList(List<Codecs.TagEntryId> list, WorldAccess world, BlockPos blockPos) {
         RegistryEntry<Biome> biome = world.getBiome(blockPos);
 
