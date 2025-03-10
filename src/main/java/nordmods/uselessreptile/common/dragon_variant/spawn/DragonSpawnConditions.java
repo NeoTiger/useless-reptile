@@ -28,98 +28,24 @@ public record DragonSpawnConditions(int weight,
                     AltitudeRestriction.CODEC.optionalFieldOf("altitude").forGetter(DragonSpawnConditions::altitudeRestriction))
             .apply(instance, (DragonSpawnConditions::new)));
 
-    public static class AltitudeRestriction {
-        private final Optional<Integer> min;
-        private final Optional<Integer> max;
-
-        private AltitudeRestriction(Optional<Integer> min, Optional<Integer> max) {
-            this.min = min;
-            this.max = max;
-        }
-
+    public record AltitudeRestriction(Optional<Integer> min, Optional<Integer> max) {
         public static final Codec<AltitudeRestriction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                         Codec.INT.optionalFieldOf("min").forGetter(altitudeRestriction -> altitudeRestriction.min),
                         Codec.INT.optionalFieldOf("max").forGetter(altitudeRestriction -> altitudeRestriction.max))
                 .apply(instance, AltitudeRestriction::new));
 
-        public int min() {
+        public int getMin() {
             return min.orElse(Integer.MIN_VALUE);
         }
 
-        public int max() {
+        public int getMax() {
             return max.orElse(Integer.MAX_VALUE);
         }
-
-        @Override
-        public String toString() {
-            StringBuilder builder = new StringBuilder();
-            builder.append("Altitude: {");
-            if (min.isPresent()) {
-                builder.append("Min: ").append(min());
-                if (max.isPresent()) builder.append(", ");
-            }
-            if (max.isPresent()) builder.append("Max: ").append(max());
-            builder.append("}");
-
-            return builder.toString();
-        }
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("{Weight: ").append(weight());
-        if (allowedBiomes().isPresent()) {
-            builder.append(", Allowed Biomes: [");
-            List<Codecs.TagEntryId> entryIdList = allowedBiomes().get();
-            for (Codecs.TagEntryId entryId :entryIdList) {
-                if (!entryIdList.getFirst().equals(entryId)) builder.append(", ");
-                builder.append(entryId.toString());
-            }
-            builder.append("]");
-        }
-
-        if (bannedBiomes().isPresent()) {
-            builder.append(", Banned Biomes: [");
-            List<Codecs.TagEntryId> entryIdList = bannedBiomes().get();
-            for (Codecs.TagEntryId entryId :entryIdList) {
-                if (!entryIdList.getFirst().equals(entryId)) builder.append(", ");
-                builder.append(entryId.toString());
-            }
-            builder.append("]");
-        }
-
-        if (allowedBlocks().isPresent()) {
-            builder.append(", Allowed Blocks: [");
-            List<Codecs.TagEntryId> entryIdList = allowedBlocks().get();
-            for (Codecs.TagEntryId entryId :entryIdList) {
-                if (!entryIdList.getFirst().equals(entryId)) builder.append(", ");
-                builder.append(entryId.toString());
-            }
-            builder.append("]");
-        }
-
-        if (bannedBlocks().isPresent()) {
-            builder.append(", Banned Blocks: [");
-            List<Codecs.TagEntryId> entryIdList = bannedBlocks().get();
-            for (Codecs.TagEntryId entryId :entryIdList) {
-                if (!entryIdList.getFirst().equals(entryId)) builder.append(", ");
-                builder.append(entryId.toString());
-            }
-            builder.append("]");
-        }
-
-        if (altitudeRestriction().isPresent()) {
-            builder.append(", ").append(altitudeRestriction().get());
-        }
-        builder.append("}");
-        return builder.toString();
     }
 
     public static Builder builder() {
         return new Builder();
     }
-
 
     public static void debugPrint() {
         if (!URConfig.getConfig().logDragonSpawns) return;

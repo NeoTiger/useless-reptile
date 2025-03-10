@@ -13,18 +13,16 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.biome.Biome;
 import nordmods.uselessreptile.UselessReptile;
+import nordmods.uselessreptile.common.dragon_variant.DragonVariant;
 import nordmods.uselessreptile.common.entity.base.URDragonEntity;
 import nordmods.uselessreptile.common.init.URRegistryKeys;
-import nordmods.uselessreptile.common.dragon_variant.DragonVariant;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
 public class DragonSpawnUtil {
-    public static boolean isBiomeInList(List<Codecs.TagEntryId> list, WorldAccess world, BlockPos blockPos) {
-        RegistryEntry<Biome> biome = world.getBiome(blockPos);
-
+    public static boolean isBiomeInList(List<Codecs.TagEntryId> list, RegistryEntry<Biome> biome) {
         for (Codecs.TagEntryId tagEntryId : list) {
             if (tagEntryId.tag()) {
                 if (biome.isIn(TagKey.of(RegistryKeys.BIOME, tagEntryId.id()))) return true;
@@ -34,9 +32,7 @@ public class DragonSpawnUtil {
         return false;
     }
 
-    public static boolean isBlockInList(List<Codecs.TagEntryId> list, WorldAccess world, BlockPos blockPos) {
-        RegistryEntry<Block> block = world.getBlockState(blockPos.down()).getRegistryEntry();
-
+    public static boolean isBlockInList(List<Codecs.TagEntryId> list, RegistryEntry<Block> block) {
         for (Codecs.TagEntryId tagEntryId : list) {
             if (tagEntryId.tag()) {
                 if (block.isIn(TagKey.of(RegistryKeys.BLOCK, tagEntryId.id()))) return true;
@@ -118,27 +114,31 @@ public class DragonSpawnUtil {
         //altitude check
         if (conditions.altitudeRestriction().isPresent()) {
             DragonSpawnConditions.AltitudeRestriction restriction = conditions.altitudeRestriction().get();
-            if (restriction.min() > pos.getY() || restriction.max() <= pos.getY()) return false;
+            if (restriction.getMin() > pos.getY() || restriction.getMax() <= pos.getY()) return false;
         }
+
         //allowed tagEntries check (whitelist)
+        RegistryEntry<Biome> biome = world.getBiome(pos);
         if (conditions.allowedBiomes().isPresent()) {
             List <Codecs.TagEntryId> list = conditions.allowedBiomes().get();
-            if (!list.isEmpty() && !isBiomeInList(list, world, pos)) return false;
+            if (!list.isEmpty() && !isBiomeInList(list, biome)) return false;
         }
         //banned tagEntries check (blacklist)
         if (conditions.bannedBiomes().isPresent()) {
             List <Codecs.TagEntryId> list = conditions.bannedBiomes().get();
-            if (!list.isEmpty() && isBiomeInList(list, world, pos)) return false;
+            if (!list.isEmpty() && isBiomeInList(list, biome)) return false;
         }
+
+        RegistryEntry<Block> block = world.getBlockState(pos.down()).getRegistryEntry();
         //allowed blocks check (whitelist)
         if (conditions.allowedBlocks().isPresent()) {
             List <Codecs.TagEntryId> list = conditions.allowedBlocks().get();
-            if (!list.isEmpty() && !isBlockInList(list, world, pos)) return false;
+            if (!list.isEmpty() && !isBlockInList(list, block)) return false;
         }
         //banned blocks check (blacklist)
         if (conditions.bannedBlocks().isPresent()) {
             List <Codecs.TagEntryId> list = conditions.bannedBlocks().get();
-            if (!list.isEmpty() && isBlockInList(list, world, pos)) return false;
+            if (!list.isEmpty() && isBlockInList(list, block)) return false;
         }
 
         return true;
