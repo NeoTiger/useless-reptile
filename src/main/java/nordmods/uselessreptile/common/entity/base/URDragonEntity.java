@@ -1,5 +1,7 @@
 package nordmods.uselessreptile.common.entity.base;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import com.mojang.authlib.GameProfile;
 import eu.pb4.common.protection.api.CommonProtection;
 import net.minecraft.block.BlockState;
@@ -11,8 +13,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.pathing.EntityNavigation;
 import net.minecraft.entity.ai.pathing.PathNodeType;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.attribute.*;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
@@ -29,6 +30,7 @@ import net.minecraft.item.Items;
 import net.minecraft.item.PotionItem;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -52,9 +54,13 @@ import net.minecraft.world.event.GameEvent;
 import net.minecraft.world.event.PositionSource;
 import net.minecraft.world.event.listener.EntityGameEventHandler;
 import net.minecraft.world.event.listener.GameEventListener;
+import nordmods.uselessreptile.UselessReptile;
 import nordmods.uselessreptile.client.util.AssetCahceOwner;
 import nordmods.uselessreptile.client.util.DragonAssetCache;
 import nordmods.uselessreptile.common.config.URMobAttributesConfig;
+import nordmods.uselessreptile.common.dragon_variant.DragonVariant;
+import nordmods.uselessreptile.common.dragon_variant.model.DragonModel;
+import nordmods.uselessreptile.common.dragon_variant.spawn.DragonSpawnUtil;
 import nordmods.uselessreptile.common.entity.ai.control.DragonLookControl;
 import nordmods.uselessreptile.common.entity.ai.control.LandDragonMoveControl;
 import nordmods.uselessreptile.common.entity.ai.navigation.DragonNavigation;
@@ -63,9 +69,6 @@ import nordmods.uselessreptile.common.gui.URDragonScreenHandler;
 import nordmods.uselessreptile.common.init.*;
 import nordmods.uselessreptile.common.item.VortexHornItem;
 import nordmods.uselessreptile.common.network.URPacketHelper;
-import nordmods.uselessreptile.common.dragon_variant.DragonVariant;
-import nordmods.uselessreptile.common.dragon_variant.model.DragonModel;
-import nordmods.uselessreptile.common.dragon_variant.spawn.DragonSpawnUtil;
 import nordmods.uselessreptile.common.util.duck.HeadMountDragonOwner;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -76,6 +79,7 @@ import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import java.util.List;
 import java.util.function.BiConsumer;
 
 public abstract class URDragonEntity extends TameableEntity implements GeoEntity, NamedScreenHandlerFactory, AssetCahceOwner, InventoryChangedListener {
@@ -99,6 +103,8 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
     protected SimpleInventory inventory = new SimpleInventory(URDragonScreenHandler.maxStorageSize);
     public boolean shouldFollow = false;
     protected Text defaultDisplayName;
+    public static final Identifier VARIANT_BONUS_MODIFIER = UselessReptile.id("variant_bonus");
+
 
     protected URDragonEntity(EntityType<? extends TameableEntity> entityType, World world) {
         super(entityType, world);
@@ -260,8 +266,39 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
         super.onTrackedDataSet(data);
         if (CUSTOM_NAME.equals(data) || VARIANT.equals(data)) {
             assetCache.cleanCache();
+        }
+        if (VARIANT.equals(data)) {
             defaultDisplayName = null;
         }
+    }
+
+    private void applyVariantModifiers() {
+        AttributeContainer container = getAttributes();
+        DragonVariant variant = DragonVariant.getByVariant(this);
+        if (variant == null) {
+            UselessReptile.LOGGER.warn("Couldn't find any info on variant {} ({}), thus variant modifiers cannot be set", getVariant(), getDragonId());
+            return;
+        }
+
+        Multimap<RegistryEntry<EntityAttribute>, EntityAttributeModifier> modifiersMap = HashMultimap.create();
+        variant.variantAttributeModifiers().ifPresent(id -> {
+            List<EntityAttributeModifier> modifiers = getRegistryManager().get(URRegistryKeys.DRAGON_VARIANT_ATTRIBUTE_MODIFIERS).get(id);
+            if (modifiers != null) modifiers.forEach(entityAttributeModifier -> {
+                modifiersMap.put(RegistryEntry.of(entityAttributeModifier.id()))
+            });
+        });
+        container.addTemporaryModifiers(modifiersMap);
+
+    }
+
+    private void removeVariantModifiers() {
+        AttributeContainer container = getAttributes();
+
+        getRegistryManager().get(RegistryKeys.ATTRIBUTE).stream().forEach(entityAttribute -> {
+            RegistryEntry<EntityAttribute> attributeRegistryEntry = RegistryEntry.of(entityAttribute);
+            if (container.hasAttribute(attributeRegistryEntry))
+                container.getCustomInstance(attributeRegistryEntry).removeModifier(VARIANT_BONUS_MODIFIER);
+        });
     }
 
     @Override

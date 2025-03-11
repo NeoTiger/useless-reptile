@@ -10,21 +10,22 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public record DragonVariant(Identifier dragonId, String name, Identifier dragonModelData, Identifier dragonEquipment, Optional<Identifier> spawnConditions) {
+public record DragonVariant(Identifier dragonId, String name, Identifier dragonModelData, Identifier dragonEquipment, Optional<Identifier> spawnConditions, Optional<Identifier> variantAttributeModifiers) {
     public static final Codec<DragonVariant> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                     Identifier.CODEC.fieldOf("id").forGetter(DragonVariant::dragonId),
                     Codec.STRING.fieldOf("name").forGetter(DragonVariant::name),
-                    Identifier.CODEC.fieldOf("dragon_model_data").forGetter(DragonVariant::dragonModelData),
+                    Identifier.CODEC.fieldOf("dragon_model").forGetter(DragonVariant::dragonModelData),
                     Identifier.CODEC.fieldOf("equipment").forGetter(DragonVariant::dragonEquipment),
-                    Identifier.CODEC.optionalFieldOf("spawn_conditions").forGetter(DragonVariant::spawnConditions))
+                    Identifier.CODEC.optionalFieldOf("spawn_conditions").forGetter(DragonVariant::spawnConditions),
+                    Identifier.CODEC.optionalFieldOf("attribute_modifiers").forGetter(DragonVariant::variantAttributeModifiers))
             .apply(instance, DragonVariant::new));
 
-    public static final Codec<DragonVariant> CODEC_NO_SPAWN_INFO = RecordCodecBuilder.create(instance -> instance.group(
+    public static final Codec<DragonVariant> CODEC_NO_SERVER_INFO = RecordCodecBuilder.create(instance -> instance.group(
                     Identifier.CODEC.fieldOf("id").forGetter(DragonVariant::dragonId),
                     Codec.STRING.fieldOf("name").forGetter(DragonVariant::name),
-                    Identifier.CODEC.fieldOf("dragon_model_data").forGetter(DragonVariant::dragonModelData),
+                    Identifier.CODEC.fieldOf("dragon_model").forGetter(DragonVariant::dragonModelData),
                     Identifier.CODEC.fieldOf("equipment").forGetter(DragonVariant::dragonEquipment))
-            .apply(instance, (id, variant, dragonModelData, dragonEquipment) -> new DragonVariant(id, variant, dragonModelData, dragonEquipment, Optional.empty())));
+            .apply(instance, (id, variant, dragonModelData, dragonEquipment) -> new DragonVariant(id, variant, dragonModelData, dragonEquipment, Optional.empty(), Optional.empty())));
 
     @Nullable
     public static DragonVariant getByVariant(URDragonEntity dragon) {

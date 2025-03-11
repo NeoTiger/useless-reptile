@@ -2,6 +2,6 @@
   "id": "uselessreptile:wyvern",
   "name": "Barren Orange",
   "equipment": "example:barren",
-  "dragon_model_data": "example:barren_orange",
+  "dragon_model": "example:barren_orange",
   "spawn_conditions": "example:barren_orange"
 }

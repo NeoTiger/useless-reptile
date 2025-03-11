@@ -1,0 +1,12 @@
+[
+  {
+    "id": "generic.scale",
+    "value": -0.2,
+    "operation": "add_multiplied_base"
+  },
+  {
+    "id": "generic.max_health",
+    "value": -2,
+    "operation": "add_value"
+  }
+]

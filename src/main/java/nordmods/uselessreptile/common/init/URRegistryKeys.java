@@ -2,6 +2,7 @@ package nordmods.uselessreptile.common.init;
 
 import net.fabricmc.fabric.api.event.registry.DynamicRegistries;
 import net.fabricmc.fabric.api.event.registry.DynamicRegistrySetupCallback;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -21,14 +22,16 @@ public class URRegistryKeys {
     public static final RegistryKey<Registry<DragonEquipment>> DRAGON_EQUIPMENT = RegistryKey.ofRegistry(Identifier.of("ur_dragon_variant","equipment"));
     public static final RegistryKey<Registry<DragonEquipment>> DRAGON_EQUIPMENT_INJECT = RegistryKey.ofRegistry(Identifier.of("ur_dragon_variant","equipment_inject"));
     public static final RegistryKey<Registry<List<DragonSpawnConditions>>> DRAGON_SPAWN_CONDITIONS = RegistryKey.ofRegistry(Identifier.of("ur_dragon_variant","spawn_conditions"));
+    public static final RegistryKey<Registry<List<EntityAttributeModifier>>> DRAGON_VARIANT_ATTRIBUTE_MODIFIERS = RegistryKey.ofRegistry(Identifier.of("ur_dragon_variant","attribute_modifiers"));
 
     public static void init() {
         DynamicRegistries.registerSynced(DRAGON_MODEL, DragonModel.CODEC);
         DynamicRegistries.registerSynced(DRAGON_EQUIPMENT_INJECT, DragonEquipment.CODEC);
         DynamicRegistries.registerSynced(DRAGON_EQUIPMENT, DragonEquipment.CODEC);
         DynamicRegistries.register(DRAGON_SPAWN_CONDITIONS, DragonSpawnConditions.CODEC.listOf());
-        DynamicRegistries.registerSynced(DRAGON_VARIANT, DragonVariant.CODEC, DragonVariant.CODEC_NO_SPAWN_INFO);
-        DynamicRegistries.registerSynced(DRAGON_VARIANT_CUSTOM_NAME, DragonVariant.CODEC_NO_SPAWN_INFO);
+        DynamicRegistries.register(DRAGON_VARIANT_ATTRIBUTE_MODIFIERS, EntityAttributeModifier.CODEC.listOf());
+        DynamicRegistries.registerSynced(DRAGON_VARIANT, DragonVariant.CODEC, DragonVariant.CODEC_NO_SERVER_INFO);
+        DynamicRegistries.registerSynced(DRAGON_VARIANT_CUSTOM_NAME, DragonVariant.CODEC_NO_SERVER_INFO);
 
         DynamicRegistrySetupCallback.EVENT.register(registryView -> {
             DynamicRegistryManager registryManager = registryView.asDynamicRegistryManager();
