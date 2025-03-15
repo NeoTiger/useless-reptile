@@ -472,6 +472,15 @@ public class ModMenuIntegration implements ModMenuApi {
                         val -> clientConfig.logDragonModelData = val)
                 .customController(BooleanController::new)
                 .build();
+        Option<URClientConfig.PassengerVisibility> renderPassengers = Option.<URClientConfig.PassengerVisibility>createBuilder()
+                .name(Text.translatable("config.uselessreptile.option.renderPassengers"))
+                .description(OptionDescription.createBuilder()
+                        .text(Text.translatable("config.uselessreptile.option.renderPassengers.@Tooltip")).build())
+                .binding(clientDefaults.renderPassengers,
+                        () -> clientConfig.renderPassengers,
+                        val -> clientConfig.renderPassengers = val)
+                .customController(opt -> new EnumController<>(opt, URClientConfig.PassengerVisibility.class))
+                .build();
 
         cameraGroup.option(cameraDistanceOffset);
         cameraGroup.option(cameraVerticalOffset);
@@ -483,6 +492,7 @@ public class ModMenuIntegration implements ModMenuApi {
         dragonAppearanceGroup.option(disableNamedTextures);
         dragonAppearanceGroup.option(disableEmissiveTextures);
         dragonAppearanceGroup.option(hideEquipmentInfo);
+        dragonAppearanceGroup.option(renderPassengers);
 
         debugGroup.option(logDragonModelData);
         debugGroup.option(logEquipmentModelData);
