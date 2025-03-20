@@ -1,7 +1,5 @@
 package nordmods.uselessreptile.common.entity.base;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 import com.mojang.authlib.GameProfile;
 import eu.pb4.common.protection.api.CommonProtection;
 import net.minecraft.block.BlockState;
@@ -30,6 +28,7 @@ import net.minecraft.item.Items;
 import net.minecraft.item.PotionItem;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.screen.NamedScreenHandlerFactory;
@@ -268,36 +267,42 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
             assetCache.cleanCache();
         }
         if (VARIANT.equals(data)) {
+            removeVariantModifiers();
+            applyVariantModifiers();
             defaultDisplayName = null;
         }
     }
 
     private void applyVariantModifiers() {
-        AttributeContainer container = getAttributes();
         DragonVariant variant = DragonVariant.getByVariant(this);
         if (variant == null) {
             UselessReptile.LOGGER.warn("Couldn't find any info on variant {} ({}), thus variant modifiers cannot be set", getVariant(), getDragonId());
             return;
         }
 
-        Multimap<RegistryEntry<EntityAttribute>, EntityAttributeModifier> modifiersMap = HashMultimap.create();
         variant.variantAttributeModifiers().ifPresent(id -> {
             List<EntityAttributeModifier> modifiers = getRegistryManager().get(URRegistryKeys.DRAGON_VARIANT_ATTRIBUTE_MODIFIERS).get(id);
             if (modifiers != null) modifiers.forEach(entityAttributeModifier -> {
-                modifiersMap.put(RegistryEntry.of(entityAttributeModifier.id()))
+                EntityAttribute attribute = getRegistryManager().get(RegistryKeys.ATTRIBUTE).get(entityAttributeModifier.id());
+                if (attribute != null) {
+                    EntityAttributeInstance entityAttributeInstance = getAttributeInstance(
+                            getRegistryManager()
+                                    .get(RegistryKeys.ATTRIBUTE)
+                                    .entryOf(RegistryKey.of(RegistryKeys.ATTRIBUTE, entityAttributeModifier.id()))
+                    );
+                    if (entityAttributeInstance != null && !entityAttributeInstance.hasModifier(VARIANT_BONUS_MODIFIER))
+                        entityAttributeInstance.addTemporaryModifier(new EntityAttributeModifier(VARIANT_BONUS_MODIFIER, entityAttributeModifier.value(), entityAttributeModifier.operation()));
+
+                }
             });
         });
-        container.addTemporaryModifiers(modifiersMap);
-
     }
 
     private void removeVariantModifiers() {
         AttributeContainer container = getAttributes();
-
-        getRegistryManager().get(RegistryKeys.ATTRIBUTE).stream().forEach(entityAttribute -> {
-            RegistryEntry<EntityAttribute> attributeRegistryEntry = RegistryEntry.of(entityAttribute);
-            if (container.hasAttribute(attributeRegistryEntry))
-                container.getCustomInstance(attributeRegistryEntry).removeModifier(VARIANT_BONUS_MODIFIER);
+        getRegistryManager().get(RegistryKeys.ATTRIBUTE).streamEntries().forEach(entityAttributeReference -> {
+            if (container.hasAttribute(entityAttributeReference))
+                container.getCustomInstance(entityAttributeReference).removeModifier(VARIANT_BONUS_MODIFIER);
         });
     }
 
