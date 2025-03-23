@@ -292,20 +292,10 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
         }
     }
 
-    @Override
-    protected SoundEvent getAmbientSound() {
-        if (!isTamed() && isFlying() && getWorld().isThundering() && !getShouldBailOut() && !hasSurrendered()) return URSounds.LIGHTNING_CHASER_DISTANT_ROAR;
-        return URSounds.LIGHTNING_CHASER_AMBIENT;
-    }
-
-    @Override
-    protected SoundEvent getHurtSound(DamageSource source) {
-        return URSounds.LIGHTNING_CHASER_HURT;
-    }
-
-    @Override
-    protected SoundEvent getDeathSound() {
-        return URSounds.LIGHTNING_CHASER_DEATH;
+    public void playAmbientSound() {
+        boolean playRoar = !isTamed() && isFlying() && getWorld().isThundering() && !getShouldBailOut() && !hasSurrendered();
+        SoundInfo soundInfo = getSoundInfo(playRoar ? "roar" : "idle");
+        if (soundInfo != null) playSound(SoundEvent.of(soundInfo.id()), soundInfo.volume(), soundInfo.pitch());
     }
 
     @Override
@@ -583,7 +573,9 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
                 if (target != null) {
                     if (!canTarget(target)) return false;
                     setTarget(target);
-                    URPacketHelper.playSound(LightningChaserEntity.this, URSounds.LIGHTNING_CHASER_ACCEPT_CHALLENGE, getSoundCategory(), 1, 1,1);
+                    URDragonEntity.SoundInfo soundInfo = LightningChaserEntity.this.getSoundInfo("accept_challenge");
+                    if (soundInfo != null)
+                        URPacketHelper.playSound(LightningChaserEntity.this, SoundEvent.of(soundInfo.id()), LightningChaserEntity.this.getSoundCategory(), soundInfo.volume(), soundInfo.pitch(), 1);
                     return true;
                 }
             }

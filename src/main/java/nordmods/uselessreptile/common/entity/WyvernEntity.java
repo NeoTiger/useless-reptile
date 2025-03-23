@@ -10,7 +10,6 @@ import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.UntamedActiveTargetGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -37,6 +36,7 @@ import nordmods.primitive_multipart_entities.common.entity.MultipartEntity;
 import nordmods.uselessreptile.common.config.URConfig;
 import nordmods.uselessreptile.common.entity.ai.goal.common.*;
 import nordmods.uselessreptile.common.entity.ai.goal.wyvern.WyvernAttackGoal;
+import nordmods.uselessreptile.common.entity.base.URDragonEntity;
 import nordmods.uselessreptile.common.entity.base.URDragonPart;
 import nordmods.uselessreptile.common.entity.base.URRideableFlyingDragonEntity;
 import nordmods.uselessreptile.common.entity.special.AcidBlastEntity;
@@ -194,21 +194,6 @@ public class WyvernEntity extends URRideableFlyingDragonEntity implements Multip
     }
 
     @Override
-    protected SoundEvent getAmbientSound() {
-        return URSounds.WYVERN_AMBIENT;
-    }
-
-    @Override
-    protected SoundEvent getHurtSound(DamageSource source) {
-        return URSounds.WYVERN_HURT;
-    }
-
-    @Override
-    protected SoundEvent getDeathSound() {
-        return URSounds.WYVERN_DEATH;
-    }
-
-    @Override
     public boolean canHaveStatusEffect(StatusEffectInstance effect) {
         RegistryEntry<StatusEffect> type = effect.getEffectType();
         return !(type == URStatusEffects.ACID || type == StatusEffects.POISON || type == StatusEffects.HUNGER);
@@ -326,7 +311,11 @@ public class WyvernEntity extends URRideableFlyingDragonEntity implements Multip
     public void meleeAttack(LivingEntity target) {
         setSecondaryAttackCooldown(getMaxSecondaryAttackCooldown());
         setAttackType(random.nextInt(3)+1);
-        if (isFlying()) URPacketHelper.playSound(this, URSounds.WYVERN_BITE, SoundCategory.NEUTRAL, 1, 1, 3);
+        if (isFlying()) {
+            URDragonEntity.SoundInfo soundInfo = getSoundInfo("bite");
+            if (soundInfo != null)
+                URPacketHelper.playSound(this, SoundEvent.of(soundInfo.id()), SoundCategory.NEUTRAL, soundInfo.volume(), soundInfo.pitch(), 3);
+        }
         if (target != null && !getPassengerList().contains(target)) {
             Box targetBox = target.getBoundingBox();
             if (doesCollide(targetBox, getAttackBox())) tryAttack(target);

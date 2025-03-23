@@ -29,6 +29,26 @@
     {
       "id": "uselessreptile:lightning_chaser.bite",
       "name": "bite"
+    },
+    {
+      "id": "uselessreptile:lightning_chaser.ambient",
+      "name": "idle"
+    },
+    {
+      "id": "uselessreptile:lightning_chaser.distant_roar",
+      "name": "roar"
+    },
+    {
+      "id": "uselessreptile:lightning_chaser.accept_challenge",
+      "name": "accept_challenge"
+    },
+    {
+      "id": "uselessreptile:lightning_chaser.hurt",
+      "name": "hurt"
+    },
+    {
+      "id": "uselessreptile:lightning_chaser.death",
+      "name": "death"
     }
   ]
 }

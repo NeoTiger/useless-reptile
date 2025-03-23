@@ -11,6 +11,7 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.ai.pathing.EntityNavigation;
 import net.minecraft.entity.ai.pathing.PathNodeType;
 import net.minecraft.entity.attribute.*;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
@@ -724,6 +725,39 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
 
     @Override
     protected void playStepSound(BlockPos pos, BlockState state) {
+    }
+
+    @Override
+    @Deprecated
+    protected SoundEvent getAmbientSound() {
+        return null;
+    }
+
+    public void playAmbientSound() {
+        SoundInfo soundInfo = getSoundInfo("idle");
+        if (soundInfo != null) playSound(SoundEvent.of(soundInfo.id()), soundInfo.volume(), soundInfo.pitch());
+    }
+
+    @Override
+    @Deprecated
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return null;
+    }
+
+    @Override
+    protected void playHurtSound(DamageSource damageSource) {
+        SoundInfo soundInfo = getSoundInfo("hurt");
+        if (soundInfo != null) {
+            ambientSoundChance = -getMinAmbientSoundDelay();
+            playSound(SoundEvent.of(soundInfo.id()), soundInfo.volume(), soundInfo.pitch());
+        }
+    }
+
+    @Override
+    protected SoundEvent getDeathSound() {
+        SoundInfo soundInfo = getSoundInfo("death");
+        if (soundInfo != null) return SoundEvent.of(soundInfo.id());
+        return null;
     }
 
     @Override

@@ -8,7 +8,6 @@ import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.TrackOwnerAttackerGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
@@ -40,7 +39,6 @@ import nordmods.uselessreptile.common.entity.base.URRideableDragonEntity;
 import nordmods.uselessreptile.common.event.MoleclawGetBlockMiningLevelEvent;
 import nordmods.uselessreptile.common.gui.MoleclawScreenHandler;
 import nordmods.uselessreptile.common.init.URAttributes;
-import nordmods.uselessreptile.common.init.URSounds;
 import nordmods.uselessreptile.common.init.URTags;
 import nordmods.uselessreptile.common.network.GUIEntityToRenderS2CPacket;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -359,21 +357,6 @@ public class MoleclawEntity extends URRideableDragonEntity {
     }
 
     @Override
-    protected SoundEvent getHurtSound(DamageSource source) {
-        return URSounds.MOLECLAW_HURT;
-    }
-
-    @Override
-    protected SoundEvent getDeathSound() {
-        return URSounds.MOLECLAW_DEATH;
-    }
-
-    @Override
-    protected SoundEvent getAmbientSound() {
-        return URSounds.MOLECLAW_AMBIENT;
-    }
-
-    @Override
     public float getPathfindingFavor(BlockPos pos, WorldView world) {
         return -world.getPhototaxisFavor(pos);
     }
@@ -381,7 +364,8 @@ public class MoleclawEntity extends URRideableDragonEntity {
     private void playPanicSound() {
         if (isPanicking()) {
             if (panicSoundDelay == 0) {
-                playSound(URSounds.MOLECLAW_PANICKING, 1 ,1);
+                SoundInfo soundInfo = getSoundInfo("panic");
+                if (soundInfo != null) playSound(SoundEvent.of(soundInfo.id()), soundInfo.volume() ,soundInfo.pitch());
                 panicSoundDelay = random.nextInt(41) + 60;
             }
             else panicSoundDelay--;

@@ -18,7 +18,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -39,7 +38,10 @@ import nordmods.uselessreptile.common.entity.ai.goal.river_pikehorn.PikehornFoll
 import nordmods.uselessreptile.common.entity.ai.goal.river_pikehorn.PikehornHuntGoal;
 import nordmods.uselessreptile.common.entity.base.HeadMountDragon;
 import nordmods.uselessreptile.common.entity.base.URFlyingDragonEntity;
-import nordmods.uselessreptile.common.init.*;
+import nordmods.uselessreptile.common.init.URAttributes;
+import nordmods.uselessreptile.common.init.URGameEvents;
+import nordmods.uselessreptile.common.init.URItems;
+import nordmods.uselessreptile.common.init.URTags;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animation.AnimatableManager;
@@ -160,21 +162,6 @@ public class RiverPikehornEntity extends URFlyingDragonEntity implements HeadMou
     //    if (getWorld().isClient())
     //        if (event.getKeyframeData().getSound().equals("attack")) playSound(URSounds.PIKEHORN_ATTACK, 1, 1);
     //}
-
-    @Override
-    protected SoundEvent getAmbientSound() {
-        return URSounds.PIKEHORN_AMBIENT;
-    }
-
-    @Override
-    protected SoundEvent getHurtSound(DamageSource source) {
-        return URSounds.PIKEHORN_HURT;
-    }
-
-    @Override
-    protected SoundEvent getDeathSound() {
-        return URSounds.PIKEHORN_DEATH;
-    }
 
     @Override
     public boolean isInvulnerableTo(DamageSource damageSource) {

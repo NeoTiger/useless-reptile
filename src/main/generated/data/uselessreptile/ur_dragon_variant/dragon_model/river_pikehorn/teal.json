@@ -25,6 +25,18 @@
     {
       "id": "uselessreptile:river_pikehorn.attack",
       "name": "attack"
+    },
+    {
+      "id": "uselessreptile:river_pikehorn.ambient",
+      "name": "idle"
+    },
+    {
+      "id": "uselessreptile:river_pikehorn.hurt",
+      "name": "hurt"
+    },
+    {
+      "id": "uselessreptile:river_pikehorn.death",
+      "name": "death"
     }
   ]
 }

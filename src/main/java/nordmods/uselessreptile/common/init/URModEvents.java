@@ -11,6 +11,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.Heightmap;
@@ -66,7 +67,9 @@ public class URModEvents {
                             lightningChaser.roamingSpot = new BlockPos(pos.getX(),
                                     world.getTopY(Heightmap.Type.WORLD_SURFACE, pos.getX(), pos.getZ()),
                                     pos.getZ());
-                            URPacketHelper.playSound(lightningChaser, URSounds.LIGHTNING_CHASER_DISTANT_ROAR, lightningChaser.getSoundCategory(), 1, 1, 1);
+                            URDragonEntity.SoundInfo soundInfo = lightningChaser.getSoundInfo("roar");
+                            if (soundInfo != null)
+                                URPacketHelper.playSound(lightningChaser, SoundEvent.of(soundInfo.id()), lightningChaser.getSoundCategory(), soundInfo.volume(), soundInfo.pitch(), 1);
                         }
                         playerTimer.useless_reptile$setTimer(URConfig.getConfig().lightningChaserThunderstormSpawnTimerCooldown);
                         break;

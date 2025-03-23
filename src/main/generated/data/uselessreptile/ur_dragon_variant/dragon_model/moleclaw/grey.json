@@ -18,6 +18,22 @@
     {
       "id": "uselessreptile:moleclaw.attack",
       "name": "attack"
+    },
+    {
+      "id": "uselessreptile:moleclaw.ambient",
+      "name": "idle"
+    },
+    {
+      "id": "uselessreptile:moleclaw.hurt",
+      "name": "hurt"
+    },
+    {
+      "id": "uselessreptile:moleclaw.death",
+      "name": "death"
+    },
+    {
+      "id": "uselessreptile:moleclaw.panicking",
+      "name": "panic"
     }
   ]
 }

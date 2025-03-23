@@ -28,6 +28,18 @@
     {
       "id": "uselessreptile:wyvern.bite",
       "name": "bite"
+    },
+    {
+      "id": "uselessreptile:wyvern.ambient",
+      "name": "idle"
+    },
+    {
+      "id": "uselessreptile:wyvern.hurt",
+      "name": "hurt"
+    },
+    {
+      "id": "uselessreptile:wyvern.death",
+      "name": "death"
     }
   ]
 }

@@ -85,6 +85,9 @@ public class URDragonModelProvider implements DataProvider {
         sounds.add(new DragonModel.Sound("flap", SoundEvents.ENTITY_ENDER_DRAGON_FLAP.getId(), Optional.of(3f), Optional.of(0.7f)));
         sounds.add(new DragonModel.Sound("shoot", SoundEvents.ENTITY_ENDER_DRAGON_SHOOT.getId(), Optional.of(2f), Optional.empty()));
         sounds.add(new DragonModel.Sound("bite", URSounds.WYVERN_BITE.getId(), Optional.empty(), Optional.empty()));
+        sounds.add(new DragonModel.Sound("idle", URSounds.WYVERN_AMBIENT.getId(), Optional.empty(), Optional.empty()));
+        sounds.add(new DragonModel.Sound("hurt", URSounds.WYVERN_HURT.getId(), Optional.empty(), Optional.empty()));
+        sounds.add(new DragonModel.Sound("death", URSounds.WYVERN_DEATH.getId(), Optional.empty(), Optional.empty()));
         addEntry(UREntities.WYVERN_ENTITY, variant, Optional.of(sounds), true);
     }
 
@@ -93,6 +96,10 @@ public class URDragonModelProvider implements DataProvider {
         sounds.add(new DragonModel.Sound("step", URSounds.DRAGON_STEP.getId(), Optional.empty(), Optional.of(0.7f)));
         sounds.add(new DragonModel.Sound("attack_strong", URSounds.MOLECLAW_STRONG_ATTACK.getId(), Optional.empty(), Optional.empty()));
         sounds.add(new DragonModel.Sound("attack", URSounds.MOLECLAW_ATTACK.getId(), Optional.empty(), Optional.empty()));
+        sounds.add(new DragonModel.Sound("idle", URSounds.MOLECLAW_AMBIENT.getId(), Optional.empty(), Optional.empty()));
+        sounds.add(new DragonModel.Sound("hurt", URSounds.MOLECLAW_HURT.getId(), Optional.empty(), Optional.empty()));
+        sounds.add(new DragonModel.Sound("death", URSounds.MOLECLAW_DEATH.getId(), Optional.empty(), Optional.empty()));
+        sounds.add(new DragonModel.Sound("panic", URSounds.MOLECLAW_PANICKING.getId(), Optional.empty(), Optional.empty()));
         addEntry(UREntities.MOLECLAW_ENTITY, variant, Optional.of(sounds), false);
     }
 
@@ -102,6 +109,9 @@ public class URDragonModelProvider implements DataProvider {
         sounds.add(new DragonModel.Sound("woosh", URSounds.DRAGON_WOOSH.getId(), Optional.of(0.7f), Optional.of(1.2f)));
         sounds.add(new DragonModel.Sound("flap", SoundEvents.ENTITY_ENDER_DRAGON_FLAP.getId(), Optional.empty(), Optional.of(1.2f)));
         sounds.add(new DragonModel.Sound("attack", URSounds.PIKEHORN_ATTACK.getId(), Optional.empty(), Optional.empty()));
+        sounds.add(new DragonModel.Sound("idle", URSounds.PIKEHORN_AMBIENT.getId(), Optional.empty(), Optional.empty()));
+        sounds.add(new DragonModel.Sound("hurt", URSounds.PIKEHORN_HURT.getId(), Optional.empty(), Optional.empty()));
+        sounds.add(new DragonModel.Sound("death", URSounds.PIKEHORN_DEATH.getId(), Optional.empty(), Optional.empty()));
         addEntry(UREntities.RIVER_PIKEHORN_ENTITY, variant, Optional.of(sounds), true);
     }
 
@@ -112,6 +122,11 @@ public class URDragonModelProvider implements DataProvider {
         sounds.add(new DragonModel.Sound("flap", SoundEvents.ENTITY_ENDER_DRAGON_FLAP.getId(), Optional.of(3f), Optional.of(0.6f)));
         sounds.add(new DragonModel.Sound("flap_heavy", SoundEvents.ENTITY_ENDER_DRAGON_FLAP.getId(), Optional.of(3f), Optional.of(0.5f)));
         sounds.add(new DragonModel.Sound("bite", URSounds.LIGHTNING_CHASER_BITE.getId(), Optional.empty(), Optional.empty()));
+        sounds.add(new DragonModel.Sound("idle", URSounds.LIGHTNING_CHASER_AMBIENT.getId(), Optional.empty(), Optional.empty()));
+        sounds.add(new DragonModel.Sound("roar", URSounds.LIGHTNING_CHASER_DISTANT_ROAR.getId(), Optional.empty(), Optional.empty()));
+        sounds.add(new DragonModel.Sound("accept_challenge", URSounds.LIGHTNING_CHASER_ACCEPT_CHALLENGE.getId(), Optional.empty(), Optional.empty()));
+        sounds.add(new DragonModel.Sound("hurt", URSounds.LIGHTNING_CHASER_HURT.getId(), Optional.empty(), Optional.empty()));
+        sounds.add(new DragonModel.Sound("death", URSounds.LIGHTNING_CHASER_DEATH.getId(), Optional.empty(), Optional.empty()));
         addEntry(UREntities.LIGHTNING_CHASER_ENTITY, variant, Optional.of(sounds), true);
     }
 
