@@ -25,13 +25,11 @@ public class DragonEqupmentModel extends GeoModel<DragonEquipmentAnimatable> {
         if (id != null) return id;
 
         DragonEquipment.Equipment data = DragonVariantUtil.getEquipmentModelData(entity.owner, entity.item);
-        if (data != null && data.modelData().model().isPresent()) {
-            id = data.modelData().model().get();
-            if (ResourceUtil.doesExist(id)) {
-                assetCache.setModelLocationCache(id);
-                return id;
-            } else UselessReptile.LOGGER.warn("Failed to get model for equipment ({}) for {} ({}) of variant {}", entity.item, entity.owner.getName().getString(), entity.owner.getDragonId(), entity.owner.getVariant());
-        }
+        if (data != null && ResourceUtil.doesExist(data.modelData().model())) {
+            id = data.modelData().model();
+            assetCache.setModelLocationCache(id);
+            return id;
+        } else UselessReptile.LOGGER.warn("Failed to find model for equipment ({}) for {} ({}) of variant {}", entity.item, entity.owner.getName().getString(), entity.owner.getDragonId(), entity.owner.getVariant());
 
         return null;
     }
@@ -50,7 +48,7 @@ public class DragonEqupmentModel extends GeoModel<DragonEquipmentAnimatable> {
             id = data.modelData().texture();
             assetCache.setTextureLocationCache(id);
             return id;
-        } else UselessReptile.LOGGER.warn("Failed to get texture for equipment ({}) for {} ({}) of variant {}", entity.item, entity.owner.getName().getString(), entity.owner.getDragonId(), entity.owner.getVariant());
+        } else UselessReptile.LOGGER.warn("Failed to find texture for equipment ({}) for {} ({}) of variant {}", entity.item, entity.owner.getName().getString(), entity.owner.getDragonId(), entity.owner.getVariant());
 
         return null;
     }
@@ -70,7 +68,7 @@ public class DragonEqupmentModel extends GeoModel<DragonEquipmentAnimatable> {
             if (ResourceUtil.doesExist(id)) {
                 assetCache.setAnimationLocationCache(id);
                 return id;
-            } else UselessReptile.LOGGER.warn("Failed to get animation for equipment ({}) for {} ({}) of variant {}", entity.item, entity.owner.getName().getString(), entity.owner.getDragonId(), entity.owner.getVariant());
+            } else UselessReptile.LOGGER.warn("Failed to find animation for equipment ({}) for {} ({}) of variant {}", entity.item, entity.owner.getName().getString(), entity.owner.getDragonId(), entity.owner.getVariant());
         }
 
         assetCache.setAnimationLocationCache(DEFAULT_ANIMATION);

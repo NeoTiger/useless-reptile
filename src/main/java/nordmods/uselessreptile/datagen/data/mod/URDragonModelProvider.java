@@ -75,7 +75,7 @@ public class URDragonModelProvider implements DataProvider {
         Identifier texture = Identifier.of(id.getNamespace(), "textures/entity/" + id.getPath() + "/" + variant +".png");
         Identifier model = Identifier.of(id.getNamespace(), "geo/entity/" + id.getPath() + "/" + id.getPath() +".geo.json");
         Identifier animation = Identifier.of(id.getNamespace(), "animations/entity/" + id.getPath() + "/" + id.getPath() +".animation.json");
-        return new ModelData(texture, Optional.of(model), Optional.of(animation), cull, false);
+        return new ModelData(texture, model, Optional.of(animation), cull, false);
     }
 
     protected void addWyvern(String variant) {

@@ -22,13 +22,11 @@ public class URDragonModel<T extends URDragonEntity> extends GeoModel<T> {
         if (id != null) return id;
 
         DragonModel data  = DragonVariantUtil.getDragonModelData(entity);
-        if (data != null && data.modelData().animation().isPresent()) {
+        if (data != null && ResourceUtil.doesExist(data.modelData().animation().orElseThrow())) {
             id = data.modelData().animation().get();
-            if (ResourceUtil.doesExist(id)) {
-                assetCache.setAnimationLocationCache(id);
-                return id;
-            } else UselessReptile.LOGGER.warn("Failed to get animation for {} ({}) of variant {}. Default will be used instead", entity.getName().getString(), entity.getDragonId(), entity.getVariant());
-        }
+            assetCache.setAnimationLocationCache(id);
+            return id;
+        } else UselessReptile.LOGGER.warn("Failed to find animation for {} ({}) of variant {}. Default will be used instead", entity.getName().getString(), entity.getDragonId(), entity.getVariant());
 
         id = getDefaultAnimation(entity);
         assetCache.setAnimationLocationCache(id);
@@ -44,13 +42,12 @@ public class URDragonModel<T extends URDragonEntity> extends GeoModel<T> {
         if (id != null) return id;
 
         DragonModel data  = DragonVariantUtil.getDragonModelData(entity);
-        if (data != null && data.modelData().model().isPresent()) {
-            id = data.modelData().model().get();
-            if (ResourceUtil.doesExist(id)) {
-                assetCache.setModelLocationCache(id);
-                return id;
-            } else UselessReptile.LOGGER.warn("Failed to get model for {} ({}) of variant {}. Default will be used instead", entity.getName().getString(), entity.getDragonId(), entity.getVariant());
-        }
+        if (data != null && ResourceUtil.doesExist(data.modelData().model())) {
+            id = data.modelData().model();
+            assetCache.setModelLocationCache(id);
+            return id;
+        } else UselessReptile.LOGGER.warn("Failed to find model for {} ({}) of variant {}. Default will be used instead", entity.getName().getString(), entity.getDragonId(), entity.getVariant());
+
 
         id = getDefaultModel(entity);
         assetCache.setModelLocationCache(id);
@@ -70,7 +67,7 @@ public class URDragonModel<T extends URDragonEntity> extends GeoModel<T> {
             id = data.modelData().texture();
             assetCache.setTextureLocationCache(id);
             return id;
-        } else UselessReptile.LOGGER.warn("Failed to get texture for {} ({}) of variant {}. Default will be used instead", entity.getName().getString(), entity.getDragonId(), entity.getVariant());
+        } else UselessReptile.LOGGER.warn("Failed to find texture for {} ({}) of variant {}. Default will be used instead", entity.getName().getString(), entity.getDragonId(), entity.getVariant());
 
         id = getDefaultTexture(entity);
         assetCache.setTextureLocationCache(id);

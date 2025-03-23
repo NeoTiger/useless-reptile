@@ -64,7 +64,7 @@ public class UREquipmentProvider implements DataProvider {
     }
 
     protected void addEntry(EntityType<? extends URDragonEntity> type, Item item, Identifier texture, Identifier model, boolean translucent) {
-        DragonEquipment.Equipment equipmentModelData = new DragonEquipment.Equipment(Registries.ITEM.getId(item), new ModelData(texture, Optional.of(model), Optional.empty(), false, translucent));
+        DragonEquipment.Equipment equipmentModelData = new DragonEquipment.Equipment(Registries.ITEM.getId(item), new ModelData(texture, model, Optional.empty(), false, translucent));
         Identifier id = EntityType.getId(type);
         if (holder.containsKey(id)) holder.get(id).equipment().add(equipmentModelData);
         else holder.put(id, new DragonEquipment(Optional.empty(), new ArrayList<>(Collections.singleton(equipmentModelData))));
