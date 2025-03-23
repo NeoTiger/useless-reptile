@@ -195,7 +195,7 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
                 if (getTiltState() == 1) return loopAnim("fly.straight.up", event);
                 if (getTiltState() == 2) return loopAnim("fly.straight.down", event);
                 if (shouldGlide) return loopAnim("fly.straight.glide", event);
-                if ((float)getAccelerationDuration()/getMaxAccelerationDuration() < 0.9f && !isClientSpectator()) return loopAnim("fly.straight.heavy", event);
+                if ((float)getAccelerationDuration()/getMaxAccelerationDuration() < 0.9f) return loopAnim("fly.straight.heavy", event);
                 return loopAnim("fly.straight", event);
             }
             event.getController().setAnimationSpeed(Math.max(animationSpeed, 1));

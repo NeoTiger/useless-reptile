@@ -4,7 +4,6 @@ import com.mojang.authlib.GameProfile;
 import eu.pb4.common.protection.api.CommonProtection;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.EnchantmentEffectComponentTypes;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -738,12 +737,6 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
         if (isSitting()) return false;
         if (getOwner() != null && target instanceof TameableEntity tameable && tameable.getOwner() == getOwner()) return false;
         return super.canTarget(target);
-    }
-
-    //idk how else to detect Replay Mod
-    public boolean isClientSpectator() {
-        if (MinecraftClient.getInstance().player != null) return MinecraftClient.getInstance().player.isSpectator();
-        else return false;
     }
 
     @Override
