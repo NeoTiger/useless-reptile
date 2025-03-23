@@ -62,7 +62,7 @@ public class DragonSpawnUtil {
         });
 
         if (variants.isEmpty()) {
-            if (canWarn) UselessReptile.LOGGER.warn("Failed to set name for {} at {} as none can spawn there. Setting default", entity.getName().getString(), entity.getBlockPos());
+            if (canWarn) UselessReptile.LOGGER.warn("Failed to set variant for {} at {} as none can spawn there. Setting default", entity.getName().getString(), entity.getBlockPos());
             entity.setVariant(entity.getDefaultVariant());
             return;
         }

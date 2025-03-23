@@ -51,7 +51,6 @@ import software.bernie.geckolib.animation.AnimatableManager;
 import software.bernie.geckolib.animation.AnimationController;
 import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.animation.PlayState;
-import software.bernie.geckolib.animation.keyframe.event.SoundKeyframeEvent;
 
 public class WyvernEntity extends URRideableFlyingDragonEntity implements MultipartEntity {
 
@@ -119,27 +118,29 @@ public class WyvernEntity extends URRideableFlyingDragonEntity implements Multip
         AnimationController<WyvernEntity> turn = new AnimationController<>(this, "turn", TRANSITION_TICKS, this::turnController);
         AnimationController<WyvernEntity> attack = new AnimationController<>(this, "attack", 0, this::attackController);
         AnimationController<WyvernEntity> eye = new AnimationController<>(this, "eye", 0, this::eyeController);
-        main.setSoundKeyframeHandler(this::soundListenerMain);
-        attack.setSoundKeyframeHandler(this::soundListenerAttack);
+        main.setSoundKeyframeHandler(this::soundHandler);
+        attack.setSoundKeyframeHandler(this::soundHandler);
+        turn.setSoundKeyframeHandler(this::soundHandler);
+        eye.setSoundKeyframeHandler(this::soundHandler);
         animationData.add(main, turn, attack, eye);
     }
 
-    private <ENTITY extends GeoEntity> void soundListenerMain(SoundKeyframeEvent<ENTITY> event) {
-        if (getWorld().isClient())
-            switch (event.getKeyframeData().getSound()) {
-                case "flap" -> playSound(SoundEvents.ENTITY_ENDER_DRAGON_FLAP, 3, 0.7F);
-                case "woosh" -> playSound(URSounds.DRAGON_WOOSH, 2, 1);
-                case "step" -> playSound(URSounds.WYVERN_STEP, 1, 1);
-            }
-    }
-
-    private <ENTITY extends GeoEntity> void soundListenerAttack(SoundKeyframeEvent<ENTITY> event) {
-        if (getWorld().isClient())
-            switch (event.getKeyframeData().getSound()) {
-                case "shoot" -> playSound(SoundEvents.ENTITY_ENDER_DRAGON_SHOOT, 2, 1);
-                case "bite" ->  playSound(URSounds.WYVERN_BITE, 1, 1);
-            }
-    }
+    //private <ENTITY extends GeoEntity> void soundListenerMain(SoundKeyframeEvent<ENTITY> event) {
+    //    if (getWorld().isClient())
+    //        switch (event.getKeyframeData().getSound()) {
+    //            case "flap" -> playSound(SoundEvents.ENTITY_ENDER_DRAGON_FLAP, 3, 0.7F);
+    //            case "woosh" -> playSound(URSounds.DRAGON_WOOSH, 2, 1);
+    //            case "step" -> playSound(URSounds.WYVERN_STEP, 1, 1);
+    //        }
+    //}
+//
+    //private <ENTITY extends GeoEntity> void soundListenerAttack(SoundKeyframeEvent<ENTITY> event) {
+    //    if (getWorld().isClient())
+    //        switch (event.getKeyframeData().getSound()) {
+    //            case "shoot" -> playSound(SoundEvents.ENTITY_ENDER_DRAGON_SHOOT, 2, 1);
+    //            case "bite" ->  playSound(URSounds.WYVERN_BITE, 1, 1);
+    //        }
+    //}
 
     private <A extends GeoEntity> PlayState eyeController(AnimationState<A> event) {
         return loopAnim("blink", event);

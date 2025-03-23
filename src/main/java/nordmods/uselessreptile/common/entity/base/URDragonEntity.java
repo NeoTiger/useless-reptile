@@ -58,6 +58,7 @@ import nordmods.uselessreptile.client.util.AssetCahceOwner;
 import nordmods.uselessreptile.client.util.DragonAssetCache;
 import nordmods.uselessreptile.common.config.URMobAttributesConfig;
 import nordmods.uselessreptile.common.dragon_variant.DragonVariant;
+import nordmods.uselessreptile.common.dragon_variant.DragonVariantUtil;
 import nordmods.uselessreptile.common.dragon_variant.model.DragonModel;
 import nordmods.uselessreptile.common.dragon_variant.spawn.DragonSpawnUtil;
 import nordmods.uselessreptile.common.entity.ai.control.DragonLookControl;
@@ -76,8 +77,10 @@ import software.bernie.geckolib.animation.Animation;
 import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.keyframe.event.SoundKeyframeEvent;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.function.BiConsumer;
 
@@ -102,6 +105,7 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
     protected SimpleInventory inventory = new SimpleInventory(URDragonScreenHandler.maxStorageSize);
     public boolean shouldFollow = false;
     protected Text defaultDisplayName;
+    private HashMap<String, SoundInfo> soundInfoHolder = new HashMap<>();
     public static final Identifier VARIANT_BONUS_MODIFIER = UselessReptile.id("variant_bonus");
 
 
@@ -265,6 +269,7 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
         super.onTrackedDataSet(data);
         if (CUSTOM_NAME.equals(data) || VARIANT.equals(data)) {
             assetCache.cleanCache();
+            soundInfoHolder = new HashMap<>();
         }
         if (VARIANT.equals(data)) {
             removeVariantModifiers();
@@ -304,6 +309,37 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
             if (container.hasAttribute(entityAttributeReference))
                 container.getCustomInstance(entityAttributeReference).removeModifier(VARIANT_BONUS_MODIFIER);
         });
+    }
+
+    @Nullable
+    public SoundInfo getSoundInfo(String name) {
+        if (!soundInfoHolder.containsKey(name)) {
+            DragonModel model = DragonVariantUtil.getDragonModelData(this);
+            if (model != null) {
+                if (model.sounds().isPresent()) {
+                    DragonModel.Sound sound = model.sounds().get().stream()
+                            .filter(s -> s.name().equals(name))
+                            .findFirst()
+                            .orElse(null);
+
+                    if (sound != null) soundInfoHolder.put(name, new SoundInfo(sound.id(), sound.volume().orElse(1f), sound.pitch().orElse(1f)));
+                    else {
+                        UselessReptile.LOGGER.warn("Sound {} is not defined for {} ({}) of variant {}.", name, getName().getString(), getDragonId(), getVariant());
+                        soundInfoHolder.put(name, null);
+                    }
+                } else {
+                    UselessReptile.LOGGER.warn("Could not find sound {} for {} ({}) of variant {} as no sounds are defined.", name, getName().getString(), getDragonId(), getVariant());
+                    soundInfoHolder.put(name, null);
+                }
+            }
+        }
+        return soundInfoHolder.get(name);
+    }
+
+
+    protected <ENTITY extends GeoEntity> void soundHandler(SoundKeyframeEvent<ENTITY> event) {
+        SoundInfo soundInfo = getSoundInfo(event.getKeyframeData().getSound());
+        if (soundInfo != null) playSound(SoundEvent.of(soundInfo.id()), soundInfo.volume(), soundInfo.pitch());
     }
 
     @Override
@@ -1004,4 +1040,6 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
             return false;
         }
     }
+
+    public record SoundInfo(Identifier id, float volume, float pitch) {}
 }

@@ -6,10 +6,23 @@ import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import nordmods.uselessreptile.common.entity.base.URDragonEntity;
 import nordmods.uselessreptile.common.init.URRegistryKeys;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
+
+//TODO:
+//  hunt targets
+//  untamed targets
+//  tamed targets
+//  sounds
+//  taming items
+//  healing/food items
+//  effect immunities
+//  damage immunities
+
+//TODO also move custom name registry to clientside
 public record DragonVariant(Identifier dragonId, String name, Identifier dragonModelData, Identifier dragonEquipment, Optional<Identifier> spawnConditions, Optional<Identifier> variantAttributeModifiers) {
     public static final Codec<DragonVariant> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                     Identifier.CODEC.fieldOf("id").forGetter(DragonVariant::dragonId),
@@ -26,6 +39,15 @@ public record DragonVariant(Identifier dragonId, String name, Identifier dragonM
                     Identifier.CODEC.fieldOf("dragon_model").forGetter(DragonVariant::dragonModelData),
                     Identifier.CODEC.fieldOf("equipment").forGetter(DragonVariant::dragonEquipment))
             .apply(instance, (id, variant, dragonModelData, dragonEquipment) -> new DragonVariant(id, variant, dragonModelData, dragonEquipment, Optional.empty(), Optional.empty())));
+
+    @NotNull
+    public static DragonVariant getDefaultVariant(URDragonEntity dragon) {
+        return dragon.getWorld().getRegistryManager().get(URRegistryKeys.DRAGON_VARIANT)
+                .stream()
+                .filter(dragonVariant -> dragonVariant.dragonId().equals(dragon.getDragonId()) && dragonVariant.name().equals(dragon.getDefaultVariant()))
+                .findFirst()
+                .orElseThrow();
+    }
 
     @Nullable
     public static DragonVariant getByVariant(URDragonEntity dragon) {
@@ -49,11 +71,15 @@ public record DragonVariant(Identifier dragonId, String name, Identifier dragonM
                 .orElse(null);
     }
 
-    @Nullable
     public static DragonVariant getDragonVariant(URDragonEntity dragon) {
         DragonVariant variant = null;
+
         if (dragon.hasCustomName()) variant = getByCustomName(dragon);
         if (variant != null) return variant;
-        return getByVariant(dragon);
+
+        variant = getByVariant(dragon);
+        if (variant != null) return variant;
+
+        return getDefaultVariant(dragon);
     }
 }

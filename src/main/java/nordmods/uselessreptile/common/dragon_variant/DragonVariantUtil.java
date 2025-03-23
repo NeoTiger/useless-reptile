@@ -18,11 +18,7 @@ public class DragonVariantUtil {
     @Nullable
     public static DragonModel getDragonModelData(URDragonEntity dragon) {
         if (!ResourceUtil.isResourceReloadFinished) return null;
-
-        DragonVariant variant = DragonVariant.getDragonVariant(dragon);
-        if (variant == null) return null;
-
-        return dragon.getWorld().getRegistryManager().get(URRegistryKeys.DRAGON_MODEL).get(variant.dragonModelData());
+        return dragon.getWorld().getRegistryManager().get(URRegistryKeys.DRAGON_MODEL).get(DragonVariant.getDragonVariant(dragon).dragonModelData());
     }
 
     @Nullable
@@ -30,7 +26,6 @@ public class DragonVariantUtil {
         if (!ResourceUtil.isResourceReloadFinished) return null;
 
         DragonVariant variant = DragonVariant.getDragonVariant(dragon);
-        if (variant == null) return null;
 
         DynamicRegistryManager registryManager = dragon.getWorld().getRegistryManager();
         DragonEquipment dragonEquipment = registryManager.get(URRegistryKeys.DRAGON_EQUIPMENT).get(variant.dragonEquipment());

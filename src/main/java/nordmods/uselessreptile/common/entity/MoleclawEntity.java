@@ -48,7 +48,6 @@ import software.bernie.geckolib.animation.AnimatableManager;
 import software.bernie.geckolib.animation.AnimationController;
 import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.animation.PlayState;
-import software.bernie.geckolib.animation.keyframe.event.SoundKeyframeEvent;
 
 import java.util.List;
 
@@ -124,23 +123,25 @@ public class MoleclawEntity extends URRideableDragonEntity {
         AnimationController<MoleclawEntity> turn = new AnimationController<>(this, "turn", TRANSITION_TICKS, this::turnController);
         AnimationController<MoleclawEntity> attack = new AnimationController<>(this, "attack", 0, this::attackController);
         AnimationController<MoleclawEntity> eye = new AnimationController<>(this, "eye", 0, this::eyeController);
-        main.setSoundKeyframeHandler(this::soundListenerMain);
-        attack.setSoundKeyframeHandler(this::soundListenerAttack);
+        main.setSoundKeyframeHandler(this::soundHandler);
+        attack.setSoundKeyframeHandler(this::soundHandler);
+        turn.setSoundKeyframeHandler(this::soundHandler);
+        eye.setSoundKeyframeHandler(this::soundHandler);
         animationData.add(main, turn, attack, eye);
     }
 
-    private <ENTITY extends GeoEntity> void soundListenerMain(SoundKeyframeEvent<ENTITY> event) {
-        if (getWorld().isClient())
-            if (event.getKeyframeData().getSound().equals("step")) playSound(URSounds.DRAGON_STEP, 1, 0.7f);
-    }
-
-    private <ENTITY extends GeoEntity> void soundListenerAttack(SoundKeyframeEvent<ENTITY> event) {
-        if (getWorld().isClient())
-            switch (event.getKeyframeData().getSound()) {
-                case "attack_strong" -> playSound(URSounds.MOLECLAW_STRONG_ATTACK, 1, 1F);
-                case "attack" -> playSound(URSounds.MOLECLAW_ATTACK, 1, 1);
-            }
-    }
+    //private <ENTITY extends GeoEntity> void soundListenerMain(SoundKeyframeEvent<ENTITY> event) {
+    //    if (getWorld().isClient())
+    //        if (event.getKeyframeData().getSound().equals("step")) playSound(URSounds.DRAGON_STEP, 1, 0.7f);
+    //}
+//
+    //private <ENTITY extends GeoEntity> void soundListenerAttack(SoundKeyframeEvent<ENTITY> event) {
+    //    if (getWorld().isClient())
+    //        switch (event.getKeyframeData().getSound()) {
+    //            case "attack_strong" -> playSound(URSounds.MOLECLAW_STRONG_ATTACK, 1, 1F);
+    //            case "attack" -> playSound(URSounds.MOLECLAW_ATTACK, 1, 1);
+    //        }
+    //}
 
     private <A extends GeoEntity> PlayState eyeController(AnimationState<A> event) {
         return loopAnim("blink", event);
