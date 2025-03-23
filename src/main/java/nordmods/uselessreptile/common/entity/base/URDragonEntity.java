@@ -741,6 +741,7 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
     @Override
     @Deprecated
     protected SoundEvent getHurtSound(DamageSource source) {
+        playHurtSound(source); //don't ask
         return null;
     }
 
@@ -756,7 +757,7 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
     @Override
     protected SoundEvent getDeathSound() {
         SoundInfo soundInfo = getSoundInfo("death");
-        if (soundInfo != null) return SoundEvent.of(soundInfo.id());
+        if (soundInfo != null) playSound(SoundEvent.of(soundInfo.id()), soundInfo.volume(), soundInfo.pitch());
         return null;
     }
 

@@ -1,6 +1,7 @@
 package nordmods.uselessreptile.client.model.special;
 
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.util.Identifier;
 import nordmods.uselessreptile.UselessReptile;
 import nordmods.uselessreptile.client.util.AssetCache;
@@ -13,13 +14,15 @@ import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.model.GeoModel;
 
 public class DragonEqupmentModel extends GeoModel<DragonEquipmentAnimatable> {
-    private static final Identifier DEFAULT_ANIMATION = UselessReptile.id("animations/entity/empty.animation.json");
+    public static final Identifier DEFAULT_ANIMATION = UselessReptile.id("animations/entity/empty.animation.json");
+    public static final Identifier DEFAULT_MODEL = UselessReptile.id("geo/entity/empty.geo.json");
+    public static final Identifier DEFAULT_TEXTURE = SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE;
 
     @Override
     @Nullable
     public Identifier getModelResource(DragonEquipmentAnimatable entity) {
         AssetCache assetCache = entity.getAssetCache();
-        if (!ResourceUtil.isResourceReloadFinished) return null;
+        if (!ResourceUtil.isResourceReloadFinished) return DEFAULT_MODEL;
 
         Identifier id = assetCache.getModelLocationCache();
         if (id != null) return id;
@@ -27,30 +30,34 @@ public class DragonEqupmentModel extends GeoModel<DragonEquipmentAnimatable> {
         DragonEquipment.Equipment data = DragonVariantUtil.getEquipmentModelData(entity.owner, entity.item);
         if (data != null && ResourceUtil.doesExist(data.modelData().model())) {
             id = data.modelData().model();
-            assetCache.setModelLocationCache(id);
-            return id;
-        } else UselessReptile.LOGGER.warn("Failed to find model for equipment ({}) for {} ({}) of variant {}", entity.item, entity.owner.getName().getString(), entity.owner.getDragonId(), entity.owner.getVariant());
-
-        return null;
+            if (ResourceUtil.doesExist(id)) {
+                assetCache.setModelLocationCache(id);
+                return id;
+            } else UselessReptile.LOGGER.warn("Failed to find model for equipment ({}) for {} ({}) of variant {}", entity.item, entity.owner.getName().getString(), entity.owner.getDragonId(), entity.owner.getVariant());
+        }
+        assetCache.setModelLocationCache(DEFAULT_MODEL);
+        return DEFAULT_MODEL;
     }
 
     @Override
     @Nullable
     public Identifier getTextureResource(DragonEquipmentAnimatable entity) {
         AssetCache assetCache = entity.getAssetCache();
-        if (!ResourceUtil.isResourceReloadFinished) return null;
+        if (!ResourceUtil.isResourceReloadFinished) return DEFAULT_TEXTURE;
 
         Identifier id = assetCache.getTextureLocationCache();
         if (id != null) return id;
 
         DragonEquipment.Equipment data = DragonVariantUtil.getEquipmentModelData(entity.owner, entity.item);
-        if (data != null) {
+        if (data != null && ResourceUtil.doesExist(data.modelData().texture())) {
             id = data.modelData().texture();
-            assetCache.setTextureLocationCache(id);
-            return id;
-        } else UselessReptile.LOGGER.warn("Failed to find texture for equipment ({}) for {} ({}) of variant {}", entity.item, entity.owner.getName().getString(), entity.owner.getDragonId(), entity.owner.getVariant());
-
-        return null;
+            if (ResourceUtil.doesExist(id)) {
+                assetCache.setTextureLocationCache(id);
+                return id;
+            } else UselessReptile.LOGGER.warn("Failed to find texture for equipment ({}) for {} ({}) of variant {}", entity.item, entity.owner.getName().getString(), entity.owner.getDragonId(), entity.owner.getVariant());
+        }
+        assetCache.setTextureLocationCache(DEFAULT_TEXTURE);
+        return DEFAULT_TEXTURE;
     }
 
     @Override

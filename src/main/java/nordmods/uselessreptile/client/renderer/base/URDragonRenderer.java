@@ -9,6 +9,7 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import nordmods.uselessreptile.client.model.URDragonModel;
+import nordmods.uselessreptile.client.model.special.DragonEqupmentModel;
 import nordmods.uselessreptile.client.renderer.layers.URGlowingLayer;
 import nordmods.uselessreptile.client.renderer.special.SaddleEquipmentRenderer;
 import nordmods.uselessreptile.client.util.DragonAssetCache;
@@ -59,11 +60,10 @@ public abstract class URDragonRenderer <T extends URDragonEntity> extends GeoEnt
             DragonEquipmentRenderer usedRenderer = itemStack.isIn(URTags.DRAGON_SADDLES) ? saddleEquipmentRenderer : dragonEquipmentRenderer;
 
             Identifier id = usedRenderer.getGeoModel().getModelResource(dragonEquipmentAnimatable);
-            if (id == null) continue;
+            if (id == DragonEqupmentModel.DEFAULT_MODEL) continue;
             BakedGeoModel bakedEquipmentModel = usedRenderer.getGeoModel().getBakedModel(id);
-            id = usedRenderer.getGeoModel().getTextureResource(dragonEquipmentAnimatable);
-            if (id == null) continue;
 
+            id = usedRenderer.getGeoModel().getTextureResource(dragonEquipmentAnimatable);
             Map<String, GeoBone> equipmentBones = dragonEquipmentAnimatable.equipmentBones;
             if (equipmentBones.isEmpty()) getEquipmentBones(equipmentBones, bakedEquipmentModel);
 
