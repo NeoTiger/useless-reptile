@@ -135,7 +135,7 @@ public class URDragonModelProvider implements DataProvider {
     }
 
     protected void addEntry(Identifier dragonId, String variant, Optional<List<DragonModel.Sound>> sounds, boolean cull) {
-        addEntry(getId(dragonId, variant), new DragonModel(getModelData(dragonId, variant, cull), Optional.empty(), sounds));
+        addEntry(getId(dragonId, variant), new DragonModel(getModelData(dragonId, variant, cull), sounds));
     }
 
     protected void addEntry(EntityType<? extends Entity> entityType, String variant, Optional<List<DragonModel.Sound>> sounds, boolean cull) {

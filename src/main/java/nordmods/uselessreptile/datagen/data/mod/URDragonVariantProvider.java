@@ -45,6 +45,7 @@ public class URDragonVariantProvider implements DataProvider {
         DragonVariant variant = new DragonVariant(
                 id,
                 name,
+                Optional.empty(),
                 UselessReptile.id("wyvern/" + name),
                 UselessReptile.id("wyvern"),
                 Optional.empty(),
@@ -101,6 +102,7 @@ public class URDragonVariantProvider implements DataProvider {
         DragonVariant variant = new DragonVariant(
                 id,
                 name,
+                Optional.empty(),
                 UselessReptile.id("wyvern/" + name),
                 UselessReptile.id("wyvern"),
                 Optional.of(UselessReptile.id("wyvern/default")),
@@ -114,6 +116,7 @@ public class URDragonVariantProvider implements DataProvider {
         DragonVariant variant = new DragonVariant(
                 id,
                 name,
+                Optional.empty(),
                 UselessReptile.id("moleclaw/" + name),
                 UselessReptile.id("moleclaw"),
                 Optional.of(UselessReptile.id("moleclaw/" + (rare ? "rare" : "default"))),
@@ -127,6 +130,7 @@ public class URDragonVariantProvider implements DataProvider {
         DragonVariant variant = new DragonVariant(
                 id,
                 name,
+                Optional.empty(),
                 UselessReptile.id("river_pikehorn/" + name),
                 UselessReptile.id("empty"),
                 Optional.of(UselessReptile.id("river_pikehorn/default")),
@@ -140,6 +144,7 @@ public class URDragonVariantProvider implements DataProvider {
         DragonVariant variant = new DragonVariant(
                 id,
                 name,
+                Optional.empty(),
                 UselessReptile.id("lightning_chaser/" + name),
                 UselessReptile.id("lightning_chaser"),
                 Optional.of(UselessReptile.id("lightning_chaser/" + name)),

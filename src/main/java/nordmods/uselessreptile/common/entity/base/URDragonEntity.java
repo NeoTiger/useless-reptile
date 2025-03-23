@@ -988,10 +988,7 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
     protected Text getDefaultName() {
         if (defaultDisplayName == null) {
             DragonVariant variant = DragonVariant.getByVariant(this);
-            if (variant != null) {
-                DragonModel model = getWorld().getRegistryManager().get(URRegistryKeys.DRAGON_MODEL).get(variant.dragonModelData());
-                if (model != null && model.displayNameKey().isPresent()) defaultDisplayName = Text.translatable(model.displayNameKey().get());
-            }
+            if (variant != null && variant.displayNameKey().isPresent()) defaultDisplayName = Text.translatable(variant.displayNameKey().get());
             if (defaultDisplayName == null) defaultDisplayName = super.getDefaultName();
         }
         return defaultDisplayName;

@@ -16,17 +16,18 @@ import java.util.Optional;
 //  hunt targets
 //  untamed targets
 //  tamed targets
-//  sounds
 //  taming items
+//  per slot equipment items
 //  healing/food items
 //  effect immunities
 //  damage immunities
 
 //TODO also move custom name registry to clientside
-public record DragonVariant(Identifier dragonId, String name, Identifier dragonModelData, Identifier dragonEquipment, Optional<Identifier> spawnConditions, Optional<Identifier> variantAttributeModifiers) {
+public record DragonVariant(Identifier dragonId, String name, Optional<String> displayNameKey, Identifier dragonModelData, Identifier dragonEquipment, Optional<Identifier> spawnConditions, Optional<Identifier> variantAttributeModifiers) {
     public static final Codec<DragonVariant> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                     Identifier.CODEC.fieldOf("id").forGetter(DragonVariant::dragonId),
                     Codec.STRING.fieldOf("name").forGetter(DragonVariant::name),
+                    Codec.STRING.optionalFieldOf("display_name_key").forGetter(DragonVariant::displayNameKey),
                     Identifier.CODEC.fieldOf("dragon_model").forGetter(DragonVariant::dragonModelData),
                     Identifier.CODEC.fieldOf("equipment").forGetter(DragonVariant::dragonEquipment),
                     Identifier.CODEC.optionalFieldOf("spawn_conditions").forGetter(DragonVariant::spawnConditions),
@@ -36,9 +37,10 @@ public record DragonVariant(Identifier dragonId, String name, Identifier dragonM
     public static final Codec<DragonVariant> CODEC_NO_SERVER_INFO = RecordCodecBuilder.create(instance -> instance.group(
                     Identifier.CODEC.fieldOf("id").forGetter(DragonVariant::dragonId),
                     Codec.STRING.fieldOf("name").forGetter(DragonVariant::name),
+                    Codec.STRING.optionalFieldOf("display_name_key").forGetter(DragonVariant::displayNameKey),
                     Identifier.CODEC.fieldOf("dragon_model").forGetter(DragonVariant::dragonModelData),
                     Identifier.CODEC.fieldOf("equipment").forGetter(DragonVariant::dragonEquipment))
-            .apply(instance, (id, variant, dragonModelData, dragonEquipment) -> new DragonVariant(id, variant, dragonModelData, dragonEquipment, Optional.empty(), Optional.empty())));
+            .apply(instance, (id, variant, displayNameKey, dragonModelData, dragonEquipment) -> new DragonVariant(id, variant, displayNameKey, dragonModelData, dragonEquipment, Optional.empty(), Optional.empty())));
 
     @NotNull
     public static DragonVariant getDefaultVariant(URDragonEntity dragon) {
