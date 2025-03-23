@@ -1,10 +1,12 @@
 package nordmods.uselessreptile.common.entity.special;
 
-import net.minecraft.entity.*;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Tameable;
 import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.MathHelper;
@@ -16,7 +18,9 @@ import nordmods.uselessreptile.common.init.UREntities;
 import nordmods.uselessreptile.common.init.URSounds;
 import nordmods.uselessreptile.common.init.URStatusEffects;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class ShockwaveSphereEntity extends ProjectileEntity implements ProjectileDamageHelper {
     private float currentRadius = 0;
@@ -90,9 +94,9 @@ public class ShockwaveSphereEntity extends ProjectileEntity implements Projectil
         if (target.isInvulnerableTo(getDamageSources().create(DamageTypes.LIGHTNING_BOLT))) return false;
         if (target instanceof EntityPart part) target = part.owner;
         Entity owner = getOwner();
-        LivingEntity ownerOwner = owner instanceof TameableEntity tameable ? tameable.getOwner() : null;
+        LivingEntity ownerOwner = owner instanceof Tameable tameable ? tameable.getOwner() : null;
         if (target == ownerOwner) return false;
-        if (target instanceof TameableEntity tameableEntity && tameableEntity.getOwner() == ownerOwner) return false;
+        if (target instanceof Tameable tameableEntity && tameableEntity.getOwner() == ownerOwner) return false;
 
         return true;
     }
