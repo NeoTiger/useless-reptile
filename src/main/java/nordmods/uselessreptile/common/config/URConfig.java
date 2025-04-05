@@ -61,8 +61,6 @@ public class URConfig {
     public boolean allowDragonTeleport = true;
     @SerialEntry
     public boolean dragonMadness = false;
-    @SerialEntry(comment = "DEBUG INFO")
-    public boolean logDragonSpawns = false;
 
     public static URConfig getConfig() {
         return CONFIG.instance();

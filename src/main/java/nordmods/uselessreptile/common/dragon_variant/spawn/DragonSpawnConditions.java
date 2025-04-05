@@ -7,10 +7,11 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.world.biome.Biome;
-import nordmods.uselessreptile.common.config.URConfig;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public record DragonSpawnConditions(int weight,
                                      @NotNull Optional<List<Codecs.TagEntryId>> allowedBiomes,
@@ -45,11 +46,6 @@ public record DragonSpawnConditions(int weight,
 
     public static Builder builder() {
         return new Builder();
-    }
-
-    public static void debugPrint() {
-        if (!URConfig.getConfig().logDragonSpawns) return;
-        //TODO
     }
 
     //allowed - works as whitelist if presented and not empty
