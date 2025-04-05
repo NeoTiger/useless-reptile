@@ -15,7 +15,6 @@ public class UselessReptile implements ModInitializer, PreLaunchEntrypoint {
 
     @Override
     public void onInitialize() {
-        //ModonomiconIntegration.init();
         URMobAttributesConfig.init();
         
         URMobAttributesConfig.init();
