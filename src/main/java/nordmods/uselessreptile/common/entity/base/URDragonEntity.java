@@ -101,6 +101,7 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
     protected @Nullable BlockPos jukeboxPos;
     protected SimpleInventory inventory = new SimpleInventory(URDragonScreenHandler.maxStorageSize);
     public boolean shouldFollow = false;
+    public int dismountCooldown = 0;
 
     protected URDragonEntity(EntityType<? extends TameableEntity> entityType, World world) {
         super(entityType, world);
@@ -178,7 +179,10 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
 
     public boolean getIsSitting() {return dataTracker.get(IS_SITTING);}
     public void setIsSitting(boolean state) {
-        dataTracker.set(IS_SITTING, state);
+        if (!getWorld().isClient()) {
+            dataTracker.set(IS_SITTING, state);
+            dataTracker.set(TURNING_STATE, (byte)0);
+        }
         setSitting(state);
         if (state) setTarget(null);
     }
@@ -187,29 +191,29 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
     public void setVariant(String state) {dataTracker.set(VARIANT, state);}
 
     public byte getTurningState() {return dataTracker.get(TURNING_STATE);}
-    public void setTurningState(byte state) {dataTracker.set(TURNING_STATE, state);}
+    public void setTurningState(byte state) {if (!getWorld().isClient()) dataTracker.set(TURNING_STATE, state);}
 
     public byte getRotationProgress() {return dataTracker.get(ROTATION_PROGRESS);}
     public float getNormalizedRotationProgress() {return (float)getRotationProgress()/(float)TRANSITION_TICKS;}
-    public void setRotationProgress(byte state) {dataTracker.set(ROTATION_PROGRESS, state);}
+    public void setRotationProgress(byte state) {if (!getWorld().isClient()) dataTracker.set(ROTATION_PROGRESS, state);}
 
     public int getTamingProgress() {return dataTracker.get(TAMING_PROGRESS);}
-    public void setTamingProgress(int state) {dataTracker.set(TAMING_PROGRESS, state);}
+    public void setTamingProgress(int state) {if (!getWorld().isClient()) dataTracker.set(TAMING_PROGRESS, state);}
 
     public float getSpeedModifier() {return dataTracker.get(SPEED_MODIFIER);}
-    public void setSpeedMod(float state) {dataTracker.set(SPEED_MODIFIER, state);}
+    public void setSpeedMod(float state) {if (!getWorld().isClient()) dataTracker.set(SPEED_MODIFIER, state);}
 
     public float getMountedOffset() {return dataTracker.get(MOUNTED_OFFSET);}
-    public void setMountedOffset(float state) {dataTracker.set(MOUNTED_OFFSET, state);}
+    public void setMountedOffset(float state) {if (!getWorld().isClient()) dataTracker.set(MOUNTED_OFFSET, state);}
 
     public float getHeightMod() {return dataTracker.get(HEIGHT_MODIFIER);}
-    public void setHeightMod(float state) {dataTracker.set(HEIGHT_MODIFIER, state);}
+    public void setHeightMod(float state) {if (!getWorld().isClient()) dataTracker.set(HEIGHT_MODIFIER, state);}
 
     public float getWidthMod() {return dataTracker.get(WIDTH_MODIFIER);}
-    public void setWidthMod(float state) {dataTracker.set(WIDTH_MODIFIER, state);}
+    public void setWidthMod(float state) {if (!getWorld().isClient()) dataTracker.set(WIDTH_MODIFIER, state);}
 
     public String getBoundedInstrumentSound() {return  dataTracker.get(BOUNDED_INSTRUMENT_SOUND);}
-    public void setBoundedInstrumentSound(String state) {dataTracker.set(BOUNDED_INSTRUMENT_SOUND, state);}
+    public void setBoundedInstrumentSound(String state) {if (!getWorld().isClient()) dataTracker.set(BOUNDED_INSTRUMENT_SOUND, state);}
 
     @Override
     public void writeCustomDataToNbt(NbtCompound tag) {
@@ -409,7 +413,7 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
                 return ActionResult.SUCCESS;
             }
 
-            if ((itemStack.isOf(Items.STICK) || isInstrument(itemStack)) && player.isSneaking()) {
+            if ((itemStack.isOf(Items.STICK)) && !hasPassengers()) {
                 if (isSitting()) setIsSitting(false);
                 else {
                     setIsSitting(true);
@@ -487,15 +491,15 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
 
             if (yawDiff < -getRotationSpeed()) {
                 currentYaw += getRotationSpeed();
-                if (!getWorld().isClient()) setTurningState((byte)2);
+                setTurningState((byte)2);
             }
             else if (yawDiff > getRotationSpeed()) {
                 currentYaw -= getRotationSpeed();
-                if (!getWorld().isClient()) setTurningState((byte)1);
+                setTurningState((byte)1);
             }
             else currentYaw = destinationYaw;
         } else {
-            if (!getWorld().isClient()) setTurningState((byte)0);
+            setTurningState((byte)0);
         }
         prevYaw = bodyYaw = getYaw();
         super.setRotation(currentYaw, MathHelper.clamp(pitch, -getPitchLimit(), getPitchLimit()));

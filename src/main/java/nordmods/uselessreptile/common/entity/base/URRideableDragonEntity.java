@@ -2,27 +2,27 @@ package nordmods.uselessreptile.common.entity.base;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.RideableInventory;
+import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 import nordmods.uselessreptile.client.init.URKeybinds;
+import nordmods.uselessreptile.common.config.URConfig;
 import nordmods.uselessreptile.common.network.GUIEntityToRenderS2CPacket;
 import nordmods.uselessreptile.common.network.KeyInputC2SPacket;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class URRideableDragonEntity extends URDragonEntity implements RideableInventory {
     protected URRideableDragonEntity(EntityType<? extends TameableEntity> entityType, World world) {
@@ -81,8 +81,8 @@ public abstract class URRideableDragonEntity extends URDragonEntity implements R
         ItemStack itemStack = player.getStackInHand(hand);
         if (isTamed() && isOwner(player) && !isInteractableItem(itemStack)) {
             if (!hasPassengers() && hasSaddle()) {
-                if (isSitting()) setIsSitting(false);
-                else if (!getWorld().isClient()) player.startRiding(this);
+                setIsSitting(false);
+                if (!getWorld().isClient()) player.startRiding(this);
                 return ActionResult.SUCCESS;
             }
         }
@@ -145,7 +145,8 @@ public abstract class URRideableDragonEntity extends URDragonEntity implements R
             boolean isMoveForwardPressed = MinecraftClient.getInstance().options.forwardKey.isPressed();
             boolean isJumpPressed = MinecraftClient.getInstance().options.jumpKey.isPressed();
             boolean isMoveBackPressed = MinecraftClient.getInstance().options.backKey.isPressed();
-            boolean isDownPressed = URKeybinds.flyDownKey.isUnbound() ? isSprintPressed : URKeybinds.flyDownKey.isPressed();
+            boolean isDownPressed = MinecraftClient.getInstance().options.sneakKey.isPressed()
+                    || (URKeybinds.flyDownKey.isUnbound() ? isSprintPressed : URKeybinds.flyDownKey.isPressed());
             boolean isSecondaryAttackPressed = URKeybinds.secondaryAttackKey.isPressed();
             boolean isPrimaryAttackPressed = URKeybinds.primaryAttackKey.isPressed();
 
@@ -197,5 +198,72 @@ public abstract class URRideableDragonEntity extends URDragonEntity implements R
         return 3;
     }
 
+    @Override
+    public void tick() {
+        super.tick();
+        if (dismountCooldown > 0) dismountCooldown--;
+    }
+
+    protected boolean canBeDismounted() {
+        return true;
+    }
+
+    @Override
+    protected void removePassenger(Entity passenger) {
+        super.removePassenger(passenger);
+        // pause looking and wandering goals for 15-30 seconds after dismounting
+        dismountCooldown = 300 + getRandom().nextInt(300);
+    }
+
     public abstract boolean isSaddleItem(ItemStack itemStack);
+
+    @Override
+    public Vec3d updatePassengerForDismount(LivingEntity passenger) {
+        Vec3d vec3d = getPassengerDismountOffset(
+                (double)this.getWidth(), (double)passenger.getWidth(), this.getYaw() + (passenger.getMainArm() == Arm.RIGHT ? 90.0F : -90.0F)
+        );
+        Vec3d vec3d2 = this.locateSafeDismountingPos(vec3d, passenger);
+        if (vec3d2 != null) {
+            return vec3d2;
+        } else {
+            Vec3d vec3d3 = getPassengerDismountOffset(
+                    (double)this.getWidth(), (double)passenger.getWidth(), this.getYaw() + (passenger.getMainArm() == Arm.LEFT ? 90.0F : -90.0F)
+            );
+            Vec3d vec3d4 = this.locateSafeDismountingPos(vec3d3, passenger);
+            return vec3d4 != null ? vec3d4 : this.getPos();
+        }
+    }
+
+    @Nullable
+    private Vec3d locateSafeDismountingPos(Vec3d offset, LivingEntity passenger) {
+        double d = this.getX() + offset.x;
+        double e = this.getBoundingBox().minY;
+        double f = this.getZ() + offset.z;
+        BlockPos.Mutable mutable = new BlockPos.Mutable();
+
+        for (EntityPose entityPose : passenger.getPoses()) {
+            mutable.set(d, e, f);
+            double g = this.getBoundingBox().maxY + 0.75;
+
+            do {
+                double h = this.getWorld().getDismountHeight(mutable);
+                if ((double)mutable.getY() + h > g) {
+                    break;
+                }
+
+                if (Dismounting.canDismountInBlock(h)) {
+                    Box box = passenger.getBoundingBox(entityPose);
+                    Vec3d vec3d = new Vec3d(d, (double)mutable.getY() + h, f);
+                    if (Dismounting.canPlaceEntityAt(this.getWorld(), passenger, box.offset(vec3d))) {
+                        passenger.setPose(entityPose);
+                        return vec3d;
+                    }
+                }
+
+                mutable.move(Direction.UP);
+            } while (!((double)mutable.getY() < g));
+        }
+
+        return null;
+    }
 }

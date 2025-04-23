@@ -16,6 +16,7 @@ public class DragonReturnToHomePoint extends Goal {
 
     @Override
     public boolean canStart() {
+        if (entity.dismountCooldown > 0) return false;
         return entity.isTamed() && entity.squaredDistanceTo(entity.getHomePoint().toCenterPos()) > toleranceDistance * toleranceDistance;
     }
 

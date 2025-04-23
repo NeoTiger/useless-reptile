@@ -28,6 +28,7 @@ public class FlyingDragonFlyAroundGoal<T extends URDragonEntity & FlyingDragon> 
 
     @Override
     public boolean canStart() {
+        if (this.mob.dismountCooldown > 0) return false;
         if (!this.mob.isFlying()) return false;
         return super.canStart();
     }

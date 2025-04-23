@@ -88,6 +88,10 @@ public class ModMenuIntegration implements ModMenuApi {
                 .name(Text.translatable("config.uselessreptile.group.dragonBehaviour"))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.group.dragonBehaviour.@Tooltip")).build());
+        OptionGroup.Builder dragonridingGroup = OptionGroup.createBuilder()
+                .name(Text.translatable("config.uselessreptile.group.dragonriding"))
+                .description(OptionDescription.createBuilder()
+                        .text(Text.translatable("config.uselessreptile.group.dragonriding.@Tooltip")).build());
 
         //options
         Option<Boolean> naturalWyvernSpawn = Option.<Boolean>createBuilder()
@@ -294,6 +298,17 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(BooleanController::new)
                 .build();
 
+        // Riding options
+        Option<Boolean> preventDismountingInFlight = Option.<Boolean>createBuilder()
+                .name(Text.translatable("config.uselessreptile.option.preventDismountingInFlight"))
+                .description(OptionDescription.createBuilder()
+                        .text(Text.translatable("config.uselessreptile.option.preventDismountingInFlight.@Tooltip")).build())
+                .binding(config.preventDismountingInFlight,
+                        () -> config.preventDismountingInFlight,
+                        val -> config.preventDismountingInFlight = val)
+                .customController(BooleanController::new)
+                .build();
+
         inWorldSpawnGroup.option(naturalWyvernSpawn);
         inWorldSpawnGroup.option(naturalMoleclawSpawn);
         inWorldSpawnGroup.option(naturalPikehornSpawn);
@@ -320,10 +335,13 @@ public class ModMenuIntegration implements ModMenuApi {
         dragonBehaviourGroup.option(allowDragonTeleport);
         dragonBehaviourGroup.option(dragonMadness);
 
+        dragonridingGroup.option(preventDismountingInFlight);
+
         gameplayCategory.group(inWorldSpawnGroup.build());
         gameplayCategory.group(spawnGroupsGroup.build());
         gameplayCategory.group(groupSizeGroup.build());
         gameplayCategory.group(dragonBehaviourGroup.build());
+        gameplayCategory.group(dragonridingGroup.build());
 
 
         return gameplayCategory.build();

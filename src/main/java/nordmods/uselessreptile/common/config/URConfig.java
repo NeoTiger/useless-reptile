@@ -61,6 +61,8 @@ public class URConfig {
     public boolean allowDragonTeleport = true;
     @SerialEntry
     public boolean dragonMadness = false;
+    @SerialEntry(comment = "prevents players from dismounting a dragon during flight")
+    public boolean preventDismountingInFlight = true;
 
     public static URConfig getConfig() {
         return CONFIG.instance();

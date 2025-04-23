@@ -94,6 +94,7 @@
     "config.uselessreptile.category.client" : "Client Options",
     "config.uselessreptile.category.mobAttributes" : "Dragon Attributes",
     "config.uselessreptile.group.dragonBehaviour" : "Dragon Behaviour",
+    "config.uselessreptile.group.dragonriding" : "Dragonriding",
     "config.uselessreptile.group.camera" : "Camera Settings",
     "config.uselessreptile.group.dragonAppearance" : "Dragon Appearance",
     "config.uselessreptile.group.groupSize" : "Dragon Group Sizes",
@@ -131,6 +132,8 @@
     "config.uselessreptile.option.undergroundDragonSpawnGroupCapacity": "Underground Dragon Spawn Group Capacity",
     "config.uselessreptile.option.lightningChaserThunderstormSpawnTimerCooldown": "Lightning Chaser Spawn Timer Cooldown",
     "config.uselessreptile.option.dragonMadness": "Dragon Madness",
+    "config.uselessreptile.option.preventDismountingInFlight": "Prevent Dismounting in Flight",
+
     "config.uselessreptile.option.moleclawGriefing": "Moleclaw Griefing",
     "config.uselessreptile.option.lightningChaserGriefing": "Lightning Chaser Griefing",
     "config.uselessreptile.option.allowDragonTeleport": "Allow Tamed Dragons to Teleport",
@@ -144,6 +147,7 @@
     "config.uselessreptile.requires_restart.@Tooltip" : "\nChanging this option requires game restart",
     "config.uselessreptile.group.spawnGroups.@Tooltip" : "Capacities of spawn groups added by this mod",
     "config.uselessreptile.group.dragonBehaviour.@Tooltip" : "Options for changing behavior of dragons in game",
+    "config.uselessreptile.group.dragonriding.@Tooltip" : "Options for dragonriding behavior",
     "config.uselessreptile.group.camera.@Tooltip" : "Settings for camera when you riding the dragon",
     "config.uselessreptile.group.dragonAppearance.@Tooltip" : "Options to change how dragons look",
     "config.uselessreptile.group.groupSize.@Tooltip" : "Defines group sizes of dragons when they spawn naturally. Minimal group size always must be equal or less than maximum one.",
@@ -186,6 +190,8 @@
     "config.uselessreptile.option.spawnGroupCapacity.@Tooltip": "Maximum capacity of this group. \nGroup includes following entities: %s",
     "config.uselessreptile.option.lightningChaserThunderstormSpawnTimerCooldown.@Tooltip": "Amount of time (in ticks) that must pass before Lightning Chaser can attempt to spawn near the same player",
     "config.uselessreptile.option.dragonMadness.@Tooltip": "All (untamed) dragons now attack players on sight",
+    "config.uselessreptile.option.preventDismountingInFlight.@Tooltip": "Prevents a player from dismounting a dragon during flight",
+
     "config.uselessreptile.option.lightningChaserBaseSpecialAttackCooldown.@Tooltip": "Shockwave attack cooldown",
     "config.uselessreptile.option.allowDragonTeleport.@Tooltip": "Allows tamed dragons to teleport whenever they attempt to follow the owner and happen to be too far away",
     "config.uselessreptile.option.naturalSpawn.@Tooltip": "Enables natural spawning of this dragon",

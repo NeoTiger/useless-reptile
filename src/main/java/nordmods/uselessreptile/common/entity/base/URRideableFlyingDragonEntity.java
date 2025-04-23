@@ -1,6 +1,7 @@
 package nordmods.uselessreptile.common.entity.base;
 
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
@@ -15,6 +16,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import nordmods.uselessreptile.common.config.URConfig;
 import nordmods.uselessreptile.common.entity.ai.control.FlyingDragonMoveControl;
 import nordmods.uselessreptile.common.entity.ai.navigation.FlyingDragonNavigation;
 import nordmods.uselessreptile.common.init.URAttributes;
@@ -279,6 +281,20 @@ public abstract class URRideableFlyingDragonEntity extends URRideableDragonEntit
         if (forceFlight) {
             forceFlight = false;
             startToFly();
+        }
+    }
+
+    @Override
+    protected boolean canBeDismounted() {
+        return !(URConfig.getConfig().preventDismountingInFlight && isFlying());
+    }
+
+    // Immediately re-mounts a passenger if the dragon is still in-flight
+    @Override
+    protected void removePassenger(Entity passenger) {
+        super.removePassenger(passenger);
+        if (!getWorld().isClient() && isFlying()) {
+            passenger.startRiding(this, true);
         }
     }
 }
